@@ -1,0 +1,51 @@
+.slide-panel-noti {
+  position: fixed;
+  top: 0;
+  right: -500px;
+  /*Start hidden*/
+  width: 500px;
+  height: 100vh;
+  background-color: white;
+  box-shadow: -5px 0 10px rgba(0, 0, 0, 0.2);
+  transition: right 0.3s ease-in-out;
+  z-index: 3100;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.slide-panel-noti.open {
+  right: 0;
+}
+
+.slide-panel-noti-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  /* max-height: calc(100vh - 10px); */
+  padding-bottom: 20px;
+  -ms-overflow-style: none;
+  /* Hides scrollbar in Internet Explorer and Edge */
+  scrollbar-width: none;
+}
+
+.slide-panel-noti-content::-webkit-scrollbar {
+  display: none;
+  /* Hides scrollbar in Chrome, Safari, and Opera */
+}
+
+.close-btn {
+  position: absolute;
+  top: 5px;
+  left: -5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #333;
+  /* Dark gray */
+  display: flex;
+  align-items: center;
+}
+
+.close-btn:hover {
+  color: red;
+}
