@@ -9,6 +9,9 @@ import AllOrder from './order/order';
 import ResetPin from './auth/reset';
 import SetNewPin from './auth/newpin';
 import SuccessScreen from './auth/success'
+import CoffeeShop from './inventory/dashboard';
+import TransactionDashboard from './transaction/dashboard'; 
+import SettingDashboard from './settings/dashboard';
 
 function App() {
   return (
@@ -26,6 +29,9 @@ function App() {
         <Route path="/reset/pin" element={<ResetPin/>} />
         <Route path="/set/new/pin" element={<SetNewPin/>} />
         <Route path="/success" element={<SuccessScreen/>} />
+        <Route path="/inventory" element={<CoffeeShop/>} />
+        <Route path="/transaction" element={<TransactionDashboard/>} />
+        <Route path="/settings" element={<SettingDashboard/>} />
       </Routes>
     </>
   );

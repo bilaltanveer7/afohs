@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
+import { useLocation, useNavigate } from "react-router-dom";
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import { Button, Avatar } from '@mui/material';
@@ -25,7 +26,12 @@ import ListItemText from '@mui/material/ListItemText';
 import logo1 from '../assetts/slogo.png';
 import logo2 from '../assetts/Logo.png';
 import NotificationsPanel from './notification';
+import EmployeeProfileScreen from './profile';
+import LoginActivityScreen from './activity';
+import LogoutScreen from './logout';
+import NewOrderDialog from './order';
 import CloseIcon from "@mui/icons-material/Close";
+import CoffeeShop from '../inventory/dashboard';
 import './style.css'
 
 const drawerWidthOpen = 240; // Set open width to 240px
@@ -94,12 +100,17 @@ const AppBar = styled(MuiAppBar, {
 
 export default function SideNav({ open, setOpen }) {
     const [showNotification, setShowNotification] = React.useState(false)
+    const [showProfile, setShowProfile] = React.useState(false)
+    const [showOrder, setShowOrder] = React.useState(false)
+    const [profileView, setProfileView] = React.useState("profile");
     const menuItems = [
-        { text: "Home", icon: <HomeIcon /> },
-        { text: "Inventory", icon: <InventoryIcon /> },
-        { text: "Members", icon: <PeopleIcon /> },
-        { text: "Settings", icon: <SettingsIcon /> }
+        { text: "Dashboard", icon: <HomeIcon />, path: "/dashboard" },
+        { text: "Inventory", icon: <InventoryIcon />, path: "/inventory" },
+        { text: "Transaction", icon: <PeopleIcon />, path: "/transaction" },
+        { text: "Settings", icon: <SettingsIcon />, path: "/settings" }
     ];
+    const navigate = useNavigate();
+    const location = useLocation();
 
     return (
         <Box sx={{ display: "flex" }}>
@@ -111,10 +122,11 @@ export default function SideNav({ open, setOpen }) {
                     backgroundColor: "#BBC6CE",
                     height: '60px',
                     justifyContent: 'center',
+                    zIndex: 1000
                 }}
             >
                 <Toolbar style={{
-                    justifyContent: 'space-between'
+                    justifyContent: 'space-between', zIndex: 1000
                 }}>
                     {/* Toggle Menu Icon */}
                     <IconButton
@@ -133,7 +145,7 @@ export default function SideNav({ open, setOpen }) {
                                 onClick={() => setShowNotification(true)} />
                         </IconButton>
                         <div className={`slide-panel-noti ${showNotification ? "open" : ""}`}>
-                            <button className="close-btn" onClick={() => setShowNotification(false)}>
+                            <button className="close-btn-noti" onClick={() => setShowNotification(false)}>
                                 <CloseIcon fontSize="medium" />
                             </button>
                             <div className="slide-panel-noti-content">
@@ -149,7 +161,9 @@ export default function SideNav({ open, setOpen }) {
                         }} />
 
                         {/* Profile Section */}
-                        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                        <Box sx={{ display: "flex", alignItems: "center", gap: 1, cursor: 'pointer' }}
+                            onClick={() => setShowProfile(true)}
+                        >
                             <Avatar
                                 src="your-profile-image-url.jpg"
                                 alt="User Profile"
@@ -160,6 +174,20 @@ export default function SideNav({ open, setOpen }) {
                                 <Typography sx={{ fontSize: "12px", color: "#666" }}>Admin</Typography>
                             </Box>
                         </Box>
+                        <div className={`slide-panel-noti ${showProfile ? "open" : ""}`}>
+                            <button className="close-btn-noti" onClick={() => setShowProfile(false)}>
+                                <CloseIcon fontSize="medium" />
+                            </button>
+                            <div className="slide-panel-noti-content">
+                                {profileView === "profile" ? (
+                                    <EmployeeProfileScreen setProfileView={setProfileView} />
+                                ) : profileView === "loginActivity" ? (
+                                    <LoginActivityScreen setProfileView={setProfileView} />
+                                ) : profileView === "logoutSuccess" ? (
+                                    <LogoutScreen setProfileView={setProfileView} />
+                                ) : null}
+                            </div>
+                        </div>
                     </Box>
                 </Toolbar>
             </AppBar>
@@ -197,28 +225,59 @@ export default function SideNav({ open, setOpen }) {
                             justifyContent: "center",
                             transition: "all 0.3s ease-in-out",
                         }}
+                        onClick={() => setShowOrder(true)}
                     >
                         {open ? "+ New Order" : "+ New Order"} {/* Show full text only when open */}
                     </Button>
+                    <div className={`slide-panel-noti ${showOrder ? "open" : ""}`}>
+                        <button className="close-btn-noti" onClick={() => setShowOrder(false)}>
+                            <CloseIcon fontSize="medium" />
+                        </button>
+                        <div className="slide-panel-noti-content">
+                            <NewOrderDialog />
+                        </div>
+                    </div>
                 </Box>
 
                 <List>
-                    {menuItems.map(({ text, icon }, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: "block" }}>
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 60,
-                                    justifyContent: open ? "initial" : "center",
-                                    px: 5,
-                                }}
-                            >
-                                <ListItemIcon sx={{ color: "#fff", minWidth: 0, justifyContent: "center", mr: open ? 3 : "auto" }}>
-                                    {icon}
-                                </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                    ))}
+                    {menuItems.map(({ text, icon, path }) => {
+                        const isSelected = location.pathname === path;
+
+                        return (
+                            <ListItem key={text} disablePadding sx={{ display: "block", p: 0.5 }}>
+                                <ListItemButton
+                                    onClick={() => navigate(path)}
+                                    sx={{
+                                        minHeight: 50,
+                                        justifyContent: open ? "initial" : "center",
+                                        // px: 5,
+                                        mx: 3,
+                                        borderRadius: "12px",
+                                        backgroundColor: isSelected ? "#333" : "transparent", // Dark gray when selected
+                                        "&:hover": {
+                                            backgroundColor: "#444" // Slightly lighter gray on hover
+                                        }
+                                    }}
+                                >
+                                    <ListItemIcon sx={{
+                                        color: isSelected ? "orange" : "#fff", // Orange when selected, white otherwise
+                                        minWidth: 0,
+                                        justifyContent: "center",
+                                        mr: open ? 1 : "auto"
+                                    }}>
+                                        {React.cloneElement(icon, { style: { color: isSelected ? "orange" : "#fff" } })}
+                                    </ListItemIcon>
+                                    <ListItemText
+                                        primary={text}
+                                        sx={{
+                                            color: isSelected ? "orange" : "#fff", // Orange text when selected
+                                            opacity: open ? 1 : 0
+                                        }}
+                                    />
+                                </ListItemButton>
+                            </ListItem>
+                        );
+                    })}
                 </List>
             </Drawer>
         </Box>

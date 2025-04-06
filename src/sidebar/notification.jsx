@@ -112,7 +112,7 @@ const NotificationsPanel = () => {
       sx={{
         width: '100%',
         mx: 'auto',
-        height: '100%',
+        height: '100vh',
       }}
     >
       {/* Header */}
@@ -121,12 +121,16 @@ const NotificationsPanel = () => {
         justifyContent: 'space-between',
         alignItems: 'center',
         p: 3,
+        position:'sticky',
+        top:0,
+        zIndex:10,
+        bgcolor:'white'
       }}>
         <Box sx={{
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          mt: 1,
+          // mt: 1,
           width: '33%'
         }}>
           <Typography variant="h6" sx={{ fontWeight: 'bold', mr: 1 }}>

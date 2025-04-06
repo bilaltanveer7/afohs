@@ -6,6 +6,14 @@ import ReservationOrder from './reserve';
 import NewSelfOrder from './neworder';
 import CloseIcon from "@mui/icons-material/Close";
 import CancelOrder from './delmodal';
+import crownicon from '../assetts/Diamond.png'
+import truckicon from '../assetts/truck.png'
+import trashicon from '../assetts/trash.png'
+import foodicon from '../assetts/food-tray.png'
+import camicon from '../assetts/camera.png'
+import recicon from '../assetts/receipt-list.png'
+import watchicon from '../assetts/stopwatch-alt.png'
+import sofaicon from '../assetts/sofa.png'
 import "./style.css"
 import {
     Box,
@@ -222,15 +230,15 @@ const Dashboard = () => {
                                     }}>
                                         {/* Customer info section */}
                                         <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
-                                            <Box sx={{ display: 'flex', alignItems: 'center', mr: 2 }}>
+                                            <Box sx={{ display: 'flex', alignItems: 'center', mr: 1 }}>
                                                 <Button
                                                     variant="contained"
                                                     sx={{
                                                         bgcolor: '#1976d2',
                                                         color: 'white',
                                                         borderRadius: '50%',
-                                                        minWidth: 40,
-                                                        height: 40,
+                                                        minWidth: 45,
+                                                        height: 45,
                                                         p: 0,
                                                         fontWeight: 'bold',
                                                         fontSize: '0.875rem'
@@ -242,15 +250,18 @@ const Dashboard = () => {
 
                                             <Box sx={{
                                                 mr: 2,
-
+                                                bgcolor: '#bfb8b8',
                                                 borderRadius: '50%',
-                                                width: 40,
-                                                height: 40,
+                                                width: 45,
+                                                height: 45,
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center'
                                             }}>
-                                                <Box component="span" sx={{ fontSize: '1.2rem' }}>🖨️</Box>
+                                                <img src={sofaicon} alt="" style={{
+                                                    height: 22,
+                                                    width: 22
+                                                }} />
                                             </Box>
 
                                             <Box sx={{ flexGrow: 1 }}>
@@ -259,17 +270,11 @@ const Dashboard = () => {
                                                         <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: 1 }}>
                                                             Qafi Latif
                                                         </Typography>
-                                                        <Box component="span" sx={{
-                                                            color: '#f59e0b',
-                                                            fontSize: '1.2rem',
-                                                            bgcolor: '#FEF3C7',
-                                                            borderRadius: '50%',
+                                                        <img src={crownicon} alt="" style={{
                                                             width: 24,
                                                             height: 24,
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center'
-                                                        }}>😊</Box>
+                                                            marginLeft: '0.5rem'
+                                                        }} />
                                                     </Box>
                                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                                         <Box component="span" sx={{ mr: 0.5, fontSize: '1rem' }}>🕙</Box>
@@ -298,7 +303,7 @@ const Dashboard = () => {
                                                     size="small"
                                                     sx={{
                                                         mr: 1,
-                                                        bgcolor: '#f5f5f5',
+                                                        bgcolor: '#bfb8b8',
                                                         borderRadius: 1,
                                                         height: 24,
                                                         fontSize: '0.75rem',
@@ -306,22 +311,23 @@ const Dashboard = () => {
                                                     }}
                                                 />
                                                 <Chip
-                                                    label="DP • 50%"
+                                                    label="DP : 50%"
                                                     size="small"
                                                     variant="outlined"
                                                     sx={{
                                                         mr: 1,
-                                                        borderColor: '#e0e0e0',
+                                                        bgcolor: '#bfb8b8',
                                                         borderRadius: 1,
                                                         height: 24,
                                                         fontSize: '0.75rem'
                                                     }}
                                                 />
-                                                <Box sx={{ ml: 'auto', mr: 2 }}>
-                                                    <IconButton size="small" sx={{ p: 0 }}>
-                                                        <Box component="span" sx={{ color: '#ef4444', fontSize: '1rem' }}>🗑️</Box>
-                                                    </IconButton>
-                                                </Box>
+                                            </Box>
+                                            <Box sx={{ ml: 'auto', mr: 2 }}>
+                                                <img src={trashicon} alt="" style={{
+                                                    height: 20,
+                                                    width: 20
+                                                }} />
                                             </Box>
                                             <Button
                                                 variant="contained"
@@ -376,15 +382,18 @@ const Dashboard = () => {
 
                                             <Box sx={{
                                                 mr: 2,
-
+                                                bgcolor: '#bfb8b8',
                                                 borderRadius: '50%',
-                                                width: 40,
-                                                height: 40,
+                                                width: 45,
+                                                height: 45,
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center'
                                             }}>
-                                                <Box component="span" sx={{ fontSize: '1.2rem' }}>💬</Box>
+                                                <img src={sofaicon} alt="" style={{
+                                                    height: 22,
+                                                    width: 22
+                                                }} />
                                             </Box>
 
                                             <Box sx={{ flexGrow: 1 }}>
@@ -393,17 +402,11 @@ const Dashboard = () => {
                                                         <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: 1 }}>
                                                             Annette Black
                                                         </Typography>
-                                                        <Box component="span" sx={{
-                                                            color: '#f59e0b',
-                                                            fontSize: '1.2rem',
-                                                            bgcolor: '#FEF3C7',
-                                                            borderRadius: '50%',
-                                                            width: 24,
+                                                        <img src={crownicon} alt="" style={{
                                                             height: 24,
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center'
-                                                        }}>😊</Box>
+                                                            width: 24,
+                                                            marginLeft: '0.5rem'
+                                                        }} />
                                                     </Box>
                                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                                         <Box component="span" sx={{ mr: 0.5, fontSize: '1rem' }}>🕙</Box>
@@ -432,7 +435,7 @@ const Dashboard = () => {
                                                     size="small"
                                                     sx={{
                                                         mr: 1,
-                                                        bgcolor: '#f5f5f5',
+                                                        bgcolor: '#bfb8b8',
                                                         borderRadius: 1,
                                                         height: 24,
                                                         fontSize: '0.75rem',
@@ -445,17 +448,18 @@ const Dashboard = () => {
                                                     variant="outlined"
                                                     sx={{
                                                         mr: 1,
-                                                        borderColor: '#e0e0e0',
+                                                        bgcolor: '#bfb8b8',
                                                         borderRadius: 1,
                                                         height: 24,
                                                         fontSize: '0.75rem'
                                                     }}
                                                 />
-                                                <Box sx={{ ml: 'auto', mr: 2 }}>
-                                                    <IconButton size="small" sx={{ p: 0 }}>
-                                                        <Box component="span" sx={{ color: '#ef4444', fontSize: '1rem' }}>🗑️</Box>
-                                                    </IconButton>
-                                                </Box>
+                                            </Box>
+                                            <Box sx={{ ml: 'auto', mr: 2 }}>
+                                                <img src={trashicon} alt="" style={{
+                                                    height: 20,
+                                                    width: 20
+                                                }} />
                                             </Box>
                                             <Button
                                                 variant="contained"
@@ -509,15 +513,18 @@ const Dashboard = () => {
 
                                             <Box sx={{
                                                 mr: 2,
-
+                                                bgcolor: '#bfb8b8',
                                                 borderRadius: '50%',
-                                                width: 40,
-                                                height: 40,
+                                                width: 45,
+                                                height: 45,
                                                 display: 'flex',
                                                 alignItems: 'center',
                                                 justifyContent: 'center'
                                             }}>
-                                                <Box component="span" sx={{ fontSize: '1.2rem' }}>💬</Box>
+                                                <img src={sofaicon} alt="" style={{
+                                                    height: 22,
+                                                    width: 22
+                                                }} />
                                             </Box>
 
                                             <Box sx={{ flexGrow: 1 }}>
@@ -526,17 +533,11 @@ const Dashboard = () => {
                                                         <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: 1 }}>
                                                             Ronald Richards
                                                         </Typography>
-                                                        <Box component="span" sx={{
-                                                            color: '#f59e0b',
-                                                            fontSize: '1.2rem',
-                                                            bgcolor: '#FEF3C7',
-                                                            borderRadius: '50%',
-                                                            width: 24,
-                                                            height: 24,
-                                                            display: 'flex',
-                                                            alignItems: 'center',
-                                                            justifyContent: 'center'
-                                                        }}>😊</Box>
+                                                        <img src={crownicon} alt="" style={{
+                                                            height:24,
+                                                            width:24,
+                                                            marginLeft:'0.5rem'
+                                                        }}/>
                                                     </Box>
                                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                                         <Box component="span" sx={{ mr: 0.5, fontSize: '1rem' }}>🕙</Box>
@@ -565,7 +566,7 @@ const Dashboard = () => {
                                                     size="small"
                                                     sx={{
                                                         mr: 1,
-                                                        bgcolor: '#f5f5f5',
+                                                        bgcolor: '#bfb8b8',
                                                         borderRadius: 1,
                                                         height: 24,
                                                         fontSize: '0.75rem',
@@ -578,17 +579,18 @@ const Dashboard = () => {
                                                     variant="outlined"
                                                     sx={{
                                                         mr: 1,
-                                                        borderColor: '#e0e0e0',
+                                                        bgcolor: '#bfb8b8',
                                                         borderRadius: 1,
                                                         height: 24,
                                                         fontSize: '0.75rem'
                                                     }}
                                                 />
-                                                <Box sx={{ ml: 'auto', mr: 2 }}>
-                                                    <IconButton size="small" sx={{ p: 0 }}>
-                                                        <Box component="span" sx={{ color: '#ef4444', fontSize: '1rem' }}>🗑️</Box>
-                                                    </IconButton>
-                                                </Box>
+                                            </Box>
+                                            <Box sx={{ ml: 'auto', mr: 2 }}>
+                                                <img src={trashicon} alt="" style={{
+                                                    height: 20,
+                                                    width: 20
+                                                }} />
                                             </Box>
                                             <Button
                                                 variant="contained"
@@ -778,7 +780,7 @@ const Dashboard = () => {
                                         <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
                                             <Box sx={{
                                                 mr: 2,
-                                                bgcolor: '#f0f0f0',
+                                                bgcolor: '#bfb8b8',
                                                 borderRadius: '50%',
                                                 width: 40,
                                                 height: 40,
@@ -786,7 +788,11 @@ const Dashboard = () => {
                                                 alignItems: 'center',
                                                 justifyContent: 'center'
                                             }}>
-                                                <Box component="span" sx={{ fontSize: '1.2rem' }}>🚚</Box>
+
+                                                <img src={truckicon} alt="" style={{
+                                                    height: 27,
+                                                    width: 27,
+                                                }} />
                                             </Box>
 
                                             <Box sx={{ flexGrow: 1 }}>
@@ -794,17 +800,11 @@ const Dashboard = () => {
                                                     <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: 1 }}>
                                                         Miles Esther
                                                     </Typography>
-                                                    <Box component="span" sx={{
-                                                        color: '#f59e0b',
-                                                        fontSize: '1.2rem',
-                                                        bgcolor: '#FEF3C7',
-                                                        borderRadius: '50%',
-                                                        width: 24,
+                                                    <img src={crownicon} alt="" style={{
                                                         height: 24,
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center'
-                                                    }}>😊</Box>
+                                                        width: 24,
+                                                        marginLeft: '10px'
+                                                    }} />
                                                 </Box>
 
                                                 <Typography variant="caption" sx={{ color: '#666' }}>
@@ -815,7 +815,6 @@ const Dashboard = () => {
 
                                         {/* Order actions section */}
                                         <Box sx={{
-                                            borderTop: '1px solid #f0f0f0',
                                             p: 2,
                                             display: 'flex',
                                             justifyContent: 'space-between',
@@ -827,16 +826,16 @@ const Dashboard = () => {
                                                     size="small"
                                                     sx={{
                                                         mr: 1,
-                                                        bgcolor: '#f5f5f5',
+                                                        bgcolor: '#bfb8b8',
                                                         borderRadius: 1,
                                                         height: 24,
                                                         fontSize: '0.75rem',
                                                         fontWeight: 'medium'
                                                     }}
                                                 />
-                                                <IconButton size="small" sx={{ p: 0 }} onClick={() => setIsModalVisible(true)}>
+                                                {/* <IconButton size="small" sx={{ p: 0 }} onClick={() => setIsModalVisible(true)}>
                                                     <Box component="span" sx={{ color: '#ef4444', fontSize: '1rem' }}>🗑️</Box>
-                                                </IconButton>
+                                                </IconButton> */}
                                                 {isModalVisible && <CancelOrder onClose={() => setIsModalVisible(false)} onConfirm={handleCancelOrder} />}
                                                 {isNotificationVisible && (
                                                     <Box
@@ -860,6 +859,12 @@ const Dashboard = () => {
                                                     </Box>
                                                 )}
                                             </Box>
+                                            <img src={trashicon} alt="" onClick={() => setIsModalVisible(true)} style={{
+                                                height: 20,
+                                                width: 20,
+                                                marginLeft: '1rem',
+                                                cursor: 'pointer'
+                                            }} />
                                             <Button
                                                 variant="contained"
                                                 size="small"
@@ -895,7 +900,7 @@ const Dashboard = () => {
                                         <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
                                             <Box sx={{
                                                 mr: 2,
-                                                bgcolor: '#f0f0f0',
+                                                bgcolor: '#bfb8b8',
                                                 borderRadius: '50%',
                                                 width: 40,
                                                 height: 40,
@@ -903,7 +908,10 @@ const Dashboard = () => {
                                                 alignItems: 'center',
                                                 justifyContent: 'center'
                                             }}>
-                                                <Box component="span" sx={{ fontSize: '1.2rem' }}>🚚</Box>
+                                                <img src={truckicon} alt="" style={{
+                                                    height: 27,
+                                                    width: 27,
+                                                }} />
                                             </Box>
 
                                             <Box sx={{ flexGrow: 1 }}>
@@ -911,17 +919,11 @@ const Dashboard = () => {
                                                     <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: 1 }}>
                                                         Annette Black
                                                     </Typography>
-                                                    <Box component="span" sx={{
-                                                        color: '#f59e0b',
-                                                        fontSize: '1.2rem',
-                                                        bgcolor: '#FEF3C7',
-                                                        borderRadius: '50%',
-                                                        width: 24,
+                                                    <img src={crownicon} alt="" style={{
                                                         height: 24,
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center'
-                                                    }}>🔒</Box>
+                                                        width: 24,
+                                                        marginLeft: '10px'
+                                                    }} />
                                                 </Box>
 
                                                 <Typography variant="caption" sx={{ color: '#666' }}>
@@ -932,7 +934,7 @@ const Dashboard = () => {
 
                                         {/* Order actions section */}
                                         <Box sx={{
-                                            borderTop: '1px solid #f0f0f0',
+
                                             p: 2,
                                             display: 'flex',
                                             justifyContent: 'space-between',
@@ -944,17 +946,20 @@ const Dashboard = () => {
                                                     size="small"
                                                     sx={{
                                                         mr: 1,
-                                                        bgcolor: '#f5f5f5',
+                                                        bgcolor: '#bfb8b8',
                                                         borderRadius: 1,
                                                         height: 24,
                                                         fontSize: '0.75rem',
                                                         fontWeight: 'medium'
                                                     }}
                                                 />
-                                                <IconButton size="small" sx={{ p: 0 }}>
-                                                    <Box component="span" sx={{ color: '#ef4444', fontSize: '1rem' }}>🗑️</Box>
-                                                </IconButton>
+
                                             </Box>
+                                            <img src={trashicon} alt="" style={{
+                                                height: 20,
+                                                width: 20,
+                                                marginLeft: '1rem'
+                                            }} />
                                             <Button
                                                 variant="contained"
                                                 size="small"
@@ -990,7 +995,7 @@ const Dashboard = () => {
                                         <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
                                             <Box sx={{
                                                 mr: 2,
-                                                bgcolor: '#f0f0f0',
+                                                bgcolor: '#bfb8b8',
                                                 borderRadius: '50%',
                                                 width: 40,
                                                 height: 40,
@@ -998,7 +1003,10 @@ const Dashboard = () => {
                                                 alignItems: 'center',
                                                 justifyContent: 'center'
                                             }}>
-                                                <Box component="span" sx={{ fontSize: '1.2rem' }}>🚚</Box>
+                                                <img src={truckicon} alt="" style={{
+                                                    height: 27,
+                                                    width: 27,
+                                                }} />
                                             </Box>
 
                                             <Box sx={{ flexGrow: 1 }}>
@@ -1006,17 +1014,11 @@ const Dashboard = () => {
                                                     <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: 1 }}>
                                                         Bessie Cooper
                                                     </Typography>
-                                                    <Box component="span" sx={{
-                                                        color: '#f59e0b',
-                                                        fontSize: '1.2rem',
-                                                        bgcolor: '#FEF3C7',
-                                                        borderRadius: '50%',
-                                                        width: 24,
+                                                    <img src={crownicon} alt="" style={{
                                                         height: 24,
-                                                        display: 'flex',
-                                                        alignItems: 'center',
-                                                        justifyContent: 'center'
-                                                    }}>⭐</Box>
+                                                        width: 24,
+                                                        marginLeft: '10px'
+                                                    }} />
                                                 </Box>
 
                                                 <Typography variant="caption" sx={{ color: '#666' }}>
@@ -1027,7 +1029,6 @@ const Dashboard = () => {
 
                                         {/* Order actions section */}
                                         <Box sx={{
-                                            borderTop: '1px solid #f0f0f0',
                                             p: 2,
                                             display: 'flex',
                                             justifyContent: 'space-between',
@@ -1039,17 +1040,20 @@ const Dashboard = () => {
                                                     size="small"
                                                     sx={{
                                                         mr: 1,
-                                                        bgcolor: '#f5f5f5',
+                                                        bgcolor: '#bfb8b8',
                                                         borderRadius: 1,
                                                         height: 24,
                                                         fontSize: '0.75rem',
                                                         fontWeight: 'medium'
                                                     }}
                                                 />
-                                                <IconButton size="small" sx={{ p: 0 }}>
-                                                    <Box component="span" sx={{ color: '#ef4444', fontSize: '1rem' }}>🗑️</Box>
-                                                </IconButton>
+
                                             </Box>
+                                            <img src={trashicon} alt="" style={{
+                                                height: 20,
+                                                width: 20,
+                                                marginLeft: '1rem'
+                                            }} />
                                             <Button
                                                 variant="contained"
                                                 size="small"
@@ -1100,12 +1104,6 @@ const Dashboard = () => {
                                             cursor: 'pointer'
                                         }}
                                             onClick={() => navigate('/order/queue')} />
-
-                                        {/* <IconButton size="small" sx={{ border: '1px solid #e0e0e0' }}
-                                        onClick={() => navigate('/order/queue')}
-                                    >
-                                        <MoreVert fontSize="small" />
-                                    </IconButton> */}
                                     </Box>
                                     <Box sx={{ display: 'flex', width: '145px', height: '48px', alignItems: 'center' }}>
 
@@ -1163,22 +1161,44 @@ const Dashboard = () => {
                                                 >
                                                     T2
                                                 </Button>
-                                                <IconButton size="small" sx={{ bgcolor: '#f5f5f5', height: 40, width: 40 }}>
-                                                    <Print fontSize="small" />
+                                                <Button
+                                                    sx={{
+                                                        bgcolor: '#bfb8b8',
+                                                        height: 40,
+                                                        minWidth: 40,
+                                                        borderRadius: '50%',
+                                                        p: 0
+                                                    }}>
+                                                    <img src={foodicon} alt="" style={{
+                                                        height: 21,
+                                                        width: 21
+                                                    }} />
+                                                </Button>
+                                            </Box>
+                                            <Box sx={{ display: 'flex', gap: 1 }}>
+
+                                                <IconButton size="small" sx={{ bgcolor: '#0e3151', color: 'white', height: 46, width: 46, borderRadius: '0px' }}>
+                                                    <Add fontSize="small" />
                                                 </IconButton>
+                                            </Box>
+                                        </Box>
+                                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <Box>
+                                                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', mb: 0.5 }}>
+                                                    Qafi Latif
+                                                    <img src={crownicon} alt="" style={{
+                                                        height: 24,
+                                                        width: 24,
+                                                        marginLeft: '0.7rem'
+                                                    }} />
+                                                </Typography>
+
+                                                <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>
+                                                    4 items (<Typography component="span" variant="caption" sx={{ color: '#10b981' }}>1 Complete</Typography>)
+                                                </Typography>
                                             </Box>
                                             <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>Rs 47.00</Typography>
                                         </Box>
-
-                                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', mb: 0.5 }}>
-                                            Qafi Latif
-                                            <Box component="span" sx={{ color: '#f59e0b', fontSize: '1.2rem', ml: 1 }}>⭐</Box>
-                                        </Typography>
-
-                                        <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>
-                                            4 items (<Typography component="span" variant="caption" sx={{ color: '#10b981' }}>1 Complete</Typography>)
-                                        </Typography>
-
                                         <Box sx={{ display: 'flex', gap: 1 }}>
                                             <Chip
                                                 label="#001"
@@ -1211,28 +1231,47 @@ const Dashboard = () => {
                                                 >
                                                     T3
                                                 </Button>
-                                                <IconButton size="small" sx={{ bgcolor: '#f5f5f5', height: 40, width: 40 }}>
-                                                    <Print fontSize="small" />
-                                                </IconButton>
+                                                <Button
+                                                    sx={{
+                                                        bgcolor: '#bfb8b8',
+                                                        height: 40,
+                                                        minWidth: 40,
+                                                        borderRadius: '50%',
+                                                        p: 0
+                                                    }}>
+                                                    <img src={foodicon} alt="" style={{
+                                                        height: 21,
+                                                        width: 21
+                                                    }} />
+                                                </Button>
                                             </Box>
                                             <Box sx={{ display: 'flex', gap: 1 }}>
-                                                <IconButton size="small" sx={{ border: '1px solid #e0e0e0', height: 40, width: 40 }}>
-                                                    <Chat fontSize="small" />
-                                                </IconButton>
-                                                <IconButton size="small" sx={{ bgcolor: '#0e3151', color: 'white', height: 40, width: 40 }}>
+                                                <img src={camicon} alt="" style={{
+                                                    height: 46,
+                                                    width: 46
+                                                }} />
+                                                <IconButton size="small" sx={{ bgcolor: '#0e3151', color: 'white', height: 46, width: 46, borderRadius: '0px' }}>
                                                     <Add fontSize="small" />
                                                 </IconButton>
                                             </Box>
                                         </Box>
+                                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <Box>
+                                                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', mb: 0.5 }}>
+                                                    Hamid Indra
+                                                    <img src={crownicon} alt="" style={{
+                                                        height: 24,
+                                                        width: 24,
+                                                        marginLeft: '0.7rem'
+                                                    }} />
+                                                </Typography>
 
-                                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', mb: 0.5 }}>
-                                            Hamid Indra
-                                            <Box component="span" sx={{ color: '#f59e0b', fontSize: '1.2rem', ml: 1 }}>⭐</Box>
-                                        </Typography>
-
-                                        <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>
-                                            4 items (<Typography component="span" variant="caption" sx={{ color: '#10b981' }}>1 Complete</Typography>)
-                                        </Typography>
+                                                <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>
+                                                    4 items (<Typography component="span" variant="caption" sx={{ color: '#10b981' }}>1 Complete</Typography>)
+                                                </Typography>
+                                            </Box>
+                                            <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>Rs 47.00</Typography>
+                                        </Box>
 
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <Box sx={{ display: 'flex', gap: 1 }}>
@@ -1244,11 +1283,19 @@ const Dashboard = () => {
                                                 <Chip
                                                     label="Waiting to payment"
                                                     size="small"
-                                                    sx={{ bgcolor: '#f5f5f5', borderRadius: 1, height: 24 }}
-                                                    icon={<Box component="span" sx={{ fontSize: '0.75rem', ml: 1 }}>⬜</Box>}
+                                                    sx={{ bgcolor: '#f5f5f5', borderRadius: 1, height: 24, alignItems: 'center', justifyContent: 'center' }}
+                                                    icon={<Box component="span" sx={{ fontSize: '0.75rem', ml: 2 }}>
+                                                        <img
+                                                            src={recicon}
+                                                            style={{
+                                                                height: 14,
+                                                                width: 14
+                                                            }}
+                                                        />
+                                                    </Box>}
                                                 />
+
                                             </Box>
-                                            <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>Rs 47.00</Typography>
                                         </Box>
                                     </Paper>
 
@@ -1269,29 +1316,47 @@ const Dashboard = () => {
                                                 >
                                                     T4
                                                 </Button>
-                                                <IconButton size="small" sx={{ bgcolor: '#f5f5f5', height: 40, width: 40 }}>
-                                                    <Print fontSize="small" />
-                                                </IconButton>
+                                                <Button
+                                                    sx={{
+                                                        bgcolor: '#bfb8b8',
+                                                        height: 40,
+                                                        minWidth: 40,
+                                                        borderRadius: '50%',
+                                                        // p: 0
+                                                    }}>
+                                                    <img src={foodicon} alt="" style={{
+                                                        height: 21,
+                                                        width: 21,
+                                                    }} />
+                                                </Button>
                                             </Box>
                                             <Box sx={{ display: 'flex', gap: 1 }}>
-                                                <IconButton size="small" sx={{ border: '1px solid #e0e0e0', height: 40, width: 40 }}>
-                                                    <Chat fontSize="small" />
-                                                </IconButton>
-                                                <IconButton size="small" sx={{ bgcolor: '#0e3151', color: 'white', height: 40, width: 40 }}>
+                                                <img src={camicon} alt="" style={{
+                                                    height: 46,
+                                                    width: 46
+                                                }} />
+                                                <IconButton size="small" sx={{ bgcolor: '#0e3151', color: 'white', height: 46, width: 46, borderRadius: '0px' }}>
                                                     <Add fontSize="small" />
                                                 </IconButton>
                                             </Box>
                                         </Box>
+                                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <Box>
+                                                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', mb: 0.5 }}>
+                                                    Miles Esther
+                                                    <img src={crownicon} alt="" style={{
+                                                        height: 24,
+                                                        width: 24,
+                                                        marginLeft: '0.7rem'
+                                                    }} />
+                                                </Typography>
 
-                                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', mb: 0.5 }}>
-                                            Miles Esther
-                                            <Box component="span" sx={{ color: '#f59e0b', fontSize: '1.2rem', ml: 1 }}>⭐</Box>
-                                        </Typography>
-
-                                        <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>
-                                            4 items (<Typography component="span" variant="caption" sx={{ color: '#10b981' }}>1 Complete</Typography>)
-                                        </Typography>
-
+                                                <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>
+                                                    4 items (<Typography component="span" variant="caption" sx={{ color: '#10b981' }}>1 Complete</Typography>)
+                                                </Typography>
+                                            </Box>
+                                            <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>Rs 47.00</Typography>
+                                        </Box>
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <Box sx={{ display: 'flex', gap: 1 }}>
                                                 <Chip
@@ -1303,10 +1368,15 @@ const Dashboard = () => {
                                                     label="Cooking process"
                                                     size="small"
                                                     sx={{ bgcolor: '#f5f5f5', borderRadius: 1, height: 24 }}
-                                                    icon={<Box component="span" sx={{ fontSize: '0.75rem', ml: 1 }}>⚪</Box>}
+                                                    icon={<Box component="span" sx={{ fontSize: '0.75rem', ml: 1 }}>
+                                                        <img src={watchicon} alt="" style={{
+                                                            height: 18,
+                                                            width: 18
+                                                        }} />
+                                                    </Box>}
                                                 />
                                             </Box>
-                                            <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>Rs 47.00</Typography>
+
                                         </Box>
                                     </Paper>
                                 </Box>
