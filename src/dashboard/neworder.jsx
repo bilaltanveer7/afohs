@@ -75,11 +75,11 @@ const NewSelfOrder = () => {
 
     return (
         <Paper sx={{
-            width: '100%',
+            height: '100%',
             // maxWidth: 500,
             mx: 'auto',
             // overflow: 'hidden',
-            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            // boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
             // borderRadius: 1
             // p:1
         }}>
@@ -89,7 +89,7 @@ const NewSelfOrder = () => {
                 justifyContent: 'space-between',
                 alignItems: 'center',
                 p: 2,
-                borderBottom: '1px solid #f0f0f0',
+                // borderBottom: '1px solid #f0f0f0',
                 mt:1
             }}>
                 <Typography variant="h6" sx={{ fontWeight: 'bold' }}>

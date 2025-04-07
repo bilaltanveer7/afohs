@@ -11,6 +11,7 @@ import TakeoutDiningIcon from '@mui/icons-material/TakeoutDining';
 import EventSeatIcon from '@mui/icons-material/EventSeat';
 import TakeAwayDialog from './takeaway';
 import DineDialog from './dine';
+import ReservationDialog from './reservation';
 
 const NewOrderDialog = () => {
   const [orderType, setOrderType] = useState('dineIn');
@@ -159,6 +160,7 @@ const NewOrderDialog = () => {
       )} */}
       {orderType === 'dineIn' && <DineDialog />}
       {orderType === 'takeaway' && <TakeAwayDialog />}
+      {orderType === 'reservation' && <ReservationDialog />}
     </Paper>
   );
 };

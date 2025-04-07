@@ -21,6 +21,7 @@ const EmployeeProfileScreen = ({ setProfileView }) => {
             elevation={1}
             sx={{
                 width: '100%',
+                // height:'100vh',
                 // maxWidth: 360, 
                 borderRadius: 1,
                 overflow: 'hidden'
@@ -81,7 +82,7 @@ const EmployeeProfileScreen = ({ setProfileView }) => {
             </Box>
 
             {/* Profile Details */}
-            <Box sx={{ p: 3 }}>
+            <Box sx={{ p: 3, bgcolor: '#e6f2f5', }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
                     <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>
                         Profile Details
@@ -129,7 +130,7 @@ const EmployeeProfileScreen = ({ setProfileView }) => {
             </Box>
 
             {/* Action Buttons */}
-            <Box sx={{ px: 2, pb: 2 }}>
+            <Box sx={{ px: 2, pb: 2, bgcolor: '#e6f2f5', }}>
                 <Button
                     fullWidth
                     variant="outlined"

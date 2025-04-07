@@ -4,6 +4,9 @@ import React, { useState } from "react"
 import { Box, Typography, Button, Paper, Grid, TextField, InputAdornment, Divider, Container } from "@mui/material"
 import { ArrowForward, Backspace } from "@mui/icons-material"
 import "bootstrap/dist/css/bootstrap.min.css"
+import RegularBill from "./regular"
+import SplitBill from "./split"
+import QRScreen from "./qr"
 
 const PaymentPage = () => {
   const [selectedTab, setSelectedTab] = useState("Regular Bill")
@@ -75,8 +78,8 @@ const PaymentPage = () => {
             display: "flex",
             flexDirection: "column",
             // justifyContent:'center',
-            alignItems:'center',
-            height:'100%'
+            alignItems: 'center',
+            height: '100%'
           }}
         >
           {/* Logo */}
@@ -160,7 +163,7 @@ const PaymentPage = () => {
             </Grid>
           </Grid>
 
-          <Divider sx={{ my: 2, bgcolor:'black' }} />
+          <Divider sx={{ my: 2, bgcolor: 'black' }} />
 
           <Grid container spacing={1} sx={{ mb: 1 }}>
             <Grid item xs={4}>
@@ -320,7 +323,7 @@ const PaymentPage = () => {
           <Box
             sx={{
               display: "flex",
-              justifyContent: "space-between",
+              // justifyContent: "space-between",
               alignItems: "center",
               p: 2,
               borderBottom: "1px solid #eee",
@@ -337,7 +340,7 @@ const PaymentPage = () => {
             </Typography>
 
             {/* Tabs */}
-            <Box sx={{ display: "flex" }}>
+            <Box sx={{ display: "flex", gap: 1, marginLeft: 5 }}>
               <Button
                 variant={selectedTab === "Regular Bill" ? "contained" : "text"}
                 onClick={() => handleTabClick("Regular Bill")}
@@ -353,6 +356,7 @@ const PaymentPage = () => {
               >
                 Regular Bill
               </Button>
+
               <Button
                 variant={selectedTab === "Split Bill" ? "contained" : "text"}
                 onClick={() => handleTabClick("Split Bill")}
@@ -370,534 +374,11 @@ const PaymentPage = () => {
               </Button>
             </Box>
           </Box>
-
-          {/* Payment Methods */}
-          <Box sx={{ p: 2 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={4}>
-                <Paper
-                  elevation={selectedPayment === "Cash" ? 3 : 1}
-                  sx={{
-                    p: 2,
-                    textAlign: "center",
-                    cursor: "pointer",
-                    bgcolor: selectedPayment === "Cash" ? "#bbdefb" : "white",
-                    border: selectedPayment === "Cash" ? "1px solid #90caf9" : "1px solid #eee",
-                    "&:hover": {
-                      bgcolor: selectedPayment === "Cash" ? "#bbdefb" : "#f5f5f5",
-                    },
-                  }}
-                  onClick={() => handlePaymentMethodClick("Cash")}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      mb: 1,
-                    }}
-                  >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M2 8V16C2 17.1 2.9 18 4 18H20C21.1 18 22 17.1 22 16V8C22 6.9 21.1 6 20 6H4C2.9 6 2 6.9 2 8Z" stroke="#333333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      <path d="M12 14C13.1046 14 14 13.1046 14 12C14 10.8954 13.1046 10 12 10C10.8954 10 10 10.8954 10 12C10 13.1046 10.8954 14 12 14Z" stroke="#333333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      <path d="M6 12H6.01M18 12H18.01" stroke="#333333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </Box>
-                  <Typography variant="body2" sx={{ color: "#333" }}>
-                    Cash
-                  </Typography>
-                </Paper>
-              </Grid>
-              <Grid item xs={4}>
-                <Paper
-                  elevation={selectedPayment === "Bank Transfer" ? 3 : 1}
-                  sx={{
-                    p: 2,
-                    textAlign: "center",
-                    cursor: "pointer",
-                    bgcolor: selectedPayment === "Bank Transfer" ? "#bbdefb" : "white",
-                    border: selectedPayment === "Bank Transfer" ? "1px solid #90caf9" : "1px solid #eee",
-                    "&:hover": {
-                      bgcolor: selectedPayment === "Bank Transfer" ? "#bbdefb" : "#f5f5f5",
-                    },
-                  }}
-                  onClick={() => handlePaymentMethodClick("Bank Transfer")}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      mb: 1,
-                    }}
-                  >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M4 10V17C4 19.2091 5.79086 21 8 21H16C18.2091 21 20 19.2091 20 17V10M4 10V7C4 4.79086 5.79086 3 8 3H16C18.2091 3 20 4.79086 20 7V10M4 10H20" stroke="#333333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      <path d="M8 15H16" stroke="#333333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      <path d="M8 18H12" stroke="#333333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </Box>
-                  <Typography variant="body2" sx={{ color: "#333" }}>
-                    Bank Transfer
-                  </Typography>
-                </Paper>
-              </Grid>
-              <Grid item xs={4}>
-                <Paper
-                  elevation={selectedPayment === "QR Code" ? 3 : 1}
-                  sx={{
-                    p: 2,
-                    textAlign: "center",
-                    cursor: "pointer",
-                    bgcolor: selectedPayment === "QR Code" ? "#bbdefb" : "white",
-                    border: selectedPayment === "QR Code" ? "1px solid #90caf9" : "1px solid #eee",
-                    "&:hover": {
-                      bgcolor: selectedPayment === "QR Code" ? "#bbdefb" : "#f5f5f5",
-                    },
-                  }}
-                  onClick={() => handlePaymentMethodClick("QR Code")}
-                >
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                      mb: 1,
-                    }}
-                  >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <path d="M3 3H10V10H3V3Z" stroke="#333333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      <path d="M14 3H21V10H14V3Z" stroke="#333333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      <path d="M3 14H10V21H3V14Z" stroke="#333333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      <path d="M14 14H21V21H14V14Z" stroke="#333333" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </Box>
-                  <Typography variant="body2" sx={{ color: "#333" }}>
-                    QR Code
-                  </Typography>
-                </Paper>
-              </Grid>
-            </Grid>
-          </Box>
-
-          {/* Amount Input and Customer Changes */}
-          <Box sx={{ px: 2, py: 1 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <Typography variant="body2" sx={{ mb: 1, color: "#666" }}>
-                  Input Amount
-                </Typography>
-                <TextField
-                  fullWidth
-                  value={inputAmount}
-                  onChange={(e) => setInputAmount(e.target.value)}
-                  InputProps={{
-                    startAdornment: <InputAdornment position="start">Rs</InputAdornment>,
-                  }}
-                  sx={{
-                    "& .MuiOutlinedInput-root": {
-                      borderRadius: "4px",
-                    },
-                  }}
-                />
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="body2" sx={{ mb: 1, color: "#666" }}>
-                  Customer Changes
-                </Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    height: "56px",
-                  }}
-                >
-                  <Typography variant="h6" sx={{ color: "#333" }}>
-                    Rs {customerChanges}
-                  </Typography>
-                </Box>
-              </Grid>
-            </Grid>
-          </Box>
-
-          {/* Quick Amount Buttons */}
-          <Box sx={{ px: 2, py: 1 }}>
-            <Grid container spacing={1}>
-              <Grid item>
-                <Button
-                  variant="outlined"
-                  onClick={() => handleQuickAmountClick("52.64")}
-                  sx={{
-                    borderColor: "#ccc",
-                    color: "#333",
-                    "&:hover": {
-                      borderColor: "#aaa",
-                      bgcolor: "#f5f5f5",
-                    },
-                  }}
-                >
-                  Exact money
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button
-                  variant="outlined"
-                  onClick={() => handleQuickAmountClick("10.00")}
-                  sx={{
-                    borderColor: "#ccc",
-                    color: "#333",
-                    "&:hover": {
-                      borderColor: "#aaa",
-                      bgcolor: "#f5f5f5",
-                    },
-                  }}
-                >
-                  Rs 10.00
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button
-                  variant="outlined"
-                  onClick={() => handleQuickAmountClick("20.00")}
-                  sx={{
-                    borderColor: "#ccc",
-                    color: "#333",
-                    "&:hover": {
-                      borderColor: "#aaa",
-                      bgcolor: "#f5f5f5",
-                    },
-                  }}
-                >
-                  Rs 20.00
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button
-                  variant="outlined"
-                  onClick={() => handleQuickAmountClick("50.00")}
-                  sx={{
-                    borderColor: "#ccc",
-                    color: "#333",
-                    "&:hover": {
-                      borderColor: "#aaa",
-                      bgcolor: "#f5f5f5",
-                    },
-                  }}
-                >
-                  Rs 50.00
-                </Button>
-              </Grid>
-              <Grid item>
-                <Button
-                  variant="outlined"
-                  onClick={() => handleQuickAmountClick("100.00")}
-                  sx={{
-                    borderColor: "#ccc",
-                    color: "#333",
-                    "&:hover": {
-                      borderColor: "#aaa",
-                      bgcolor: "#f5f5f5",
-                    },
-                  }}
-                >
-                  Rs 100.00
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
-
-          {/* Numeric Keypad */}
-          <Box sx={{ p: 2, mb:1}}>
-            <Grid container spacing={0}>
-              <Grid item xs={4} sx={{
-                // p:5
-              }}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  onClick={() => handleNumberClick("1")}
-                  sx={{
-                    width: "180px",
-                    height: "50px",
-                    fontSize: "1.5rem",
-                    borderColor: "#eee",
-                    color: "#333",
-                    "&:hover": {
-                      borderColor: "#ddd",
-                      bgcolor: "#f5f5f5",
-                    },
-                  }}
-                >
-                  1
-                </Button>
-              </Grid>
-              <Grid item xs={4}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  onClick={() => handleNumberClick("2")}
-                  sx={{
-                    width: "180px",
-                    height: "50px",
-                    fontSize: "1.5rem",
-                    borderColor: "#eee",
-                    color: "#333",
-                    "&:hover": {
-                      borderColor: "#ddd",
-                      bgcolor: "#f5f5f5",
-                    },
-                  }}
-                >
-                  2
-                </Button>
-              </Grid>
-              <Grid item xs={4}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  onClick={() => handleNumberClick("3")}
-                  sx={{
-                    width: "180px",
-                    height: "50px",
-                    fontSize: "1.5rem",
-                    borderColor: "#eee",
-                    color: "#333",
-                    "&:hover": {
-                      borderColor: "#ddd",
-                      bgcolor: "#f5f5f5",
-                    },
-                  }}
-                >
-                  3
-                </Button>
-              </Grid>
-              <Grid item xs={4} sx={{
-              mt:1}}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  onClick={() => handleNumberClick("4")}
-                  sx={{
-                    width: "180px",
-                    height: "50px",
-                    fontSize: "1.5rem",
-                    borderColor: "#eee",
-                    color: "#333",
-                    "&:hover": {
-                      borderColor: "#ddd",
-                      bgcolor: "#f5f5f5",
-                    },
-                  }}
-                >
-                  4
-                </Button>
-              </Grid>
-              <Grid item xs={4} sx={{
-              mt:1}}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  onClick={() => handleNumberClick("5")}
-                  sx={{
-                    width: "180px",
-                    height: "50px",
-                    fontSize: "1.5rem",
-                    borderColor: "#eee",
-                    color: "#333",
-                    "&:hover": {
-                      borderColor: "#ddd",
-                      bgcolor: "#f5f5f5",
-                    },
-                  }}
-                >
-                  5
-                </Button>
-              </Grid>
-              <Grid item xs={4} sx={{
-              mt:1}}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  onClick={() => handleNumberClick("6")}
-                  sx={{
-                    width: "180px",
-                    height: "50px",
-                    fontSize: "1.5rem",
-                    borderColor: "#eee",
-                    color: "#333",
-                    "&:hover": {
-                      borderColor: "#ddd",
-                      bgcolor: "#f5f5f5",
-                    },
-                  }}
-                >
-                  6
-                </Button>
-              </Grid>
-              <Grid item xs={4} sx={{
-              mt:1}}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  onClick={() => handleNumberClick("7")}
-                  sx={{
-                    width: "180px",
-                    height: "50px",
-                    fontSize: "1.5rem",
-                    borderColor: "#eee",
-                    color: "#333",
-                    "&:hover": {
-                      borderColor: "#ddd",
-                      bgcolor: "#f5f5f5",
-                    },
-                  }}
-                >
-                  7
-                </Button>
-              </Grid>
-              <Grid item xs={4} sx={{
-              mt:1}}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  onClick={() => handleNumberClick("8")}
-                  sx={{
-                    width: "180px",
-                    height: "50px",
-                    fontSize: "1.5rem",
-                    borderColor: "#eee",
-                    color: "#333",
-                    "&:hover": {
-                      borderColor: "#ddd",
-                      bgcolor: "#f5f5f5",
-                    },
-                  }}
-                >
-                  8
-                </Button>
-              </Grid>
-              <Grid item xs={4} sx={{
-              mt:1}}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  onClick={() => handleNumberClick("9")}
-                  sx={{
-                    width: "180px",
-                    height: "50px",
-                    fontSize: "1.5rem",
-                    borderColor: "#eee",
-                    color: "#333",
-                    "&:hover": {
-                      borderColor: "#ddd",
-                      bgcolor: "#f5f5f5",
-                    },
-                  }}
-                >
-                  9
-                </Button>
-              </Grid>
-              <Grid item xs={4} sx={{
-              mt:1}}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  onClick={handleDecimalClick}
-                  sx={{
-                    width: "180px",
-                    height: "50px",
-                    fontSize: "1.5rem",
-                    borderColor: "#eee",
-                    color: "#333",
-                    "&:hover": {
-                      borderColor: "#ddd",
-                      bgcolor: "#f5f5f5",
-                    },
-                  }}
-                >
-                  .
-                </Button>
-              </Grid>
-              <Grid item xs={4} sx={{
-              mt:1}}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  onClick={() => handleNumberClick("0")}
-                  sx={{
-                    width: "180px",
-                    height: "50px",
-                    fontSize: "1.5rem",
-                    borderColor: "#eee",
-                    color: "#333",
-                    "&:hover": {
-                      borderColor: "#ddd",
-                      bgcolor: "#f5f5f5",
-                    },
-                  }}
-                >
-                  0
-                </Button>
-              </Grid>
-              <Grid item xs={4} sx={{
-              mt:1}}>
-                <Button
-                  fullWidth
-                  variant="outlined"
-                  onClick={handleDeleteClick}
-                  sx={{
-                    width: "180px",
-                    height: "50px",
-                    fontSize: "1.5rem",
-                    borderColor: "#ffcdd2",
-                    bgcolor: "#ffebee",
-                    color: "#d32f2f",
-                    "&:hover": {
-                      borderColor: "#ef9a9a",
-                      bgcolor: "#ffcdd2",
-                    },
-                  }}
-                >
-                  <Backspace />
-                </Button>
-              </Grid>
-            </Grid>
-          </Box>
-
-          {/* Action Buttons */}
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              p: 2,
-              borderTop: "1px solid #eee",
-            }}
-          >
-            <Button
-              variant="text"
-              sx={{
-                color: "#666",
-                mr: 2,
-                "&:hover": {
-                  bgcolor: "rgba(0,0,0,0.04)",
-                },
-              }}
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="contained"
-              endIcon={<ArrowForward />}
-              sx={{
-                bgcolor: "#0a4b78",
-                color: "white",
-                "&:hover": {
-                  bgcolor: "#083c61",
-                },
-              }}
-            >
-              Pay Now
-            </Button>
+          <Box sx={{ mt: 3 }}>
+            {selectedTab === "Regular Bill" && <RegularBill />}
+            {selectedTab === "Split Bill" && <SplitBill />}
           </Box>
         </Box>
-
       </Box>
     </Container>
   )

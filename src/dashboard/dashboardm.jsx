@@ -45,6 +45,7 @@ const Dashboard = () => {
     const [showOrder, setShowOrder] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isNotificationVisible, setIsNotificationVisible] = useState(false);
+    const [isSidePanelOpen, setIsSidePanelOpen] = useState(false);
 
     const handleCancelOrder = () => {
         setIsModalVisible(false); // Close the cancel order modal
@@ -58,12 +59,37 @@ const Dashboard = () => {
 
     return (
         <>
+            {
+                showOrder && (
+                    <div className="slide-panel-reserve open">
+                        <button className="close-btn" onClick={() => setShowOrder(false)}>
+                            <CloseIcon fontSize="medium" />
+                        </button>
+                        <div className="slide-panel-reserve-content">
+                            <NewSelfOrder />
+                        </div>
+                    </div>
+                )
+            }
+
+            {showReserve && (
+                <div className="slide-panel-reserve open">
+                    <button className="close-btn" onClick={() => setShowReserve(false)}>
+                        <CloseIcon fontSize="medium" />
+                    </button>
+                    <div className="slide-panel-reserve-content">
+                        <ReservationOrder />
+                    </div>
+                </div>
+            )}
             <SideNav open={open} setOpen={setOpen} />
-            <div style={{
-                marginLeft: open ? `${drawerWidthOpen}px` : `${drawerWidthClosed}px`,
-                transition: "margin-left 0.3s ease-in-out",
-                marginTop: '4rem',
-            }}>
+            {(showReserve || showOrder) && <div className="overlay-blur" />}
+            <div className={`main-dashboard ${showReserve || showOrder ? 'blurred' : ''}`}
+                style={{
+                    marginLeft: open ? `${drawerWidthOpen}px` : `${drawerWidthClosed}px`,
+                    transition: "margin-left 0.3s ease-in-out",
+                    marginTop: '4rem',
+                }}>
                 <Box sx={{ flexGrow: 1, p: 2, bgcolor: '#f5f7fa' }}>
                     <Grid container spacing={2}>
                         {/* first column */}
@@ -157,14 +183,14 @@ const Dashboard = () => {
                                         cursor: 'pointer'
                                     }}
                                         onClick={() => setShowReserve(true)} />
-                                    <div className={`slide-panel-reserve ${showReserve ? "open" : ""}`}>
+                                    {/* <div className={`slide-panel-reserve ${showReserve ? "open" : ""}`}>
                                         <button className="close-btn" onClick={() => setShowReserve(false)}>
                                             <CloseIcon fontSize="medium" />
                                         </button>
                                         <div className="slide-panel-reserve-content">
                                             <ReservationOrder />
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </Box>
 
                                 {/* Calendar Days */}
@@ -534,10 +560,10 @@ const Dashboard = () => {
                                                             Ronald Richards
                                                         </Typography>
                                                         <img src={crownicon} alt="" style={{
-                                                            height:24,
-                                                            width:24,
-                                                            marginLeft:'0.5rem'
-                                                        }}/>
+                                                            height: 24,
+                                                            width: 24,
+                                                            marginLeft: '0.5rem'
+                                                        }} />
                                                     </Box>
                                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
                                                         <Box component="span" sx={{ mr: 0.5, fontSize: '1rem' }}>🕙</Box>
@@ -755,14 +781,6 @@ const Dashboard = () => {
                                         cursor: 'pointer'
                                     }}
                                         onClick={() => setShowOrder(true)} />
-                                    <div className={`slide-panel-reserve ${showOrder ? "open" : ""}`}>
-                                        <button className="close-btn" onClick={() => setShowOrder(false)}>
-                                            <CloseIcon fontSize="medium" />
-                                        </button>
-                                        <div className="slide-panel-reserve-content">
-                                            <NewSelfOrder />
-                                        </div>
-                                    </div>
                                 </Box>
 
                                 {/* Self Order List */}

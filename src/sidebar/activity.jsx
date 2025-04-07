@@ -29,17 +29,18 @@ const LoginActivityScreen = ({ setProfileView }) => {
         <Box sx={{
             bgcolor: '#e6f2f5',
             minHeight: '100vh',
-            p: 0,
-            m: 0
+            // p: 2,
+            pt: 1
         }}>
             <Paper
                 elevation={0}
                 sx={{
                     width: '100%',
-                    maxWidth: 500,
+                    // maxWidth: 500,
                     mx: 'auto',
                     bgcolor: 'transparent',
-                    boxShadow: 'none'
+                    boxShadow: 'none',
+                    // p:2
                 }}
             >
                 {/* Header */}
@@ -64,7 +65,7 @@ const LoginActivityScreen = ({ setProfileView }) => {
                 </Box>
 
                 {/* Activity Table */}
-                <TableContainer component={Box} sx={{ mt: 1 }}>
+                <TableContainer component={Box} sx={{ p: 2 }}>
                     <Table sx={{ minWidth: '100%' }}>
                         <TableHead>
                             <TableRow sx={{ bgcolor: '#0c4a6e' }}>
