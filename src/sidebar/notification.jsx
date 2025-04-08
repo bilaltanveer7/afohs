@@ -14,15 +14,16 @@ import CloseIcon from '@mui/icons-material/Close';
 import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import LockIcon from '@mui/icons-material/Lock';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-const NotificationsPanel = () => {
+
+const NotificationsPanel = ({ onClose }) => {
   const notifications = [
     {
       customer: {
         name: 'Miles Esther',
         icon: 'shipping',
-        time: '3 mins ago',
+        time: '2 mins ago',
         orderType: 'New Order',
-        orderNumber: '307',
+        orderNumber: '357',
         items: 4
       },
       orderItems: [
@@ -49,7 +50,7 @@ const NotificationsPanel = () => {
         icon: 'lock',
         time: '2 mins ago',
         orderType: 'New Order',
-        orderNumber: '437',
+        orderNumber: '447',
         items: 2
       },
       orderItems: [
@@ -74,9 +75,9 @@ const NotificationsPanel = () => {
       customer: {
         name: 'Bessie Cooper',
         icon: 'shipping',
-        time: '1 min ago',
+        time: '2 mins ago',
         orderType: 'Order Cancelled',
-        orderNumber: '307',
+        orderNumber: '392',
         items: 4
       },
       orderItems: [],
@@ -86,10 +87,10 @@ const NotificationsPanel = () => {
       customer: {
         name: 'Bessie Cooper',
         icon: 'shipping',
-        time: '1 min ago',
+        time: '2 mins ago',
         orderType: 'Order Cancelled',
-        orderNumber: null,
-        items: null
+        orderNumber: '432',
+        items: 4
       },
       orderItems: [],
       hasMoreItems: false
@@ -109,10 +110,16 @@ const NotificationsPanel = () => {
 
   return (
     <Paper
+      elevation={0}
       sx={{
         width: '100%',
+        maxWidth: 600,
         mx: 'auto',
         height: '100vh',
+        borderRadius: 1,
+        overflow: 'hidden', // Hide any overflow
+        display: 'flex',
+        flexDirection: 'column'
       }}
     >
       {/* Header */}
@@ -120,20 +127,19 @@ const NotificationsPanel = () => {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        p: 3,
-        position:'sticky',
-        top:0,
-        zIndex:10,
-        bgcolor:'white'
+        px: 2.5,
+        py: 2,
+        position: 'sticky',
+        top: 0,
+        zIndex: 10,
+        bgcolor: 'white',
+        borderBottom: '1px solid #e0e0e0'
       }}>
         <Box sx={{
           display: 'flex',
-          justifyContent: 'space-between',
           alignItems: 'center',
-          // mt: 1,
-          width: '33%'
         }}>
-          <Typography variant="h6" sx={{ fontWeight: 'bold', mr: 1 }}>
+          <Typography variant="h6" sx={{ fontWeight: 'bold', mr: 1, fontSize: '1.25rem' }}>
             Notifications
           </Typography>
           <Badge
@@ -143,7 +149,7 @@ const NotificationsPanel = () => {
               '& .MuiBadge-badge': {
                 fontSize: '0.75rem',
                 fontWeight: 'bold',
-                // ml:1
+                bgcolor: '#1976d2'
               }
             }}
           />
@@ -155,76 +161,81 @@ const NotificationsPanel = () => {
             sx={{
               color: '#6b7280',
               fontSize: '0.875rem',
-              mt: 1
+              mr: 2
             }}
           >
-            Mark all as read
+            Mark all read
           </Link>
+          <IconButton onClick={onClose} size="small">
+            <CloseIcon fontSize="small" />
+          </IconButton>
         </Box>
       </Box>
 
-      <Divider sx={{
-        height: '1px',
-        backgroundColor: 'black',  // Ensures the divider is dark
-        opacity: 1,                // Makes it fully visible
-        borderBottomWidth: '1px'
-      }} />
-
       {/* Notifications List */}
-      <Box sx={{ bgcolor: '#f1f5f9', maxHeight: 600, overflow: 'auto' }}>
+      <Box 
+        sx={{ 
+          bgcolor: '#f1f5f9', 
+          flexGrow: 1, 
+          overflow: 'auto',
+          '&::-webkit-scrollbar': {
+            display: 'none'
+          },
+          msOverflowStyle: 'none',
+          scrollbarWidth: 'none'
+        }}
+      >
         {notifications.map((notification, index) => (
-          <Box key={index} sx={{ mb: 0 }}>
+          <Box key={index} sx={{ mb: 0.5 }}>
             {/* Customer Info */}
             <Box sx={{
               p: 2,
-              borderBottom: index < notifications.length - 1 ? '1px solid #f0f0f0' : 'none',
+              bgcolor: '#e3f2fd',
               display: 'flex',
-              alignItems: 'center',
-              bgcolor:'#E3F2FD'
+              alignItems: 'flex-start',
             }}>
               <Avatar
                 sx={{
                   bgcolor: notification.customer.icon === 'lock' ? '#6b7280' : '#1976d2',
-                  width: 36,
-                  height: 36,
+                  width: 32,
+                  height: 32,
                   mr: 1.5
                 }}
               >
                 {getCustomerIcon(notification.customer.icon)}
               </Avatar>
               <Box sx={{ flexGrow: 1 }}>
-                <Box sx={{ display: 'flex', alignItems: 'center', }}>
-                  <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: 1, fontSize: '0.9rem' }}>
                     {notification.customer.name}
                   </Typography>
                   <Typography variant="caption" sx={{
                     color: notification.customer.orderType === 'Order Cancelled' ? '#ef4444' : '#1976d2',
-                    fontWeight: 500
+                    fontWeight: 500,
+                    fontSize: '0.75rem'
                   }}>
                     • {notification.customer.orderType}
                   </Typography>
                 </Box>
-                {notification.customer.orderNumber && (
-                  <Typography variant="caption" sx={{ color: '#6b7280' }}>
-                    Order #{notification.customer.orderNumber} • {notification.customer.items} items
-                  </Typography>
-                )}
+                <Typography variant="caption" sx={{ color: '#6b7280', fontSize: '0.75rem' }}>
+                  Order #{notification.customer.orderNumber} • {notification.customer.items} items
+                </Typography>
               </Box>
-              <Typography variant="caption" sx={{ color: '#6b7280', ml: 1 }}>
+              <Typography variant="caption" sx={{ color: '#6b7280', ml: 1, fontSize: '0.75rem', whiteSpace: 'nowrap' }}>
                 {notification.customer.time}
               </Typography>
             </Box>
 
             {/* Order Items */}
             {notification.orderItems.length > 0 && (
-              <Box sx={{ bgcolor:'#E3F2FD', px: 2, pb: notification.hasMoreItems ? 0 : 2 }}>
+              <Box sx={{ bgcolor: '#e3f2fd', px: 2, pb: notification.hasMoreItems ? 0 : 2 }}>
                 {notification.orderItems.map((item, itemIndex) => (
                   <Box
                     key={itemIndex}
                     sx={{
                       display: 'flex',
                       py: 1.5,
-                      borderTop: itemIndex > 0 ? '1px solid #f0f0f0' : 'none'
+                      borderTop: '1px solid rgba(240, 240, 240, 0.5)'
                     }}
                   >
                     <Avatar
@@ -240,18 +251,18 @@ const NotificationsPanel = () => {
                       {item.name.charAt(0)}
                     </Avatar>
                     <Box sx={{ flexGrow: 1 }}>
-                      <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                      <Typography variant="body2" sx={{ fontWeight: 'bold', fontSize: '0.875rem' }}>
                         {item.name}
                       </Typography>
-                      <Typography variant="caption" sx={{ color: '#6b7280' }}>
+                      <Typography variant="caption" sx={{ color: '#6b7280', fontSize: '0.75rem' }}>
                         Variant: {item.variant}
                       </Typography>
                     </Box>
                     <Box sx={{ textAlign: 'right' }}>
-                      <Typography variant="body2" sx={{ color: '#6b7280' }}>
+                      <Typography variant="body2" sx={{ color: '#6b7280', fontSize: '0.75rem' }}>
                         Qty: {item.quantity} x Rs {item.price.toFixed(2)}
                       </Typography>
-                      <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
+                      <Typography variant="body2" sx={{ fontWeight: 'bold', fontSize: '0.875rem' }}>
                         Rs {(item.quantity * item.price).toFixed(2)}
                       </Typography>
                     </Box>
@@ -264,21 +275,26 @@ const NotificationsPanel = () => {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   py: 1.5,
-                  borderTop: '1px solid #f0f0f0'
+                  borderTop: '1px solid rgba(240, 240, 240, 0.5)'
                 }}>
                   {notification.hasMoreItems ? (
-                    <Typography variant="body2" sx={{ color: '#6b7280' }}>
+                    <Typography variant="body2" sx={{ color: '#6b7280', fontSize: '0.875rem' }}>
                       + More menu
                     </Typography>
                   ) : (
                     <Box />
                   )}
                   <Button
+                    variant="outlined"
                     endIcon={<ArrowForwardIosIcon sx={{ fontSize: 12 }} />}
                     sx={{
                       color: '#1976d2',
                       textTransform: 'none',
-                      fontSize: '0.875rem'
+                      fontSize: '0.75rem',
+                      borderColor: '#1976d2',
+                      borderRadius: 1,
+                      py: 0.5,
+                      px: 1.5
                     }}
                   >
                     See Detail
@@ -286,8 +302,6 @@ const NotificationsPanel = () => {
                 </Box>
               </Box>
             )}
-
-            <Divider sx={{ mt: 0.5 }} />
           </Box>
         ))}
       </Box>

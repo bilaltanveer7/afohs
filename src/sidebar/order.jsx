@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   Box,
+  IconButton,
   Typography,
   Paper,
   ToggleButtonGroup,
@@ -12,8 +13,9 @@ import EventSeatIcon from '@mui/icons-material/EventSeat';
 import TakeAwayDialog from './takeaway';
 import DineDialog from './dine';
 import ReservationDialog from './reservation';
+import CloseIcon from '@mui/icons-material/Close';
 
-const NewOrderDialog = () => {
+const NewOrderDialog = ({onClose}) => {
   const [orderType, setOrderType] = useState('dineIn');
   // const [orderType, setOrderType] = useState<'dineIn' | 'takeaway' | 'reservation'>('dineIn');
   const [seatingArea, setSeatingArea] = useState('indoor');
@@ -53,12 +55,11 @@ const NewOrderDialog = () => {
 
   return (
     <Paper
-      elevation={1}
+      elevation={0}
       sx={{
         width: '100%',
         mx: 'auto',
         overflow: 'hidden',
-        zIndex: 9999
       }}
     >
       {/* Header */}
@@ -75,6 +76,9 @@ const NewOrderDialog = () => {
         <Typography variant="h6" sx={{ fontWeight: 'bold' }}>
           New Order
         </Typography>
+        <IconButton onClick={onClose} size="small">
+          <CloseIcon fontSize="small" />
+        </IconButton>
       </Box>
 
       {/* Order Type Selection */}

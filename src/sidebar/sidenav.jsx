@@ -31,8 +31,9 @@ import LoginActivityScreen from './activity';
 import LogoutScreen from './logout';
 import NewOrderDialog from './order';
 import CloseIcon from "@mui/icons-material/Close";
-import CoffeeShop from '../inventory/dashboard';
-import './style.css'
+import bellicon from '../assetts/bell-notification.png';
+import { Modal, Slide } from '@mui/material';
+// import './style.css'
 
 const drawerWidthOpen = 240; // Set open width to 240px
 const drawerWidthClosed = 110; // Set closed width to 120px
@@ -134,30 +135,58 @@ export default function SideNav({ open, setOpen }) {
                         aria-label="toggle drawer"
                         onClick={() => setOpen(!open)} // Toggle sidebar
                         edge="start"
-                        sx={{ marginRight: 5, border: "1px solid #000", borderRadius: "8px", p: 1 }}
+                        sx={{ marginRight: 5, border: "1px solid #3F4E4F", borderRadius: "2px", }}
                     >
-                        {open ? <MenuOpenIcon sx={{ color: '#000' }} /> : <MenuIcon sx={{ color: '#000' }} />} {/* Toggle between icons */}
+                        {open ? <MenuOpenIcon sx={{ color: '#3F4E4F', width: '20px', height: '20' }} /> : <MenuIcon sx={{ color: '#3F4E4F', width: '20px', height: '20' }} />} {/* Toggle between icons */}
                     </IconButton>
                     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                         {/* Notification Icon */}
-                        <IconButton sx={{ border: "1px solid #000", borderRadius: "8px", p: 1 }}>
-                            <NotificationsNoneIcon sx={{ color: "#000" }}
-                                onClick={() => setShowNotification(true)} />
+                        <IconButton
+                            onClick={() => setShowNotification(true)}
+                            sx={{ border: "1px solid #3F4E4F", borderRadius: "2px", p: 1.3 }}
+                        >
+                            <img
+                                src={bellicon}
+                                alt=""
+                                style={{ width: 17, height: 19 }}
+                            />
                         </IconButton>
-                        <div className={`slide-panel-noti ${showNotification ? "open" : ""}`}>
-                            <button className="close-btn-noti" onClick={() => setShowNotification(false)}>
-                                <CloseIcon fontSize="medium" />
-                            </button>
-                            <div className="slide-panel-noti-content">
-                                <NotificationsPanel />
-                            </div>
-                        </div>
+                        <Modal
+                            open={showNotification}
+                            onClose={() => setShowNotification(false)}
+                            closeAfterTransition
+                        >
+                            <Slide direction="left" in={showNotification} mountOnEnter unmountOnExit>
+                                <Box
+                                    sx={{
+                                        position: 'fixed',
+                                        top: '10px',
+                                        bottom: '10px',
+                                        right: 10,
+                                        width: { xs: '100%', sm: 600 },
+                                        bgcolor: '#fff',
+                                        boxShadow: 4,
+                                        zIndex: 1300,
+                                        overflowY: 'auto',
+                                        borderRadius: 1,
+                                        scrollbarWidth: 'none', // Firefox
+                                        '&::-webkit-scrollbar': {
+                                            display: 'none', // Chrome, Safari, Edge
+                                        },
+                                    }}
+                                >
+                                    <NotificationsPanel onClose={() => setShowNotification(false)} />
+                                </Box>
+                            </Slide>
+                        </Modal>
 
                         {/* Vertical Divider */}
                         <Divider orientation="vertical" flexItem sx={{
-                            backgroundColor: "black",  // Set color to black
+                            backgroundColor: "#3F4E4F",  // Set color to black
+                            height: "30px",
                             width: "1px",              // Increase thickness
-                            opacity: 1
+                            opacity: 1,
+                            mt: 1
                         }} />
 
                         {/* Profile Section */}
@@ -167,27 +196,46 @@ export default function SideNav({ open, setOpen }) {
                             <Avatar
                                 src="your-profile-image-url.jpg"
                                 alt="User Profile"
-                                sx={{ width: 40, height: 40 }}
+                                sx={{ width: 40, height: 40, borderRadius: '0' }}
                             />
                             <Box>
                                 <Typography sx={{ fontWeight: "bold", color: "#000" }}>MALIK</Typography>
                                 <Typography sx={{ fontSize: "12px", color: "#666" }}>Admin</Typography>
                             </Box>
                         </Box>
-                        <div className={`slide-panel-noti ${showProfile ? "open" : ""}`}>
-                            <button className="close-btn-noti" onClick={() => setShowProfile(false)}>
-                                <CloseIcon fontSize="medium" />
-                            </button>
-                            <div className="slide-panel-noti-content">
+                        <Modal
+                            open={showProfile}
+                            onClose={() => setShowProfile(false)}
+                            aria-labelledby="profile-modal"
+                            sx={{ zIndex: 1300 }}
+                        >
+                            <Box
+                                sx={{
+                                    position: 'fixed',
+                                    top: '10px',
+                                    bottom: '10px',
+                                    right: 10,
+                                    width: { xs: '100%', sm: 400 },
+                                    bgcolor: '#fff',
+                                    boxShadow: 4,
+                                    zIndex: 1300,
+                                    overflowY: 'auto',
+                                    borderRadius: 2,
+                                    scrollbarWidth: 'none',
+                                    '&::-webkit-scrollbar': { display: 'none' },
+                                }}
+                            >
+
+                                {/* Profile Modal Content */}
                                 {profileView === "profile" ? (
-                                    <EmployeeProfileScreen setProfileView={setProfileView} />
+                                    <EmployeeProfileScreen setProfileView={setProfileView} onClose={() => setShowProfile(false)} />
                                 ) : profileView === "loginActivity" ? (
                                     <LoginActivityScreen setProfileView={setProfileView} />
                                 ) : profileView === "logoutSuccess" ? (
                                     <LogoutScreen setProfileView={setProfileView} />
                                 ) : null}
-                            </div>
-                        </div>
+                            </Box>
+                        </Modal>
                     </Box>
                 </Toolbar>
             </AppBar>
@@ -229,14 +277,31 @@ export default function SideNav({ open, setOpen }) {
                     >
                         {open ? "+ New Order" : "+ New Order"} {/* Show full text only when open */}
                     </Button>
-                    <div className={`slide-panel-noti ${showOrder ? "open" : ""}`}>
-                        <button className="close-btn-noti" onClick={() => setShowOrder(false)}>
-                            <CloseIcon fontSize="medium" />
-                        </button>
-                        <div className="slide-panel-noti-content">
-                            <NewOrderDialog />
-                        </div>
-                    </div>
+                    <Modal
+                        open={showOrder}
+                        onClose={() => setShowOrder(false)}
+                        aria-labelledby="new-order-modal"
+                        sx={{ zIndex: 1300 }}
+                    >
+                        <Box
+                            sx={{
+                                position: 'fixed',
+                                top: '10px',
+                                bottom: '10px',
+                                right: 10,
+                                width: { xs: '100%', sm: 600 },
+                                bgcolor: '#fff',
+                                boxShadow: 4,
+                                zIndex: 1300,
+                                overflowY: 'auto',
+                                borderRadius: 2,
+                                scrollbarWidth: 'none',
+                                '&::-webkit-scrollbar': { display: 'none' },
+                            }}
+                        >
+                            <NewOrderDialog onClose={() => setShowOrder(false)} />
+                        </Box>
+                    </Modal>
                 </Box>
 
                 <List>

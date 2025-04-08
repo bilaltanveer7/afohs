@@ -14,6 +14,9 @@ import camicon from '../assetts/camera.png'
 import recicon from '../assetts/receipt-list.png'
 import watchicon from '../assetts/stopwatch-alt.png'
 import sofaicon from '../assetts/sofa.png'
+import invoiceicon from '../assetts/invoice.png'
+import boxicon from '../assetts/box.png'
+import guesticon from '../assetts/Guest.png'
 import "./style.css"
 import {
     Box,
@@ -23,6 +26,8 @@ import {
     Button,
     IconButton,
     Chip,
+    Modal,
+    Divider,
     Select,
     MenuItem
 } from '@mui/material';
@@ -34,6 +39,7 @@ import {
     Print,
     Chat
 } from '@mui/icons-material';
+import NewOrderDialog from '../sidebar/order';
 
 const drawerWidthOpen = 240;
 const drawerWidthClosed = 110;
@@ -59,32 +65,8 @@ const Dashboard = () => {
 
     return (
         <>
-            {
-                showOrder && (
-                    <div className="slide-panel-reserve open">
-                        <button className="close-btn" onClick={() => setShowOrder(false)}>
-                            <CloseIcon fontSize="medium" />
-                        </button>
-                        <div className="slide-panel-reserve-content">
-                            <NewSelfOrder />
-                        </div>
-                    </div>
-                )
-            }
-
-            {showReserve && (
-                <div className="slide-panel-reserve open">
-                    <button className="close-btn" onClick={() => setShowReserve(false)}>
-                        <CloseIcon fontSize="medium" />
-                    </button>
-                    <div className="slide-panel-reserve-content">
-                        <ReservationOrder />
-                    </div>
-                </div>
-            )}
             <SideNav open={open} setOpen={setOpen} />
-            {(showReserve || showOrder) && <div className="overlay-blur" />}
-            <div className={`main-dashboard ${showReserve || showOrder ? 'blurred' : ''}`}
+            <div
                 style={{
                     marginLeft: open ? `${drawerWidthOpen}px` : `${drawerWidthClosed}px`,
                     transition: "margin-left 0.3s ease-in-out",
@@ -98,15 +80,15 @@ const Dashboard = () => {
                                 <Box>
                                     <Box
                                         sx={{
-                                            bgcolor: '#0e3151',
-                                            // opacity:25%,
+                                            bgcolor: '#456880',
                                             p: 1.5,
                                             borderRadius: '4px',
                                             mb: 2,
                                             position: 'relative',
+
                                         }}
                                     >
-                                        <Typography variant="body2" sx={{ fontWeight: 'bold', color: 'white' }}>
+                                        <Typography variant="body2" sx={{ fontWeight: '400', color: 'white', ml: 1 }}>
                                             Sales up to <strong>56%</strong> compared to yesterday
                                         </Typography>
                                         <Box
@@ -120,35 +102,54 @@ const Dashboard = () => {
                                             }}
                                         />
                                     </Box>
-                                    <Box sx={{ width: '75vh', ml: 2, display: 'flex', justifyContent: 'center' }}>
+                                    <Box sx={{ backgroundColor: '#083152', color: '#fff', px: 1, borderRadius: 2 }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
-                                        <Grid container spacing={1} sx={{
-                                            // bgcolor: 'black',
-                                            width: '100%',
-
-                                        }}>
-                                            <Grid item xs={5}>
-                                                <Typography variant="body2" sx={{ mb: 2 }}>Today Revenue</Typography>
-                                                <Typography variant="h5" sx={{ fontWeight: 'bold', mb: 2 }}>
+                                            {/* Left Section - Revenue */}
+                                            <Box sx={{ flex: 1, textAlign: 'left', pl: 2 }}>
+                                                <Typography variant="body2" sx={{ color: "#FFFFFF", fontSize: '14px', fontWeight: 400 }}>
+                                                    Today Revenue
+                                                </Typography>
+                                                <Typography variant="h5" sx={{ fontWeight: "bold", mt: 1, fontSize: '34px', color: '#FFFFFF' }}>
                                                     Rs 559,102.00
                                                 </Typography>
-                                            </Grid>
-                                            <Box sx={{ width: '1px', height: '30%', bgcolor: '#fff', m: 4 }} />
+                                            </Box>
 
-                                            <Grid item xs={5} container alignItems="flex-start" justifyContent="flex-end">
-                                                <Box sx={{ display: 'flex', alignItems: 'flex-end', gap: 2 }}>
-                                                    <Typography variant="caption" sx={{ display: 'flex', alignItems: 'center', color: 'green' }}>
-                                                        <ArrowUpward sx={{ fontSize: 12, color: '#4caf50', mr: 0.5 }} />
-                                                        +40%
+                                            {/* Vertical Divider */}
+                                            <Box
+                                                sx={{
+                                                    width: '1.5px',
+                                                    height: '70px',
+                                                    bgcolor: '#B89274',
+                                                    // mx: 4,
+                                                }}
+                                            />
+
+                                            {/* Right Section - Profit */}
+                                            <Box sx={{ flex: 1, textAlign: 'right', pr: 2 }}>
+                                                <Box sx={{ display: "flex", justifyContent: 'flex-end', alignItems: "center", gap: 1 }}>
+                                                    <Chip
+                                                        label="+ 40.0%"
+                                                        size="small"
+                                                        sx={{
+                                                            bgcolor: "#ffffff33",
+                                                            color: "#fff",
+                                                            fontWeight: 500,
+                                                            height: 22,
+                                                            fontSize: "0.7rem",
+                                                            borderRadius: 0
+                                                        }}
+                                                    />
+                                                    <Typography variant="body2" sx={{ color: "#FFFFFF", fontSize: '14px' }}>
+                                                        Today Profit
                                                     </Typography>
-                                                    <Typography variant="body2">Today Profit</Typography>
                                                 </Box>
-                                                <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
+                                                <Typography variant="h5" sx={{ fontWeight: "bold", mt: 1, fontSize: '34px', color: '#FFFFFF' }}>
                                                     Rs 223,640.80
                                                 </Typography>
-                                            </Grid>
+                                            </Box>
 
-                                        </Grid>
+                                        </Box>
                                     </Box>
 
                                     <Grid container spacing={2} sx={{
@@ -173,9 +174,9 @@ const Dashboard = () => {
                                     </Grid>
                                 </Box>
                             </Paper>
-                            <Paper sx={{ p: 2, mt: 2 }}>
+                            <Paper elevation={0} sx={{ p: 2, mt: 2 }}>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Reservation Order</Typography>
+                                    <Typography variant="subtitle1" sx={{ fontWeight: '500', fontSize: '20px', color: '#121212' }}>Reservation Order</Typography>
                                     <img src={arrow} alt="" style={{
                                         height: '32px',
                                         width: '32px',
@@ -183,15 +184,33 @@ const Dashboard = () => {
                                         cursor: 'pointer'
                                     }}
                                         onClick={() => setShowReserve(true)} />
-                                    {/* <div className={`slide-panel-reserve ${showReserve ? "open" : ""}`}>
-                                        <button className="close-btn" onClick={() => setShowReserve(false)}>
-                                            <CloseIcon fontSize="medium" />
-                                        </button>
-                                        <div className="slide-panel-reserve-content">
-                                            <ReservationOrder />
-                                        </div>
-                                    </div> */}
                                 </Box>
+                                <Modal
+                                    open={showReserve}
+                                    onClose={() => setShowReserve(false)}
+                                    aria-labelledby="reservation-order-modal"
+                                    sx={{ zIndex: 1300 }}
+                                >
+                                    <Box
+                                        sx={{
+                                            position: 'fixed',
+                                            top: '10px',
+                                            bottom: '10px',
+                                            right: 10,
+                                            width: { xs: '100%', sm: 600 },
+                                            bgcolor: '#fff',
+                                            boxShadow: 4,
+                                            zIndex: 1300,
+                                            overflowY: 'auto',
+                                            borderRadius: 2,
+                                            scrollbarWidth: 'none',
+                                            '&::-webkit-scrollbar': { display: 'none' },
+                                        }}
+                                    >
+                                        {/* Replace this with your actual component */}
+                                        <ReservationOrder />
+                                    </Box>
+                                </Modal>
 
                                 {/* Calendar Days */}
                                 <Grid container spacing={0} sx={{ mb: 2 }}>
@@ -260,13 +279,13 @@ const Dashboard = () => {
                                                 <Button
                                                     variant="contained"
                                                     sx={{
-                                                        bgcolor: '#1976d2',
+                                                        bgcolor: '#0C67AA',
                                                         color: 'white',
                                                         borderRadius: '50%',
                                                         minWidth: 45,
                                                         height: 45,
                                                         p: 0,
-                                                        fontWeight: 'bold',
+                                                        fontWeight: '500',
                                                         fontSize: '0.875rem'
                                                     }}
                                                 >
@@ -276,7 +295,7 @@ const Dashboard = () => {
 
                                             <Box sx={{
                                                 mr: 2,
-                                                bgcolor: '#bfb8b8',
+                                                bgcolor: '#E3E3E3',
                                                 borderRadius: '50%',
                                                 width: 45,
                                                 height: 45,
@@ -293,7 +312,7 @@ const Dashboard = () => {
                                             <Box sx={{ flexGrow: 1 }}>
                                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: 1 }}>
+                                                        <Typography variant="subtitle1" sx={{ fontWeight: '500', fontSize: '16px', color: '#121212', mr: 1 }}>
                                                             Qafi Latif
                                                         </Typography>
                                                         <img src={crownicon} alt="" style={{
@@ -308,7 +327,7 @@ const Dashboard = () => {
                                                     </Box>
                                                 </Box>
 
-                                                <Typography variant="caption" sx={{ color: '#666' }}>
+                                                <Typography variant="caption" sx={{ color: '#7F7F7F', fontSize: '12px' }}>
                                                     5 Person • 12 Items
                                                 </Typography>
                                             </Box>
@@ -327,9 +346,11 @@ const Dashboard = () => {
                                                 <Chip
                                                     label="#001"
                                                     size="small"
+                                                    variant="outlined"
                                                     sx={{
                                                         mr: 1,
-                                                        bgcolor: '#bfb8b8',
+                                                        color: '#121212',
+                                                        bgcolor: '#E3E3E3',
                                                         borderRadius: 1,
                                                         height: 24,
                                                         fontSize: '0.75rem',
@@ -342,7 +363,8 @@ const Dashboard = () => {
                                                     variant="outlined"
                                                     sx={{
                                                         mr: 1,
-                                                        bgcolor: '#bfb8b8',
+                                                        bgcolor: '#E3E3E3',
+                                                        color: '#121212',
                                                         borderRadius: 1,
                                                         height: 24,
                                                         fontSize: '0.75rem'
@@ -392,13 +414,13 @@ const Dashboard = () => {
                                                 <Button
                                                     variant="contained"
                                                     sx={{
-                                                        bgcolor: '#1976d2',
+                                                        bgcolor: '#0C67AA',
                                                         color: 'white',
                                                         borderRadius: '50%',
                                                         minWidth: 40,
                                                         height: 40,
                                                         p: 0,
-                                                        fontWeight: 'bold',
+                                                        fontWeight: '500',
                                                         fontSize: '0.875rem'
                                                     }}
                                                 >
@@ -408,7 +430,7 @@ const Dashboard = () => {
 
                                             <Box sx={{
                                                 mr: 2,
-                                                bgcolor: '#bfb8b8',
+                                                bgcolor: '#E3E3E3',
                                                 borderRadius: '50%',
                                                 width: 45,
                                                 height: 45,
@@ -425,7 +447,7 @@ const Dashboard = () => {
                                             <Box sx={{ flexGrow: 1 }}>
                                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: 1 }}>
+                                                        <Typography variant="subtitle1" sx={{ fontWeight: '500', fontSize: '16px', color: '#121212', mr: 1 }}>
                                                             Annette Black
                                                         </Typography>
                                                         <img src={crownicon} alt="" style={{
@@ -440,7 +462,7 @@ const Dashboard = () => {
                                                     </Box>
                                                 </Box>
 
-                                                <Typography variant="caption" sx={{ color: '#666' }}>
+                                                <Typography variant="caption" sx={{ color: '#7F7F7F', fontSize: '12px' }}>
                                                     2 Person • Menu not yet added
                                                 </Typography>
                                             </Box>
@@ -459,9 +481,11 @@ const Dashboard = () => {
                                                 <Chip
                                                     label="#001"
                                                     size="small"
+                                                    variant="outlined"
                                                     sx={{
                                                         mr: 1,
-                                                        bgcolor: '#bfb8b8',
+                                                        bgcolor: '#E3E3E3',
+                                                        color: 'black',
                                                         borderRadius: 1,
                                                         height: 24,
                                                         fontSize: '0.75rem',
@@ -474,7 +498,8 @@ const Dashboard = () => {
                                                     variant="outlined"
                                                     sx={{
                                                         mr: 1,
-                                                        bgcolor: '#bfb8b8',
+                                                        bgcolor: '#E3E3E3',
+                                                        color: 'black',
                                                         borderRadius: 1,
                                                         height: 24,
                                                         fontSize: '0.75rem'
@@ -523,13 +548,13 @@ const Dashboard = () => {
                                                 <Button
                                                     variant="contained"
                                                     sx={{
-                                                        bgcolor: '#1976d2',
+                                                        bgcolor: '#0C67AA',
                                                         color: 'white',
                                                         borderRadius: '50%',
                                                         minWidth: 40,
                                                         height: 40,
                                                         p: 0,
-                                                        fontWeight: 'bold',
+                                                        fontWeight: '500',
                                                         fontSize: '0.875rem'
                                                     }}
                                                 >
@@ -539,7 +564,7 @@ const Dashboard = () => {
 
                                             <Box sx={{
                                                 mr: 2,
-                                                bgcolor: '#bfb8b8',
+                                                bgcolor: '#E3E3E3',
                                                 borderRadius: '50%',
                                                 width: 45,
                                                 height: 45,
@@ -556,7 +581,7 @@ const Dashboard = () => {
                                             <Box sx={{ flexGrow: 1 }}>
                                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                                                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: 1 }}>
+                                                        <Typography variant="subtitle1" sx={{ fontWeight: '500', fontSize: '16px', color: '#121212', mr: 1 }}>
                                                             Ronald Richards
                                                         </Typography>
                                                         <img src={crownicon} alt="" style={{
@@ -571,7 +596,7 @@ const Dashboard = () => {
                                                     </Box>
                                                 </Box>
 
-                                                <Typography variant="caption" sx={{ color: '#666' }}>
+                                                <Typography variant="caption" sx={{ color: '#7F7F7F', fontSize: '12px' }}>
                                                     8 Person • 12 Items
                                                 </Typography>
                                             </Box>
@@ -590,9 +615,11 @@ const Dashboard = () => {
                                                 <Chip
                                                     label="#001"
                                                     size="small"
+                                                    variant="outlined"
                                                     sx={{
                                                         mr: 1,
-                                                        bgcolor: '#bfb8b8',
+                                                        bgcolor: '#E3E3E3',
+                                                        color: 'black',
                                                         borderRadius: 1,
                                                         height: 24,
                                                         fontSize: '0.75rem',
@@ -605,7 +632,8 @@ const Dashboard = () => {
                                                     variant="outlined"
                                                     sx={{
                                                         mr: 1,
-                                                        bgcolor: '#bfb8b8',
+                                                        bgcolor: '#E3E3E3',
+                                                        color: 'black',
                                                         borderRadius: 1,
                                                         height: 24,
                                                         fontSize: '0.75rem'
@@ -646,11 +674,11 @@ const Dashboard = () => {
                         <Grid item xs={12} md={3.4}>
                             {/* Top Right - Order Stats */}
                             <Grid item xs={12}>
-                                <Grid container spacing={0.9}>
+                                <Grid container spacing={1.5}>
                                     {/* Total Transactions Card */}
                                     <Grid item xs={12}>
                                         <Paper sx={{
-                                            bgcolor: '#2d3a41',
+                                            bgcolor: '#3F4E4F',
                                             color: 'white',
                                             p: 0,
                                             // width: '320px',
@@ -661,7 +689,7 @@ const Dashboard = () => {
                                             {/* Top section - Total Transactions */}
                                             <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
                                                 <Box sx={{
-                                                    bgcolor: '#1e282e',
+                                                    bgcolor: '#202728',
                                                     p: 1.5,
                                                     borderRadius: '50%',
                                                     mr: 2,
@@ -669,36 +697,48 @@ const Dashboard = () => {
                                                     justifyContent: 'center',
                                                     alignItems: 'center'
                                                 }}>
-                                                    <Box component="span" sx={{ fontSize: '1.2rem' }}>📄</Box>
+                                                    <img src={invoiceicon} alt="" style={{
+                                                        width: 20,
+                                                        height: 20
+                                                    }} />
                                                 </Box>
                                                 <Box>
-                                                    <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                                                    <Typography variant="body2" sx={{ color: '#C6C6C6', fontSize: '14px' }}>
                                                         Total Transactions
                                                     </Typography>
-                                                    <Typography variant="h4" sx={{ fontWeight: 'bold', mt: 0.5 }}>
+                                                    <Typography variant="h4" sx={{ fontWeight: 'bold', mt: 0.5, color: '#FFFFFF', fontSize: '20px' }}>
                                                         320
                                                     </Typography>
                                                 </Box>
                                             </Box>
-
+                                            <Box
+                                                sx={{
+                                                    height: '1.5px',
+                                                    backgroundColor: '#566364',
+                                                    mx: 2, // Horizontal margin (left and right spacing)
+                                                    // my: 2
+                                                }}
+                                            />
                                             {/* Bottom section - Self Order and Mobile App */}
-                                            <Grid container sx={{ borderTop: '1px solid rgba(255,255,255,0.1)' }}>
+                                            <Grid container sx={{ mt: 1 }}>
+
                                                 <Grid item xs={6} sx={{
                                                     p: 1,
+                                                    // ml:1
                                                     // borderRight: '1px solid rgba(255,255,255,0.1)'
                                                 }}>
-                                                    <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                                                    <Typography variant="body2" sx={{ color: '#C6C6C6', fontSize: '12px', ml: 2 }}>
                                                         Self Order
                                                     </Typography>
-                                                    <Typography variant="h5" sx={{ fontWeight: 'bold', mt: 0.5 }}>
+                                                    <Typography variant="h5" sx={{ fontWeight: 'bold', mt: 0.5, color: '#FFFFFF', fontSize: '18px', ml: 2 }}>
                                                         280
                                                     </Typography>
                                                 </Grid>
                                                 <Grid item xs={6} sx={{ p: 1 }}>
-                                                    <Typography variant="body2" sx={{ opacity: 0.8 }}>
+                                                    <Typography variant="body2" sx={{ color: '#C6C6C6', fontSize: '12px' }}>
                                                         Mobile App
                                                     </Typography>
-                                                    <Typography variant="h5" sx={{ fontWeight: 'bold', mt: 0.5 }}>
+                                                    <Typography variant="h5" sx={{ fontWeight: 'bold', mt: 0.5, color: '#FFFFFF', fontSize: '18px' }}>
                                                         40
                                                     </Typography>
                                                 </Grid>
@@ -708,14 +748,14 @@ const Dashboard = () => {
 
                                     {/* Product Sold and Total Order Cards */}
                                     <Grid item xs={6}>
-                                        <Paper sx={{ bgcolor: '#2d3a41', color: 'white', p: 2, height: '100%' }}>
+                                        <Paper sx={{ bgcolor: '#3F4E4F', color: 'white', p: 2, height: '148px' }}>
                                             <Box sx={{
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                mb: 1.5
+                                                mb: 2
                                             }}>
                                                 <Box sx={{
-                                                    bgcolor: '#1e282e',
+                                                    bgcolor: '#202728',
                                                     p: 1.5,
                                                     borderRadius: '50%',
                                                     mr: 2,
@@ -723,30 +763,34 @@ const Dashboard = () => {
                                                     justifyContent: 'center',
                                                     alignItems: 'center'
                                                 }}>
-                                                    <Box component="span" sx={{ fontSize: '1.2rem' }}>📦</Box>
+                                                    <img src={boxicon} alt="" style={{
+                                                        height: 20,
+                                                        width: 20
+                                                    }} />
                                                 </Box>
-                                                <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                                                    Product Sold
-                                                </Typography>
+
                                             </Box>
-                                            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-                                                500
+                                            <Typography variant="body2" sx={{ color: '#C6C6C6', fontSize: '14px' }}>
+                                                Product Sold
                                             </Typography>
-                                            <Typography variant="caption" sx={{ opacity: 0.7 }}>
-                                                Items
+                                            <Typography variant="h5" sx={{ fontWeight: 'bold', mt: 1, color: '#FFFFFF', fontSize: '20px' }}>
+                                                500{' '}
+                                                <Box component="span" sx={{ fontSize: '12px', color: '#C6C6C6', fontWeight: 'normal' }}>
+                                                    Items
+                                                </Box>
                                             </Typography>
                                         </Paper>
                                     </Grid>
 
                                     <Grid item xs={6}>
-                                        <Paper sx={{ bgcolor: '#2d3a41', color: 'white', p: 2, height: '100%' }}>
+                                        <Paper sx={{ bgcolor: '#3F4E4F', color: 'white', p: 2, height: '148px' }}>
                                             <Box sx={{
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                mb: 1.5
+                                                mb: 2
                                             }}>
                                                 <Box sx={{
-                                                    bgcolor: '#1e282e',
+                                                    bgcolor: '#202728',
                                                     p: 1.5,
                                                     borderRadius: '50%',
                                                     mr: 2,
@@ -754,17 +798,22 @@ const Dashboard = () => {
                                                     justifyContent: 'center',
                                                     alignItems: 'center'
                                                 }}>
-                                                    <Box component="span" sx={{ fontSize: '1.2rem' }}>📋</Box>
+                                                    <img src={recicon} alt="" style={{
+                                                        height: 20,
+                                                        width: 20
+                                                    }} />
                                                 </Box>
-                                                <Typography variant="body2" sx={{ opacity: 0.8 }}>
-                                                    Total Order
-                                                </Typography>
+
                                             </Box>
-                                            <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-                                                380
+                                            <Typography variant="body2" sx={{ color: '#C6C6C6', fontSize: '14px' }}>
+                                                Total Order
                                             </Typography>
-                                            <Typography variant="caption" sx={{ opacity: 0.7 }}>
-                                                Order
+
+                                            <Typography variant="h5" sx={{ fontWeight: 'bold', mt: 1, color: '#FFFFFF', fontSize: '20px' }}>
+                                                380{' '}
+                                                <Box component="span" sx={{ fontSize: '12px', color: '#C6C6C6', fontWeight: 'normal' }}>
+                                                    Order
+                                                </Box>
                                             </Typography>
                                         </Paper>
                                     </Grid>
@@ -773,7 +822,7 @@ const Dashboard = () => {
                             <Paper sx={{ p: 0, mt: 2, boxShadow: 'none', bgcolor: '#FFFFFF' }}>
                                 {/* Header */}
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 2, pb: 3 }}>
-                                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>New Self Order</Typography>
+                                    <Typography variant="subtitle1" sx={{ color: '#121212', fontSize: '20px' }}>New Self Order</Typography>
                                     <img src={arrow} alt="" style={{
                                         height: '32px',
                                         width: '32px',
@@ -782,6 +831,32 @@ const Dashboard = () => {
                                     }}
                                         onClick={() => setShowOrder(true)} />
                                 </Box>
+                                <Modal
+                                    open={showOrder}
+                                    onClose={() => setShowOrder(false)}
+                                    aria-labelledby="reservation-order-modal"
+                                    sx={{ zIndex: 1300 }}
+                                >
+                                    <Box
+                                        sx={{
+                                            position: 'fixed',
+                                            top: '10px',
+                                            bottom: '10px',
+                                            right: 10,
+                                            width: { xs: '100%', sm: 600 },
+                                            bgcolor: '#fff',
+                                            boxShadow: 4,
+                                            zIndex: 1300,
+                                            overflowY: 'auto',
+                                            borderRadius: 2,
+                                            scrollbarWidth: 'none',
+                                            '&::-webkit-scrollbar': { display: 'none' },
+                                        }}
+                                    >
+                                        {/* Replace this with your actual component */}
+                                        <NewSelfOrder />
+                                    </Box>
+                                </Modal>
 
                                 {/* Self Order List */}
                                 <Box sx={{
@@ -798,7 +873,7 @@ const Dashboard = () => {
                                         <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
                                             <Box sx={{
                                                 mr: 2,
-                                                bgcolor: '#bfb8b8',
+                                                bgcolor: '#E3E3E3',
                                                 borderRadius: '50%',
                                                 width: 40,
                                                 height: 40,
@@ -815,7 +890,7 @@ const Dashboard = () => {
 
                                             <Box sx={{ flexGrow: 1 }}>
                                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
-                                                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: 1 }}>
+                                                    <Typography variant="subtitle1" sx={{ fontWeight: '500', fontSize: '16px', color: '#121212', mr: 1 }}>
                                                         Miles Esther
                                                     </Typography>
                                                     <img src={crownicon} alt="" style={{
@@ -842,18 +917,17 @@ const Dashboard = () => {
                                                 <Chip
                                                     label="#001"
                                                     size="small"
+                                                    color='#121212'
+                                                    variant="outlined"
                                                     sx={{
                                                         mr: 1,
-                                                        bgcolor: '#bfb8b8',
+                                                        bgcolor: '#E3E3E3',
                                                         borderRadius: 1,
                                                         height: 24,
                                                         fontSize: '0.75rem',
                                                         fontWeight: 'medium'
                                                     }}
                                                 />
-                                                {/* <IconButton size="small" sx={{ p: 0 }} onClick={() => setIsModalVisible(true)}>
-                                                    <Box component="span" sx={{ color: '#ef4444', fontSize: '1rem' }}>🗑️</Box>
-                                                </IconButton> */}
                                                 {isModalVisible && <CancelOrder onClose={() => setIsModalVisible(false)} onConfirm={handleCancelOrder} />}
                                                 {isNotificationVisible && (
                                                     <Box
@@ -918,7 +992,7 @@ const Dashboard = () => {
                                         <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
                                             <Box sx={{
                                                 mr: 2,
-                                                bgcolor: '#bfb8b8',
+                                                bgcolor: '#E3E3E3',
                                                 borderRadius: '50%',
                                                 width: 40,
                                                 height: 40,
@@ -934,7 +1008,7 @@ const Dashboard = () => {
 
                                             <Box sx={{ flexGrow: 1 }}>
                                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
-                                                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: 1 }}>
+                                                    <Typography variant="subtitle1" sx={{ fontWeight: '500', fontSize: '16px', color: '#121212', mr: 1 }}>
                                                         Annette Black
                                                     </Typography>
                                                     <img src={crownicon} alt="" style={{
@@ -962,9 +1036,11 @@ const Dashboard = () => {
                                                 <Chip
                                                     label="#001"
                                                     size="small"
+                                                    color='#121212'
+                                                    variant="outlined"
                                                     sx={{
                                                         mr: 1,
-                                                        bgcolor: '#bfb8b8',
+                                                        bgcolor: '#E3E3E3',
                                                         borderRadius: 1,
                                                         height: 24,
                                                         fontSize: '0.75rem',
@@ -1013,7 +1089,7 @@ const Dashboard = () => {
                                         <Box sx={{ p: 2, display: 'flex', alignItems: 'center' }}>
                                             <Box sx={{
                                                 mr: 2,
-                                                bgcolor: '#bfb8b8',
+                                                bgcolor: '#E3E3E3',
                                                 borderRadius: '50%',
                                                 width: 40,
                                                 height: 40,
@@ -1029,7 +1105,7 @@ const Dashboard = () => {
 
                                             <Box sx={{ flexGrow: 1 }}>
                                                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5 }}>
-                                                    <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mr: 1 }}>
+                                                    <Typography variant="subtitle1" sx={{ fontWeight: '500', fontSize: '16px', color: '#121212', mr: 1 }}>
                                                         Bessie Cooper
                                                     </Typography>
                                                     <img src={crownicon} alt="" style={{
@@ -1056,9 +1132,11 @@ const Dashboard = () => {
                                                 <Chip
                                                     label="#001"
                                                     size="small"
+                                                    color='#121212'
+                                                    variant="outlined"
                                                     sx={{
                                                         mr: 1,
-                                                        bgcolor: '#bfb8b8',
+                                                        bgcolor: '#E3E3E3',
                                                         borderRadius: 1,
                                                         height: 24,
                                                         fontSize: '0.75rem',
@@ -1098,7 +1176,7 @@ const Dashboard = () => {
                         </Grid>
                         {/* third column */}
                         <Grid item xs={12} md={3.3}>
-                            <Box sx={{ height: '100%', bgcolor: '#D9D9D9', borderRadius: '5px' }}>
+                            <Box sx={{ height: '100%', bgcolor: '#E3F2FD', borderRadius: '5px' }}>
                                 {/* Header */}
                                 <Box sx={{
                                     display: 'flex',
@@ -1110,14 +1188,14 @@ const Dashboard = () => {
                                         display: 'flex',
                                         alignItems: 'center'
                                     }}>
-                                        <Typography variant="body1" sx={{ fontWeight: 'bold', color: '#121212' }}
+                                        <Typography variant="body1" sx={{ fontWeight: '500', color: '#121212', fontSize: '18px' }}
 
                                         >
                                             Order Queue
                                         </Typography>
                                         <img src={arrow} alt="" style={{
-                                            height: '32px',
-                                            width: '32px',
+                                            height: '30px',
+                                            width: '30px',
                                             marginLeft: '10px',
                                             cursor: 'pointer'
                                         }}
@@ -1161,15 +1239,15 @@ const Dashboard = () => {
                                 </Box>
 
                                 {/* Customer Cards */}
-                                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, p: 1 }}>
+                                <Box sx={{ display: 'flex', bgcolor: '#FFFFFF', flexDirection: 'column', gap: 2, p: 1 }}>
                                     {/* Customer 1 */}
-                                    <Paper sx={{ p: 2, borderRadius: 1 }}>
+                                    <Paper elevation={0} sx={{ p: 2, borderRadius: 1, border: '1px solid #E3E3E3', }}>
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
                                             <Box sx={{ display: 'flex', gap: 1 }}>
                                                 <Button
                                                     variant="contained"
                                                     sx={{
-                                                        bgcolor: '#1976d2',
+                                                        bgcolor: '#0C67AA',
                                                         color: 'white',
                                                         borderRadius: '50%',
                                                         minWidth: 40,
@@ -1181,7 +1259,7 @@ const Dashboard = () => {
                                                 </Button>
                                                 <Button
                                                     sx={{
-                                                        bgcolor: '#bfb8b8',
+                                                        bgcolor: '#E3E3E3',
                                                         height: 40,
                                                         minWidth: 40,
                                                         borderRadius: '50%',
@@ -1202,7 +1280,7 @@ const Dashboard = () => {
                                         </Box>
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                             <Box>
-                                                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', mb: 0.5 }}>
+                                                <Typography variant="subtitle1" sx={{ fontWeight: '500', fontSize: '20px', color: '#121212', display: 'flex', alignItems: 'center', mb: 0.5 }}>
                                                     Qafi Latif
                                                     <img src={crownicon} alt="" style={{
                                                         height: 24,
@@ -1211,16 +1289,40 @@ const Dashboard = () => {
                                                     }} />
                                                 </Typography>
 
-                                                <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>
-                                                    4 items (<Typography component="span" variant="caption" sx={{ color: '#10b981' }}>1 Complete</Typography>)
+                                                <Typography variant="caption" sx={{ mb: 1, display: 'block', fontSize: '14px', color: '#7F7F7F' }}>
+                                                    4 items (<Typography component="span" variant="caption" sx={{ color: '#22D7A6' }}>1 Complete</Typography>)
                                                 </Typography>
                                             </Box>
-                                            <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>Rs 47.00</Typography>
+                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                <Typography
+                                                    component="span"
+                                                    variant="caption"
+                                                    sx={{
+                                                        color: '#7F7F7F',
+                                                        fontWeight: 'normal',
+                                                        mr: 0.5,
+                                                        fontSize: '14px',
+                                                    }}
+                                                >
+                                                    Rs
+                                                </Typography>
+                                                <Typography
+                                                    component="span"
+                                                    sx={{
+                                                        color: '#121212',
+                                                        fontSize: '20px',
+                                                        fontWeight: 'bold',
+                                                    }}
+                                                >
+                                                    47.00
+                                                </Typography>
+                                            </Box>
                                         </Box>
                                         <Box sx={{ display: 'flex', gap: 1 }}>
                                             <Chip
                                                 label="#001"
                                                 size="small"
+                                                variant="outlined"
                                                 sx={{ bgcolor: '#f5f5f5', borderRadius: 1, height: 24 }}
                                             />
                                             <Chip
@@ -1233,13 +1335,13 @@ const Dashboard = () => {
                                     </Paper>
 
                                     {/* Customer 2 */}
-                                    <Paper sx={{ p: 2, borderRadius: 1 }}>
+                                    <Paper elevation={0} sx={{ p: 2, borderRadius: 1, border: '1px solid #E3E3E3', }}>
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
                                             <Box sx={{ display: 'flex', gap: 1 }}>
                                                 <Button
                                                     variant="contained"
                                                     sx={{
-                                                        bgcolor: '#1976d2',
+                                                        bgcolor: '#0C67AA',
                                                         color: 'white',
                                                         borderRadius: '50%',
                                                         minWidth: 40,
@@ -1251,7 +1353,7 @@ const Dashboard = () => {
                                                 </Button>
                                                 <Button
                                                     sx={{
-                                                        bgcolor: '#bfb8b8',
+                                                        bgcolor: '#E3E3E3',
                                                         height: 40,
                                                         minWidth: 40,
                                                         borderRadius: '50%',
@@ -1275,7 +1377,7 @@ const Dashboard = () => {
                                         </Box>
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                             <Box>
-                                                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', mb: 0.5 }}>
+                                                <Typography variant="subtitle1" sx={{ fontWeight: '500', fontSize: '20px', color: '#121212', display: 'flex', alignItems: 'center', mb: 0.5 }}>
                                                     Hamid Indra
                                                     <img src={crownicon} alt="" style={{
                                                         height: 24,
@@ -1284,11 +1386,34 @@ const Dashboard = () => {
                                                     }} />
                                                 </Typography>
 
-                                                <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>
-                                                    4 items (<Typography component="span" variant="caption" sx={{ color: '#10b981' }}>1 Complete</Typography>)
+                                                <Typography variant="caption" sx={{ mb: 1, display: 'block', fontSize: '14px', color: '#7F7F7F' }}>
+                                                    4 items (<Typography component="span" variant="caption" sx={{ color: '#22D7A6' }}>1 Complete</Typography>)
                                                 </Typography>
                                             </Box>
-                                            <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>Rs 47.00</Typography>
+                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                <Typography
+                                                    component="span"
+                                                    variant="caption"
+                                                    sx={{
+                                                        color: '#7F7F7F',
+                                                        fontWeight: 'normal',
+                                                        mr: 0.5,
+                                                        fontSize: '14px',
+                                                    }}
+                                                >
+                                                    Rs
+                                                </Typography>
+                                                <Typography
+                                                    component="span"
+                                                    sx={{
+                                                        color: '#121212',
+                                                        fontSize: '20px',
+                                                        fontWeight: 'bold',
+                                                    }}
+                                                >
+                                                    47.00
+                                                </Typography>
+                                            </Box>
                                         </Box>
 
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -1296,6 +1421,7 @@ const Dashboard = () => {
                                                 <Chip
                                                     label="#003"
                                                     size="small"
+                                                    variant="outlined"
                                                     sx={{ bgcolor: '#f5f5f5', borderRadius: 1, height: 24 }}
                                                 />
                                                 <Chip
@@ -1307,24 +1433,24 @@ const Dashboard = () => {
                                                             src={recicon}
                                                             style={{
                                                                 height: 14,
-                                                                width: 14
+                                                                width: 14,
+                                                                filter: 'invert(1)',
                                                             }}
                                                         />
                                                     </Box>}
                                                 />
-
                                             </Box>
                                         </Box>
                                     </Paper>
 
                                     {/* Customer 3 */}
-                                    <Paper sx={{ p: 2, borderRadius: 1 }}>
+                                    <Paper elevation={0} sx={{ p: 2, borderRadius: 1, border: '1px solid #E3E3E3', }}>
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
                                             <Box sx={{ display: 'flex', gap: 1 }}>
                                                 <Button
                                                     variant="contained"
                                                     sx={{
-                                                        bgcolor: '#1976d2',
+                                                        bgcolor: '#0C67AA',
                                                         color: 'white',
                                                         borderRadius: '50%',
                                                         minWidth: 40,
@@ -1336,7 +1462,7 @@ const Dashboard = () => {
                                                 </Button>
                                                 <Button
                                                     sx={{
-                                                        bgcolor: '#bfb8b8',
+                                                        bgcolor: '#E3E3E3',
                                                         height: 40,
                                                         minWidth: 40,
                                                         borderRadius: '50%',
@@ -1360,26 +1486,50 @@ const Dashboard = () => {
                                         </Box>
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
                                             <Box>
-                                                <Typography variant="subtitle1" sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', mb: 0.5 }}>
+                                                <Typography variant="subtitle1" sx={{ fontWeight: '500', fontSize: '20px', color: '#121212', display: 'flex', alignItems: 'center', mb: 0.5 }}>
                                                     Miles Esther
-                                                    <img src={crownicon} alt="" style={{
+                                                    <img src={guesticon} alt="" style={{
                                                         height: 24,
                                                         width: 24,
                                                         marginLeft: '0.7rem'
                                                     }} />
                                                 </Typography>
 
-                                                <Typography variant="caption" sx={{ mb: 1, display: 'block' }}>
-                                                    4 items (<Typography component="span" variant="caption" sx={{ color: '#10b981' }}>1 Complete</Typography>)
+                                                <Typography variant="caption" sx={{ mb: 1, display: 'block', fontSize: '14px', color: '#7F7F7F' }}>
+                                                    4 items (<Typography component="span" variant="caption" sx={{ color: '#22D7A6' }}>1 Complete</Typography>)
                                                 </Typography>
                                             </Box>
-                                            <Typography variant="subtitle2" sx={{ fontWeight: 'bold' }}>Rs 47.00</Typography>
+                                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                                <Typography
+                                                    component="span"
+                                                    variant="caption"
+                                                    sx={{
+                                                        color: '#7F7F7F',
+                                                        fontWeight: 'normal',
+                                                        mr: 0.5,
+                                                        fontSize: '14px',
+                                                    }}
+                                                >
+                                                    Rs
+                                                </Typography>
+                                                <Typography
+                                                    component="span"
+                                                    sx={{
+                                                        color: '#121212',
+                                                        fontSize: '20px',
+                                                        fontWeight: 'bold',
+                                                    }}
+                                                >
+                                                    47.00
+                                                </Typography>
+                                            </Box>
                                         </Box>
                                         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <Box sx={{ display: 'flex', gap: 1 }}>
                                                 <Chip
                                                     label="#004"
                                                     size="small"
+                                                    variant="outlined"
                                                     sx={{ bgcolor: '#f5f5f5', borderRadius: 1, height: 24 }}
                                                 />
                                                 <Chip

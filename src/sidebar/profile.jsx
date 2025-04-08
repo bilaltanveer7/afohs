@@ -15,7 +15,7 @@ import {
     History as HistoryIcon
 } from '@mui/icons-material';
 
-const EmployeeProfileScreen = ({ setProfileView }) => {
+const EmployeeProfileScreen = ({ setProfileView, onClose }) => {
     return (
         <Paper
             elevation={1}
@@ -159,6 +159,7 @@ const EmployeeProfileScreen = ({ setProfileView }) => {
                             borderColor: '#0f0f0f',
                             py: 1
                         }}
+                        onClick={onClose}
                     >
                         Close
                     </Button>
