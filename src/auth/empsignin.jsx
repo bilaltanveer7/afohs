@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { useNavigate } from "react-router-dom";
 import {
-    Box,Typography,TextField,Button,Select,MenuItem,Paper,Link} from "@mui/material";
+    Box, Typography, TextField, Button, Select, MenuItem, Paper, Link
+} from "@mui/material";
 import {
     KeyboardArrowDown as KeyboardArrowDownIcon,
     ArrowBack as ArrowBackIcon,
@@ -99,7 +100,7 @@ const EmployeeSignIn = () => {
                 {/* Right side with login form */}
                 <Box
                     sx={{
-                        width: { xs: "100%", md: "400px" },
+                        width: { xs: "100%", md: "540px" },
                         display: "flex",
                         flexDirection: "column",
                         p: 1,
@@ -113,6 +114,7 @@ const EmployeeSignIn = () => {
                     <Paper
                         elevation={4}
                         sx={{
+                            // p:2,
                             borderRadius: 2,
                             backgroundColor: "rgba(255, 255, 255, 0.9)",
                             backdropFilter: "blur(10px)",
@@ -122,8 +124,8 @@ const EmployeeSignIn = () => {
                         <Box
                             sx={{
                                 width: '100%',
-                                maxWidth: 450,
-                                p: 4,
+                                maxWidth: 540,
+                                p: 2,
                                 // bgcolor: 'white',
                                 borderRadius: 1,
                                 boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
@@ -131,131 +133,145 @@ const EmployeeSignIn = () => {
                             }}
                         >
                             {/* Logo */}
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 3 }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 1 }}>
                                 <Box
                                     component="img"
                                     src={logo}
                                     alt="AFOHS Club Logo"
                                     sx={{
-                                        width: 80,
-                                        height: 80,
+                                        width: 150,
+                                        height: 114,
                                     }}
                                 />
 
                             </Box>
 
                             {/* Heading */}
-                            <Typography variant="h5" sx={{ fontWeight: 500, color: '#333', mb: 0.5 }}>
-                                Employee Sign In
-                            </Typography>
-
-                            <Typography sx={{ color: '#666', mb: 3, mt:1 }}>
-                                Employee of <Box component="span" sx={{ color: '#0c4a6e', fontWeight: 500 }}>Imaji Coffee Shop (IMAJI101010)</Box>
-                            </Typography>
-
-                            {/* Account Selection */}
-                            <Box sx={{ mb: 3 }}>
-                                <Typography sx={{ color: '#121212', mb: 1, fontSize:'0.9rem' }}>
-                                    Choose your account to start your shift
+                            <Box sx={{
+                                p: 2
+                            }}>
+                                <Typography variant="h5" sx={{ fontWeight: 500, color: '#3F4E4F', fontSize: '30px', mb: 0.5 }}>
+                                    Employee Sign In
                                 </Typography>
-                                <Select
-                                    fullWidth
-                                    defaultValue="kasa"
-                                    sx={{
-                                        height: 56,
-                                        width:'100%',
-                                        '.MuiOutlinedInput-notchedOutline': {
-                                            borderColor: '#ccc'
-                                        }
-                                    }}
-                                    IconComponent={KeyboardArrowDownIcon}
-                                >
-                                    <MenuItem value="kasa">Kasa Aksa (10:00 am - 15:00 pm)</MenuItem>
-                                </Select>
-                            </Box>
 
-                            {/* PIN Entry */}
-                            <Box sx={{ mb: 3 }}>
-                                <Typography sx={{ color: '#121212', mb: 1, fontSize:'0.9rem' }}>
-                                    Enter PIN
+                                <Typography sx={{ color: '#7F7F7F', fontSize: '16px', mb: 3, mt: 1 }}>
+                                    Employee of <Box component="span" sx={{ color: '#063455', fontWeight: 500, fontSize: '16px' }}>Imaji Coffee Shop (IMAJI101010)</Box>
                                 </Typography>
-                                <Box sx={{ display: 'flex', gap: 1.3 }}>
-                                    {pin.map((digit, index) => (
-                                        <TextField
-                                            key={index}
-                                            variant="outlined"
-                                            type={index === 0 ? "text" : "password"}
-                                            value={digit}
-                                            inputProps={{
-                                                maxLength: 1,
-                                                style: {
-                                                    textAlign: 'center',
-                                                    // padding: '12px 0x',
-                                                    padding:'1rem',
-                                                    fontSize: '1rem'
-                                                }
-                                            }}
-                                            sx={{
-                                                width: 48,
-                                                height: 48,
-                                                '.MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#ccc'
-                                                }
-                                            }}
-                                            InputProps={{
-                                                readOnly: index === 0
-                                            }}
-                                            autoFocus={index === currentIndex}
-                                            onChange={(e) => handlePinChange(index, e.target.value)}
-                                        />
-                                    ))}
+
+                                {/* Account Selection */}
+                                <Box sx={{ mb: 3 }}>
+                                    <Typography sx={{ color: '#121212', mb: 1, fontSize: '14px' }}>
+                                        Choose your account to start your shift
+                                    </Typography>
+                                    <Select
+                                        fullWidth
+                                        defaultValue="kasa"
+                                        sx={{
+                                            height: 56,
+                                            width: '100%',
+                                            '.MuiOutlinedInput-notchedOutline': {
+                                                borderColor: '#121212'
+                                            }
+                                        }}
+                                        IconComponent={KeyboardArrowDownIcon}
+                                    >
+                                        <MenuItem sx={{
+                                            fontSize: '14px',
+                                            color: '#121212'
+                                        }} value="kasa">Kasa Aksa (10:00 am - 15:00 pm)</MenuItem>
+                                    </Select>
                                 </Box>
-                                <Link
-                                    href="#"
-                                    underline="hover"
-                                    sx={{
-                                        color: '#3B82F6',
-                                        fontSize: '0.875rem',
-                                        mt: 1.5,
-                                        display: 'inline-block'
-                                    }}
-                                    onClick={()=>navigate('/forget-pin')}
-                                >
-                                    Forgot Pin?
-                                </Link>
-                            </Box>
 
-                            {/* Navigation Buttons */}
-                            <Box sx={{ display: 'flex', width:'100%', justifyContent: 'space-between' }}>
-                                <Button
-                                    startIcon={<ArrowBackIcon />}
-                                    sx={{
-                                        width:'150px',
-                                        bgcolor:'#fff',
-                                        color: '#555',
-                                        '&:hover': {
-                                            bgcolor: 'rgba(0,0,0,0.04)'
-                                        }
-                                    }}
-                                    onClick={() => navigate('/')}
-                                >
-                                    Back
-                                </Button>
-                                <Button
-                                    variant="contained"
-                                    endIcon={<ArrowForwardIcon />}
-                                    sx={{
-                                        width:'150px',
-                                        bgcolor: '#0c4a6e',
-                                        '&:hover': {
-                                            bgcolor: '#083654'
-                                        },
-                                        px: 3
-                                    }}
-                                    onClick={() => navigate('/dashboard')}
-                                >
-                                    Sign In
-                                </Button>
+                                {/* PIN Entry */}
+                                <Box sx={{ mb: 3 }}>
+                                    <Typography sx={{ color: '#121212', mb: 1, fontSize: '14px' }}>
+                                        Enter PIN
+                                    </Typography>
+                                    <Box sx={{ display: 'flex', gap: 2, width: '100%', justifyContent: 'space-between' }}>
+                                        {pin.map((digit, index) => (
+                                            <TextField
+                                                key={index}
+                                                variant="outlined"
+                                                type={index === 0 ? "text" : "password"}
+                                                value={digit}
+                                                inputProps={{
+                                                    maxLength: 1,
+                                                    style: {
+                                                        textAlign: 'center',
+                                                        // bgcolor:'black',
+                                                        padding: '1rem',
+                                                        fontSize: '1rem',
+                                                        // width:'200%'
+                                                    }
+                                                }}
+                                                sx={{
+                                                    width: 60,
+                                                    height: 70,
+                                                    '.MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: '#063455'
+                                                    }
+                                                }}
+                                                InputProps={{
+                                                    readOnly: index === 0
+                                                }}
+                                                autoFocus={index === currentIndex}
+                                                onChange={(e) => handlePinChange(index, e.target.value)}
+                                            />
+                                        ))}
+                                    </Box>
+                                    <Link
+                                        href="#"
+                                        underline="hover"
+                                        sx={{
+                                            color: '#129BFF',
+                                            fontSize: '0.875rem',
+                                            mt: 1.5,
+                                            display: 'inline-block'
+                                        }}
+                                        onClick={() => navigate('/forget-pin')}
+                                    >
+                                        Forgot Pin?
+                                    </Link>
+                                </Box>
+
+                                {/* Navigation Buttons */}
+                                <Box sx={{ display: 'flex', width: '100%', alignItems:'center', justifyContent: 'space-between' }}>
+                                    <Button
+                                        startIcon={<ArrowBackIcon />}
+                                        sx={{
+                                            borderRadius:'0',
+                                            width: '215px',
+                                            height: '48px',
+                                            bgcolor: '#FFFFFF',
+                                            color: '#121212',
+                                            border: '1px solid #E3E3E3',
+                                            '&:hover': {
+                                                bgcolor: 'rgba(0,0,0,0.04)'
+                                            }
+                                        }}
+                                        onClick={() => navigate('/')}
+                                    >
+                                        Back
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        endIcon={<ArrowForwardIcon />}
+                                        sx={{
+                                            borderRadius:'0',
+                                            width: '215px',
+                                            height: '46px',
+                                            color: '#FFFFFF',
+                                            bgcolor: '#063455',
+                                            '&:hover': {
+                                                bgcolor: '#083654'
+                                            },
+                                            px: 3
+                                        }}
+                                        onClick={() => navigate('/dashboard')}
+                                    >
+                                        Sign In
+                                    </Button>
+                                </Box>
                             </Box>
                         </Box>
                     </Paper>

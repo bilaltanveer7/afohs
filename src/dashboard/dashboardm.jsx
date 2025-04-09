@@ -17,7 +17,7 @@ import sofaicon from '../assetts/sofa.png'
 import invoiceicon from '../assetts/invoice.png'
 import boxicon from '../assetts/box.png'
 import guesticon from '../assetts/Guest.png'
-import "./style.css"
+// import "./style.css"
 import {
     Box,
     Grid,

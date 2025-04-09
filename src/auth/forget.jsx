@@ -99,7 +99,7 @@ const ForgetPin = () => {
                 {/* Right side with login form */}
                 <Box
                     sx={{
-                        width: { xs: "100%", md: "400px" },
+                        width: { xs: "100%", md: "540px" },
                         display: "flex",
                         flexDirection: "column",
                         p: 1,
@@ -131,52 +131,58 @@ const ForgetPin = () => {
                             }}
                         >
                             {/* Logo */}
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 3 }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 2 }}>
                                 <Box
                                     component="img"
                                     src={logo}
                                     alt="AFOHS Club Logo"
                                     sx={{
-                                        width: 80,
-                                        height: 80,
+                                        width: 150,
+                                        height: 114,
                                     }}
                                 />
-
                             </Box>
 
                             {/* Heading */}
-                            <Typography variant="h5" sx={{ fontWeight: 500, color: '#333', mb: 0.5 }}>
+                            <Typography variant="h5" sx={{ fontWeight: 500, color: '#3F4E4F', fontSize: '30px', mb: 0.5 }}>
                                 Forgot Pin ?
                             </Typography>
 
-                            <Typography sx={{ color: '#7F7F7F', mb: 3, mt: 1, fontSize: '1rem' }}>
+                            <Typography sx={{ color: '#7F7F7F', mb: 3, mt: 1, fontSize: '16px' }}>
                                 No worries, we'll send you reset instructions
                             </Typography>
 
                             {/* Account Selection */}
                             <Box sx={{ mb: 3 }}>
-                                <Typography sx={{ color: '#121212', mb: 1, fontSize: '0.9rem' }}>
+                                <Typography sx={{ color: '#121212', mb: 1, fontSize: '14px' }}>
                                     Business Name
                                 </Typography>
-                                <Box component="span" sx={{ color: '#0c4a6e', fontWeight: 500 }}>Imaji Coffee Shop (IMAJI101010)</Box>
+                                <Box component="span" sx={{ color: '#063455', fontSize: '18px', fontWeight: 500 }}>Imaji Coffee Shop (IMAJI101010)</Box>
                             </Box>
 
                             {/* PIN Entry */}
                             <Box sx={{ mb: 3 }}>
-                                <Typography sx={{ color: '#121212', mb: 1, mt:1, fontSize: '0.9rem' }}>
+                                <Typography sx={{ color: '#121212', mb: 1, mt: 1, fontSize: '0.9rem' }}>
                                     Employee Email
                                 </Typography>
-                                <Box sx={{ display: 'flex', gap: 1.3, width:'100%' }}>
+                                <Box sx={{ display: 'flex', gap: 1.3, width: '100%' }}>
                                     <TextField
                                         fullWidth
                                         placeholder="e.g: Jamal@gmail.com"
                                         value={companyId}
                                         onChange={(e) => setCompanyId(e.target.value)}
-                                        variant="outlined"
                                         size="small"
                                         sx={{
-                                            "& .MuiOutlinedInput-root": {
-                                                borderRadius: 1,
+                                            '& .MuiOutlinedInput-root': {
+                                                '& fieldset': {
+                                                    borderColor: '#121212',
+                                                },
+                                                '&:hover fieldset': {
+                                                    borderColor: '#121212',
+                                                },
+                                                '&.Mui-focused fieldset': {
+                                                    borderColor: '#121212',
+                                                },
                                             },
                                         }}
                                     />
@@ -184,13 +190,17 @@ const ForgetPin = () => {
                             </Box>
 
                             {/* Navigation Buttons */}
-                            <Box sx={{ display: 'flex', width:'100%', justifyContent: 'space-between' }}>
+                            <Box sx={{ display: 'flex', width: '100%', alignItems:'center', justifyContent: 'space-between' }}>
                                 <Button
                                     startIcon={<ArrowBackIcon />}
                                     sx={{
-                                        width:'47%',
-                                        bgcolor: '#fff',
-                                        color: '#555',
+                                        borderRadius:'0',
+                                        width: '215px',
+                                        height:'48px',
+                                        border:'1px solid #E3E3E3',
+                                        bgcolor: '#FFFFFF',
+                                        color: '#121212',
+                                        // fontSize:'16px',
                                         '&:hover': {
                                             bgcolor: 'rgba(0,0,0,0.04)'
                                         }
@@ -203,7 +213,12 @@ const ForgetPin = () => {
                                     variant="contained"
                                     endIcon={<ArrowForwardIcon />}
                                     sx={{
-                                        bgcolor: '#0c4a6e',
+                                        borderRadius:'0',
+                                        width:'215px',
+                                        height:'46px',
+                                        bgcolor: '#063455',
+                                        color:'#FFFFFF',
+                                        // fontSize:'16px',
                                         '&:hover': {
                                             bgcolor: '#083654'
                                         },

@@ -19,7 +19,7 @@ import bgImage from "../assetts/bgimage.png"; // Import your background image
 import logo from "../assetts/Logo.png"; // Import your logo
 
 const SignIn = () => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const [companyId, setCompanyId] = useState("");
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -50,9 +50,9 @@ const SignIn = () => {
           left: 0,
           right: 0,
           bottom: 0,
-        //   backgroundColor: "rgba(0, 0, 0, 0.3)",
-        //   backdropFilter: "blur(1px)",
-        //   zIndex: 1,
+          //   backgroundColor: "rgba(0, 0, 0, 0.3)",
+          //   backdropFilter: "blur(1px)",
+          //   zIndex: 1,
         },
       }}
     >
@@ -103,11 +103,11 @@ const SignIn = () => {
       {/* Right side with login form */}
       <Box
         sx={{
-          width: { xs: "100%", md: "400px" },
+          width: { xs: "100%", md: "540px" },
           display: "flex",
           flexDirection: "column",
           p: 1,
-        //   m: { xs: 1, md: 1 },
+          //   m: { xs: 1, md: 1 },
           mt: { xs: 1, md: 1 },
           mb: { xs: 1, md: 1 },
           mr: { xs: 1, md: 1 },
@@ -117,10 +117,15 @@ const SignIn = () => {
         <Paper
           elevation={4}
           sx={{
+            pb:4,
             borderRadius: 2,
             backgroundColor: "rgba(255, 255, 255, 0.9)",
             backdropFilter: "blur(10px)",
-            overflow: "hidden",
+            overflow: "auto",
+            scrollbarWidth: 'none', // Firefox
+            '&::-webkit-scrollbar': {
+              display: 'none', // Chrome, Safari, Edge
+            },
           }}
         >
           <Container maxWidth="sm" sx={{ display: "flex", flexDirection: "column", height: '100vh', p: 2 }}>
@@ -137,28 +142,28 @@ const SignIn = () => {
                 src={logo}
                 alt="AFOHS Club Logo"
                 sx={{
-                  width: 60,
-                  height: 60,
+                  width: 150,
+                  height: 114,
                   mb: 2,
                 }}
               />
               <Typography
                 variant="h5"
                 component="h1"
-                sx={{ fontWeight: 600, mb: 1, color: "text.primary" }}
+                sx={{ fontWeight: 500, fontSize: '30px', mb: 1, color: "#3F4E4F" }}
               >
                 Sign In
               </Typography>
               <Typography
                 variant="body2"
-                sx={{ color: "text.secondary", textAlign: "flex-start", mb: 2 }}
+                sx={{ color: "#7F7F7F", textAlign: "flex-start", mb: 2, fontSize: '16px' }}
               >
                 Get started now, enter your company Id to access your account
               </Typography>
             </Box>
 
             <Box sx={{ mb: 3 }}>
-              <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 500 }}>
+              <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 500, color: '#121212', fontSize: '14px' }}>
                 Company Id
               </Typography>
               <TextField
@@ -184,21 +189,21 @@ const SignIn = () => {
                 // mt: 1,
                 mb: 1,
                 py: 1.5,
-                backgroundColor: "#0A2647",
+                backgroundColor: "#063455",
                 "&:hover": {
                   backgroundColor: "#0D3B66",
                 },
                 borderRadius: 1,
                 textTransform: "none",
               }}
-              onClick={ () => navigate('/employee/sign/in')}
+              onClick={() => navigate('/employee/sign/in')}
             >
               Next
             </Button>
 
-            <Typography variant="body2" sx={{ textAlign: "center", mb: 2 }}>
+            <Typography variant="body2" sx={{ textAlign: "center", mb: 2, mt: 1, color: '#7F7F7F' }}>
               Don't have account?{" "}
-              <Link href="#" underline="none" sx={{ color: "#0A2647", fontWeight: 500 }}>
+              <Link href="#" underline="none" sx={{ color: "#063455", fontWeight: 500 }}>
                 Sign Up
               </Link>
             </Typography>

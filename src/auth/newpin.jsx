@@ -100,7 +100,7 @@ const SetNewPin = () => {
                 {/* Right side with login form */}
                 <Box
                     sx={{
-                        width: { xs: "100%", md: "400px" },
+                        width: { xs: "100%", md: "540px" },
                         display: "flex",
                         flexDirection: "column",
                         p: 1,
@@ -123,7 +123,7 @@ const SetNewPin = () => {
                         <Box
                             sx={{
                                 width: '100%',
-                                maxWidth: 450,
+                                // maxWidth: 450,
                                 p: 4,
                                 // bgcolor: 'white',
                                 borderRadius: 1,
@@ -132,34 +132,34 @@ const SetNewPin = () => {
                             }}
                         >
                             {/* Logo */}
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 3 }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 2 }}>
                                 <Box
                                     component="img"
                                     src={logo}
                                     alt="AFOHS Club Logo"
                                     sx={{
-                                        width: 80,
-                                        height: 80,
+                                        width: 150,
+                                        height: 114,
                                     }}
                                 />
 
                             </Box>
 
                             {/* Heading */}
-                            <Typography variant="h5" sx={{ fontWeight: 500, color: '#333', mb: 0.5 }}>
+                            <Typography variant="h5" sx={{ fontWeight: 500, fontSize:'30px', color: '#3F4E4F', mb: 0.5 }}>
                                 Set Up New Pin
                             </Typography>
 
-                            <Typography sx={{ color: '#666', mb: 3, mt: 1 }}>
+                            <Typography sx={{ color: '#7F7F7F', fontSize:'16px', mb: 3, mt: 1 }}>
                                 Enter the new pin to secure your account
                             </Typography>
 
                             {/* PIN Entry */}
-                            <Box sx={{ mb: 3 }}>
+                            <Box sx={{ mb: 2 }}>
                                 <Typography sx={{ color: '#121212', mb: 1, fontSize: '0.9rem' }}>
                                     Enter New Pin
                                 </Typography>
-                                <Box sx={{ display: 'flex', gap: 1.3 }}>
+                                <Box sx={{ display: 'flex', gap: 2, width: '100%', justifyContent: 'space-between' }}>
                                     {pin.map((digit, index) => (
                                         <TextField
                                             key={index}
@@ -176,10 +176,10 @@ const SetNewPin = () => {
                                                 }
                                             }}
                                             sx={{
-                                                width: 48,
-                                                height: 48,
+                                                width: 60,
+                                                height: 70,
                                                 '.MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#ccc'
+                                                    borderColor: '#121212'
                                                 }
                                             }}
                                             InputProps={{
@@ -192,11 +192,11 @@ const SetNewPin = () => {
                                 </Box>
                             </Box>
 
-                            <Box sx={{ mb: 3 }}>
+                            <Box sx={{ mb: 2 }}>
                                 <Typography sx={{ color: '#121212', mb: 1, fontSize: '0.9rem' }}>
                                     Confirm New Pin
                                 </Typography>
-                                <Box sx={{ display: 'flex', gap: 1.3 }}>
+                                <Box sx={{ display: 'flex', gap: 1.3, width: '100%', justifyContent: 'space-between' }}>
                                     {pin.map((digit, index) => (
                                         <TextField
                                             key={index}
@@ -213,10 +213,10 @@ const SetNewPin = () => {
                                                 }
                                             }}
                                             sx={{
-                                                width: 48,
-                                                height: 48,
+                                                width: 60,
+                                                height: 70,
                                                 '.MuiOutlinedInput-notchedOutline': {
-                                                    borderColor: '#ccc'
+                                                    borderColor: '#121212'
                                                 }
                                             }}
                                             InputProps={{
@@ -234,9 +234,10 @@ const SetNewPin = () => {
                                 <Button
                                     startIcon={<ArrowBackIcon />}
                                     sx={{
-                                        color: '#4B5563',
-                                        width: '150px',
-                                        height: '40px',
+                                        color: '#121212',
+                                        bgcolor:'#FFFFFF',
+                                        width: '215px',
+                                        height: '48px',
                                         textTransform: 'none',
                                         borderRadius: 0,
                                         border: '1px solid #D1D5DB',
@@ -252,9 +253,9 @@ const SetNewPin = () => {
                                     variant="contained"
                                     endIcon={<ArrowForwardIcon />}
                                     sx={{
-                                        bgcolor: '#0c4a6e',
-                                        width: '150px',
-                                        height: '40px',
+                                        bgcolor: '#063455',
+                                        width: '215px',
+                                        height: '46px',
                                         color: 'white',
                                         textTransform: 'none',
                                         borderRadius: 0,

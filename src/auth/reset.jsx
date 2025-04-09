@@ -116,7 +116,7 @@ const ResetPin = () => {
                 </Box>
                 <Box
                     sx={{
-                        width: { xs: "100%", md: "400px" },
+                        width: { xs: "100%", md: "540px" },
                         display: "flex",
                         flexDirection: "column",
                         p: 1,
@@ -140,7 +140,7 @@ const ResetPin = () => {
                             sx={{
                                 width: '100%',
                                 // maxWidth: 550,
-                                p: 4,
+                                p: 5,
                                 // bgcolor: 'white',
                                 borderRadius: 1,
                                 boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
@@ -148,40 +148,40 @@ const ResetPin = () => {
                             }}
                         >
                             {/* Logo */}
-                            <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 3 }}>
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-start', mb: 2 }}>
                                 <Box
                                     component="img"
                                     src={logo}
                                     alt="AFOHS Club Logo"
                                     sx={{
-                                        width: 80,
-                                        height: 80,
+                                        width: 150,
+                                        height: 114,
                                     }}
                                 />
 
                             </Box>
 
                             {/* Heading */}
-                            <Typography variant="h5" sx={{ fontWeight: 500, color: '#4B5563', mb: 1, textAlign: 'flex-start' }}>
+                            <Typography variant="h5" sx={{ fontWeight: 500, fontSize:'30px', color: '#3F4E4F', mb: 1, textAlign: 'flex-start' }}>
                                 Verification Email
                             </Typography>
 
-                            <Typography sx={{ color: '#6B7280', mb: 4, textAlign: 'flex-start' }}>
-                                We sent a code to <Box component="span" sx={{ color: '#0c4a6e', fontWeight: 500 }}>jamal@company.com</Box>
+                            <Typography sx={{ color: '#7F7F7F', mb: 4, textAlign: 'flex-start' }}>
+                                We sent a code to <Box component="span" sx={{ color: '#063455', fontWeight: 500 }}>jamal@company.com</Box>
                             </Typography>
 
                             {/* Code Entry */}
                             <Box sx={{ mb: 1 }}>
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 1 }}>
-                                    <Typography sx={{ color: '#4B5563', fontSize: '0.9rem' }}>
+                                    <Typography sx={{ color: '#121212', fontSize: '0.9rem' }}>
                                         Enter Code
                                     </Typography>
-                                    <Typography sx={{ color: '#6B7280', fontSize: '0.9rem' }}>
-                                        Code expires in: <Box component="span" sx={{ color: '#EF4444' }}>00:56</Box>
+                                    <Typography sx={{ color: '#7F7F7F', fontSize: '0.9rem' }}>
+                                        Code expires in: <Box component="span" sx={{ color: '#F14C35' }}>00:56</Box>
                                     </Typography>
                                 </Box>
 
-                                <Box sx={{ display: 'flex', gap: 1, justifyContent: 'space-between', mb: 3 }}>
+                                <Box sx={{ display: 'flex', gap: 1, justifyContent: 'space-between', mb: 2 }}>
                                     {code.map((digit, index) => (
                                         <TextField
                                             key={index}
@@ -195,39 +195,41 @@ const ResetPin = () => {
                                                     textAlign: 'center',
                                                     padding: '10px',
                                                     fontSize: '1.2rem',
-                                                    width: '20px',
-                                                    height: '20px'
+                                                    width: '60px',
+                                                    height: '60px',
+                                                    border:'1px solid #121212'
                                                 }
                                             }}
                                             sx={{
                                                 width: '50px',
                                                 '& .MuiOutlinedInput-root': {
                                                     borderRadius: 1,
-                                                    borderColor: '#D1D5DB'
+                                                    borderColor: '#121212'
                                                 }
                                             }}
                                         />
                                     ))}
                                 </Box>
 
-                                <Typography sx={{ color: '#6B7280', fontSize: '0.9rem', mb: 4, textAlign: 'flex-start' }}>
-                                    Didn't get a code? <Link href="#" sx={{ color: '#0c4a6e', textDecoration: 'none' }}>Click to resend</Link>
+                                <Typography sx={{ color: '#7F7F7F', fontSize: '0.9rem', mb: 4, textAlign: 'flex-start' }}>
+                                    Didn't get a code? <Link href="#" sx={{ color: '#063455', textDecoration: 'none' }}>Click to resend</Link>
                                 </Typography>
                             </Box>
 
                             {/* Action Buttons */}
-                            <Box sx={{ display: 'flex', width: '100%', justifyContent: 'space-between' }}>
+                            <Box sx={{ display: 'flex', width: '100%',alignItems:'center', justifyContent: 'space-between' }}>
                                 <Button
                                     startIcon={<ArrowBackIcon />}
                                     sx={{
-                                        color: '#4B5563',
-                                        width: '150px',
-                                        height: '40px',
+                                        color: '#121212',
+                                        bgcolor:'#FFFFFF',
+                                        width: '215px',
+                                        height: '48px',
                                         textTransform: 'none',
                                         borderRadius: 0,
-                                        border: '1px solid #D1D5DB',
-                                        // px: 2,
-                                        py: 1
+                                        border: '1px solid #E3E3E3',
+                                        px: 2,
+                                        // py: 1
                                     }}
                                     onClick={()=> navigate('/forget-pin')}
                                 >
@@ -239,13 +241,13 @@ const ResetPin = () => {
                                     endIcon={<ArrowForwardIcon />}
                                     sx={{
                                         bgcolor: '#0c4a6e',
-                                        width: '150px',
-                                        height: '40px',
-                                        color: 'white',
+                                        width: '215px',
+                                        height: '46px',
+                                        color: '#FFFFFF',
                                         textTransform: 'none',
                                         borderRadius: 0,
-                                        px: 4,
-                                        py: 1,
+                                        px: 2,
+                                        // py: 1,
                                         '&:hover': {
                                             bgcolor: '#083654'
                                         }

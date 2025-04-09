@@ -3,13 +3,19 @@ import SideNav from '../sidebar/sidenav';
 import { useNavigate } from 'react-router-dom';
 import PaymentPage from './payment';
 import CloseIcon from "@mui/icons-material/Close";
-import "./style.css";
+import filtericon from '../assetts/_ButtonBase.png'
+import coffeeimg from '../assetts/image.png'
+import capuimg from '../assetts/cimage.png'
+import bevimg from '../assetts/bgimage.png'
+// import "./style.css";
 import {
   Box,
   Typography,
+  Slide,
   TextField,
   Button,
   Card,
+  Modal,
   CardContent,
   Grid,
   IconButton,
@@ -61,7 +67,7 @@ const AllOrder = () => {
       price: 4.0,
       discount: 50,
       stock: 58,
-      image: "/placeholder.svg?height=60&width=60",
+      image: coffeeimg,
       temperature: ["Ice", "Hot"],
       size: ["S", "M", "L"],
     },
@@ -73,7 +79,7 @@ const AllOrder = () => {
       price: 5.0,
       discount: 50,
       stock: 0,
-      image: "/placeholder.svg?height=60&width=60",
+      image: capuimg,
       temperature: ["Ice", "Hot"],
       size: ["S", "M", "L"],
     },
@@ -85,7 +91,7 @@ const AllOrder = () => {
       price: 5.0,
       discount: 50,
       stock: 58,
-      image: "/placeholder.svg?height=60&width=60",
+      image: bevimg,
       temperature: ["Ice", "Hot"],
       size: ["S", "M", "L"],
     },
@@ -97,7 +103,7 @@ const AllOrder = () => {
       price: 5.0,
       discount: 0,
       stock: 58,
-      image: "/placeholder.svg?height=60&width=60",
+      image: coffeeimg,
       temperature: ["Ice", "Hot"],
       size: ["S", "M", "L"],
     },
@@ -109,7 +115,7 @@ const AllOrder = () => {
       price: 5.0,
       discount: 0,
       stock: 58,
-      image: "/placeholder.svg?height=60&width=60",
+      image: bevimg,
       temperature: ["Ice", "Hot"],
       size: ["S", "M", "L"],
     },
@@ -121,7 +127,7 @@ const AllOrder = () => {
       price: 4.0,
       discount: 0,
       stock: 58,
-      image: "/placeholder.svg?height=60&width=60",
+      image: capuimg,
       temperature: ["Ice", "Hot"],
       size: ["S", "M", "L"],
     },
@@ -845,15 +851,41 @@ const AllOrder = () => {
               <span>Payment</span>
               <ArrowForward fontSize="small" />
             </Button>
-
-            <div className={`slide-panel ${showPayment ? "open" : ""}`}>
-              <button className="close-btn" onClick={() => setShowPayment(false)}>
-                <CloseIcon fontSize="medium" />
-              </button>
-              <div className="slide-panel-content">
-                <PaymentPage />
-              </div>
-            </div>
+            <Modal
+              open={showPayment}
+              onClose={() => setShowPayment(false)}
+              aria-labelledby="payment-modal-title"
+              aria-describedby="payment-modal-description"
+              closeAfterTransition
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end"
+              }}
+            >
+              <Slide direction="left" in={showPayment} mountOnEnter unmountOnExit>
+                <Box
+                  sx={{
+                    position: 'fixed',
+                    top: '10px',
+                    bottom: '10px',
+                    right: 10,
+                    width: { xs: '100%', sm: 900 },
+                    bgcolor: '#fff',
+                    boxShadow: 4,
+                    zIndex: 1300,
+                    overflowY: 'auto',
+                    borderRadius: 1,
+                    scrollbarWidth: 'none', // Firefox
+                    '&::-webkit-scrollbar': {
+                      display: 'none', // Chrome, Safari, Edge
+                    },
+                  }}
+                >
+                  {/* Your PaymentPage component inside the modal */}
+                  <PaymentPage />
+                </Box>
+              </Slide>
+            </Modal>
           </Box>
         </Paper>
       </Box>
@@ -875,7 +907,7 @@ const AllOrder = () => {
               onClick={() => navigate('/order/queue')}>
               <ArrowBack />
             </IconButton>
-            <Typography variant="h4" component="h1" sx={{ ml: 1, color: "#4a5568", fontWeight: 500 }}>
+            <Typography variant="h4" component="h1" sx={{ ml: 1, color: "#3F4E4F", fontSize: '46px', fontWeight: 500 }}>
               All Order
             </Typography>
           </Box>
@@ -884,7 +916,7 @@ const AllOrder = () => {
 
             <Box sx={{ flex: "1 1 80%" }}>
 
-              <Box sx={{ display: "flex", overflowX: "auto", mb: 3, pb: 1 }}>
+              <Box sx={{ display: "flex", overflowX: "auto", mb: 1, py: 3, height: '80px', pl: 2, borderRadius: '10px', bgcolor: '#D9D9D9' }}>
                 {tabs.map((tab) => (
                   <Button
                     key={tab}
@@ -895,12 +927,12 @@ const AllOrder = () => {
                       px: 2,
                       py: 1,
                       textTransform: "none",
-                      color: selectedTab === tab ? "#1976d2" : "#4a5568",
-                      bgcolor: selectedTab === tab ? "white" : "#e2e8f0",
-                      border: selectedTab === tab ? "1px solid #90caf9" : "none",
-                      "&:hover": {
-                        bgcolor: selectedTab === tab ? "white" : "#d1d8e0",
-                      },
+                      color: selectedTab === tab ? "#FFFFFF" : "#063455",
+                      bgcolor: selectedTab === tab ? "#063455" : "transparent",
+                      border: selectedTab === tab ? "none" : "1px solid #063455",
+                      // "&:hover": {
+                      //   bgcolor: selectedTab === tab ? "none" : "#063455",
+                      // },
                       whiteSpace: "nowrap",
                     }}
                   >
@@ -908,69 +940,77 @@ const AllOrder = () => {
                   </Button>
                 ))}
               </Box>
-
-              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
-                <Box sx={{ display: "flex", alignItems: "baseline" }}>
-                  <Typography variant="h4" component="h2" sx={{ fontWeight: "bold", color: "#2d3748" }}>
-                    67
-                  </Typography>
-                  <Typography variant="body1" sx={{ ml: 1, color: "#718096" }}>
-                    Products
-                  </Typography>
-                </Box>
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  <TextField
-                    placeholder="Search"
-                    variant="outlined"
-                    size="small"
-                    sx={{
-                      mr: 2,
-                      width: "250px",
-                      "& .MuiOutlinedInput-root": {
-                        borderRadius: "4px",
-                      },
-                    }}
-                    InputProps={{
-                      startAdornment: (
-                        <InputAdornment position="start">
-                          <Search sx={{ color: "#718096" }} />
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                  <Box sx={{ display: "flex", bgcolor: "white", borderRadius: "4px", mr: 1 }}>
-                    <IconButton
-                      sx={{
-                        color: viewMode === "grid" ? "white" : "#4a5568",
-                        bgcolor: viewMode === "grid" ? "#4a5568" : "transparent",
-                        borderRadius: "4px 0 0 4px",
-                        "&:hover": { bgcolor: viewMode === "grid" ? "#3a4458" : "#f0f0f0" },
-                      }}
-                      onClick={() => setViewMode("grid")}
-                    >
-                      <GridView />
-                    </IconButton>
-                    <IconButton
-                      sx={{
-                        color: viewMode === "list" ? "white" : "#4a5568",
-                        bgcolor: viewMode === "list" ? "#4a5568" : "transparent",
-                        borderRadius: "0 4px 4px 0",
-                        "&:hover": { bgcolor: viewMode === "list" ? "#3a4458" : "#f0f0f0" },
-                      }}
-                      onClick={() => setViewMode("list")}
-                    >
-                      <ViewList />
-                    </IconButton>
+              <Box sx={{
+                bgcolor: '#FFFFFF',
+                width: '100%',
+                p: 2,
+                borderRadius: '8px'
+              }}>
+                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
+                  <Box sx={{ display: "flex", alignItems: "baseline" }}>
+                    <Typography variant="h4" component="h2" sx={{ fontWeight: "500", fontSize: '36px', color: "#000000" }}>
+                      67
+                    </Typography>
+                    <Typography variant="body1" sx={{ ml: 1, mt: -1, color: "#7F7F7F", fontSize: '16px', }}>
+                      Products
+                    </Typography>
                   </Box>
-                  <IconButton sx={{ bgcolor: "white", color: "#4a5568", "&:hover": { bgcolor: "#f0f0f0" } }}>
-                    <FilterAlt />
-                  </IconButton>
+                  <Box sx={{ display: "flex", alignItems: "center" }}>
+                    <TextField
+                      placeholder="Search"
+                      variant="outlined"
+                      size="small"
+                      sx={{
+                        mr: 2,
+                        width: "250px",
+                        "& .MuiOutlinedInput-root": {
+                          borderRadius: "4px",
+                        },
+                      }}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Search sx={{ color: "#718096" }} />
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                    <Box sx={{ display: "flex", bgcolor: "white", borderRadius: "4px", mr: 1 }}>
+                      <IconButton
+                        sx={{
+                          color: viewMode === "grid" ? "white" : "#4a5568",
+                          bgcolor: viewMode === "grid" ? "#4a5568" : "transparent",
+                          borderRadius: "4px 0 0 4px",
+                          "&:hover": { bgcolor: viewMode === "grid" ? "#3a4458" : "#f0f0f0" },
+                        }}
+                        onClick={() => setViewMode("grid")}
+                      >
+                        <GridView />
+                      </IconButton>
+                      <IconButton
+                        sx={{
+                          color: viewMode === "list" ? "white" : "#4a5568",
+                          bgcolor: viewMode === "list" ? "#4a5568" : "transparent",
+                          borderRadius: "0 4px 4px 0",
+                          "&:hover": { bgcolor: viewMode === "list" ? "#3a4458" : "#f0f0f0" },
+                        }}
+                        onClick={() => setViewMode("list")}
+                      >
+                        <ViewList />
+                      </IconButton>
+                    </Box>
+                    <img src={filtericon} alt='' style={{
+                      height: 44,
+                      width: 44,
+                      cursor: 'pointer'
+                    }} />
+                  </Box>
                 </Box>
+
+
+                {viewMode === "grid" ? renderGridView() : renderListView()}
               </Box>
-
-              {viewMode === "grid" ? renderGridView() : renderListView()}
             </Box>
-
             <Box sx={{ flex: "1 1 30%" }}>
               {renderOrderDetail()}
             </Box>

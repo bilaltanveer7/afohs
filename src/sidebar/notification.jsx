@@ -138,6 +138,7 @@ const NotificationsPanel = ({ onClose }) => {
         <Box sx={{
           display: 'flex',
           alignItems: 'center',
+          // justifyContent:'space-between'
         }}>
           <Typography variant="h6" sx={{ fontWeight: 'bold', mr: 1, fontSize: '1.25rem' }}>
             Notifications
@@ -146,11 +147,12 @@ const NotificationsPanel = ({ onClose }) => {
             badgeContent="5"
             color="primary"
             sx={{
-              '& .MuiBadge-badge': {
-                fontSize: '0.75rem',
-                fontWeight: 'bold',
-                bgcolor: '#1976d2'
-              }
+              ml: 1.5, // 👈 Adds left margin between text and badge
+              "& .MuiBadge-badge": {
+                fontSize: "0.75rem",
+                fontWeight: "bold",
+                bgcolor: "#1976d2",
+              },
             }}
           />
         </Box>
@@ -173,10 +175,10 @@ const NotificationsPanel = ({ onClose }) => {
       </Box>
 
       {/* Notifications List */}
-      <Box 
-        sx={{ 
-          bgcolor: '#f1f5f9', 
-          flexGrow: 1, 
+      <Box
+        sx={{
+          bgcolor: '#f1f5f9',
+          flexGrow: 1,
           overflow: 'auto',
           '&::-webkit-scrollbar': {
             display: 'none'
