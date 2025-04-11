@@ -12,6 +12,7 @@ import SuccessScreen from './auth/success'
 import CoffeeShop from './inventory/dashboard';
 import TransactionDashboard from './transaction/dashboard'; 
 import SettingDashboard from './settings/dashboard';
+import TableManagement from './table/dashboard';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <Route path="/inventory" element={<CoffeeShop/>} />
         <Route path="/transaction" element={<TransactionDashboard/>} />
         <Route path="/settings" element={<SettingDashboard/>} />
+        <Route path="/table/management" element={<TableManagement/>} />
       </Routes>
     </>
   );

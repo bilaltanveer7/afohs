@@ -428,7 +428,7 @@ const SettingDashboard = () => {
             <div style={{
                 marginLeft: open ? `${drawerWidthOpen}px` : `${drawerWidthClosed}px`,
                 transition: "margin-left 0.3s ease-in-out",
-                marginTop: '4rem',
+                marginTop: '5rem',
             }}>
                 <div className="container mt-4" style={{ maxWidth: "1200px", margin: "0 auto", padding: "20px" }}>
                     <h1 className="mb-4">Settings</h1>

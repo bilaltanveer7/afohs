@@ -158,7 +158,7 @@ const OrderQueue = () => {
             <div style={{
                 marginLeft: open ? `${drawerWidthOpen}px` : `${drawerWidthClosed}px`,
                 transition: "margin-left 0.3s ease-in-out",
-                marginTop: '4rem',
+                marginTop: '5rem',
                 // bgcolor: '#f5f7fa'
             }}>
                 <ThemeProvider theme={theme}>
@@ -179,7 +179,7 @@ const OrderQueue = () => {
                                 className="d-flex mt-3 overflow-auto"
                                 style={{
                                     gap: "10px",
-                                    backgroundColor: "#D9D9D9",
+                                    backgroundColor: "#F0F0F0",
                                     width: "100%",
                                     paddingTop: "20px",
                                     paddingBottom: '20px',

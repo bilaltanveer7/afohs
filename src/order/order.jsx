@@ -897,7 +897,7 @@ const AllOrder = () => {
       <div style={{
         marginLeft: open ? `${drawerWidthOpen}px` : `${drawerWidthClosed}px`,
         transition: "margin-left 0.3s ease-in-out",
-        marginTop: '4rem',
+        marginTop: '5rem',
         // bgcolor: '#f5f7fa'
       }}>
         <Box sx={{ maxWidth: "100%", bgcolor: "#f5f7f9", minHeight: "100vh", p: 2 }}>
@@ -916,7 +916,7 @@ const AllOrder = () => {
 
             <Box sx={{ flex: "1 1 80%" }}>
 
-              <Box sx={{ display: "flex", overflowX: "auto", mb: 1, py: 3, height: '80px', pl: 2, borderRadius: '10px', bgcolor: '#D9D9D9' }}>
+              <Box sx={{ display: "flex", overflowX: "auto", mb: 1, py: 3, height: '80px', pl: 2, borderRadius: '10px', bgcolor: '#F0F0F0' }}>
                 {tabs.map((tab) => (
                   <Button
                     key={tab}

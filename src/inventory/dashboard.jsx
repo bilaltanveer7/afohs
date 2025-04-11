@@ -858,7 +858,7 @@ export default function CoffeeShop() {
             <div style={{
                 marginLeft: open ? `${drawerWidthOpen}px` : `${drawerWidthClosed}px`,
                 transition: "margin-left 0.3s ease-in-out",
-                marginTop: '4rem',
+                marginTop: '5rem',
             }}>
                 <div className="container-fluid bg-light py-4">
                     {/* Category Filter Buttons */}

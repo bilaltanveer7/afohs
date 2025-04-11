@@ -33,7 +33,8 @@ import NewOrderDialog from './order';
 import CloseIcon from "@mui/icons-material/Close";
 import bellicon from '../assetts/bell-notification.png';
 import { Modal, Slide } from '@mui/material';
-// import './style.css'
+import tableicon from '../assetts/Table management.svg'
+import { ReactComponent as TableIcon } from '../assetts/Table management.svg';
 
 const drawerWidthOpen = 240; // Set open width to 240px
 const drawerWidthClosed = 110; // Set closed width to 120px
@@ -108,7 +109,12 @@ export default function SideNav({ open, setOpen }) {
         { text: "Dashboard", icon: <HomeIcon />, path: "/dashboard" },
         { text: "Inventory", icon: <InventoryIcon />, path: "/inventory" },
         { text: "Transaction", icon: <PeopleIcon />, path: "/transaction" },
-        { text: "Settings", icon: <SettingsIcon />, path: "/settings" }
+        { text: "Settings", icon: <SettingsIcon />, path: "/settings" },
+        {
+            text: "Table Management",
+            icon: <TableIcon />,
+            path: "/table/management"
+        }
     ];
     const navigate = useNavigate();
     const location = useLocation();
@@ -120,8 +126,8 @@ export default function SideNav({ open, setOpen }) {
                 position="fixed"
                 open={open}
                 style={{
-                    backgroundColor: "#BBC6CE",
-                    height: '60px',
+                    backgroundColor: "#D3E1EB",
+                    height: '80px',
                     justifyContent: 'center',
                     zIndex: 1000
                 }}
@@ -324,14 +330,26 @@ export default function SideNav({ open, setOpen }) {
                                         }
                                     }}
                                 >
-                                    <ListItemIcon sx={{
+                                    <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            justifyContent: "center",
+                                            mr: open ? 1 : "auto",
+                                            "& svg": {
+                                                fill: isSelected ? "orange" : "#fff"
+                                            }
+                                        }}
+                                    >
+                                        {icon}
+                                    </ListItemIcon>
+                                    {/* <ListItemIcon sx={{
                                         color: isSelected ? "orange" : "#fff", // Orange when selected, white otherwise
                                         minWidth: 0,
                                         justifyContent: "center",
                                         mr: open ? 1 : "auto"
                                     }}>
                                         {React.cloneElement(icon, { style: { color: isSelected ? "orange" : "#fff" } })}
-                                    </ListItemIcon>
+                                    </ListItemIcon> */}
                                     <ListItemText
                                         primary={text}
                                         sx={{

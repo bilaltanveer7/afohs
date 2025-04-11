@@ -537,7 +537,7 @@ const TransactionDashboard = () => {
       <div style={{
         marginLeft: open ? `${drawerWidthOpen}px` : `${drawerWidthClosed}px`,
         transition: "margin-left 0.3s ease-in-out",
-        marginTop: '4rem',
+        marginTop: '5rem',
       }}>
         <div style={styles.root}>
           <Box p={2}>

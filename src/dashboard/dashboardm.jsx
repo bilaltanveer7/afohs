@@ -70,7 +70,7 @@ const Dashboard = () => {
                 style={{
                     marginLeft: open ? `${drawerWidthOpen}px` : `${drawerWidthClosed}px`,
                     transition: "margin-left 0.3s ease-in-out",
-                    marginTop: '4rem',
+                    marginTop: '5rem',
                 }}>
                 <Box sx={{ flexGrow: 1, p: 2, bgcolor: '#f5f7fa' }}>
                     <Grid container spacing={2}>
