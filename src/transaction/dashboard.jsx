@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import SideNav from '../sidebar/sidenav'
-import { useNavigate } from 'react-router-dom';
 import {
   Typography,
   Button,
@@ -17,6 +16,8 @@ import {
   Box,
   Grid,
   InputAdornment,
+  Divider,
+  Collapse,
 } from "@mui/material"
 import {
   Search as SearchIcon,
@@ -25,7 +26,7 @@ import {
   Home as HomeIcon,
   Restaurant as RestaurantIcon,
   LocalDining as DiningIcon,
-  TwoWheeler as DeliveryIcon, // Replaced Motorcycle with TwoWheeler
+  TwoWheeler as DeliveryIcon,
   TakeoutDining as TakeoutIcon,
   EventSeat as ReservationIcon,
   CheckCircle as CheckCircleIcon,
@@ -36,9 +37,14 @@ import {
   Star as StarIcon,
   Diamond as DiamondIcon,
   ArrowDropDown as ArrowDropDownIcon,
+  KeyboardArrowDown as KeyboardArrowDownIcon,
+  ArrowForward as ArrowForwardIcon,
+  Backspace as BackspaceIcon,
+  Check as CheckIcon,
 } from "@mui/icons-material"
 import "bootstrap/dist/css/bootstrap.min.css"
 import RoomServiceIcon from "@mui/icons-material/RoomService"
+
 // Custom CSS
 const styles = {
   root: {
@@ -285,6 +291,79 @@ const styles = {
     padding: "15px",
     height: "100%",
   },
+  filterSection: {
+    marginBottom: "16px",
+    border: "1px solid #e0e0e0",
+    borderRadius: "4px",
+  },
+  filterHeader: {
+    padding: "12px 16px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    cursor: "pointer",
+  },
+  filterContent: {
+    padding: "0 16px 16px 16px",
+  },
+  filterChipNew: {
+    margin: "4px",
+    borderRadius: "16px",
+    backgroundColor: "#e3f2fd",
+    color: "#0a3d62",
+    border: "none",
+  },
+  activeFilterChipNew: {
+    margin: "4px",
+    borderRadius: "16px",
+    backgroundColor: "#0a3d62",
+    color: "white",
+    border: "none",
+  },
+  numpadButton: {
+    width: "100%",
+    height: "60px",
+    fontSize: "24px",
+    borderRadius: "4px",
+    border: "1px solid #e0e0e0",
+    backgroundColor: "white",
+    color: "#333",
+    "&:hover": {
+      backgroundColor: "#f5f5f5",
+    },
+  },
+  quickAmountButton: {
+    borderRadius: "4px",
+    border: "1px solid #e0e0e0",
+    backgroundColor: "white",
+    color: "#333",
+    padding: "8px 16px",
+    textTransform: "none",
+    "&:hover": {
+      backgroundColor: "#f5f5f5",
+    },
+  },
+  payNowButton: {
+    backgroundColor: "#0a3d62",
+    color: "white",
+    borderRadius: "4px",
+    padding: "12px 24px",
+    textTransform: "none",
+    "&:hover": {
+      backgroundColor: "#083352",
+    },
+  },
+  successIcon: {
+    backgroundColor: "#4caf50",
+    color: "white",
+    width: "80px",
+    height: "80px",
+    borderRadius: "50%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    margin: "0 auto 24px auto",
+  },
 }
 
 // Sample data
@@ -387,6 +466,30 @@ const orderDetail = {
   },
 }
 
+const paymentOrderDetail = {
+  id: "ORDER001",
+  customer: "Ravi Kamil",
+  tableNumber: "T2",
+  date: "Wed, May 27, 2020 • 9:27:53 AM",
+  cashier: "Tynisha Obey",
+  workingTime: "15.00 - 22.00 PM",
+  items: [
+    { name: "Cappuccino", quantity: 2, price: 5.0, total: 10.0 },
+    { name: "Soda Beverage", quantity: 3, price: 5.0, total: 15.0 },
+    { name: "Chocolate Croissant", quantity: 2, price: 5.0, total: 10.0 },
+    { name: "French Toast Sugar", quantity: 3, price: 4.0, total: 12.0 },
+  ],
+  subtotal: 47.0,
+  discount: 0,
+  tax: 5.64,
+  total: 52.64,
+  payment: {
+    method: "Cash",
+    amount: 60.0,
+    change: 7.36,
+  },
+}
+
 const trackingSteps = [
   {
     title: "Successfully Delivered",
@@ -428,19 +531,32 @@ const drawerWidthOpen = 240;
 const drawerWidthClosed = 110;
 
 const TransactionDashboard = () => {
-  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("all");
-  const [openFilterModal, setOpenFilterModal] = useState(false);
-  const [openOrderDetailModal, setOpenOrderDetailModal] = useState(false);
-  const [openTrackOrderModal, setOpenTrackOrderModal] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [activeTab, setActiveTab] = useState("all")
+  const [openFilterModal, setOpenFilterModal] = useState(false)
+  const [openOrderDetailModal, setOpenOrderDetailModal] = useState(false)
+  const [openTrackOrderModal, setOpenTrackOrderModal] = useState(false)
+  const [openPaymentModal, setOpenPaymentModal] = useState(false)
+  const [openPaymentSuccessModal, setOpenPaymentSuccessModal] = useState(false)
+  const [selectedOrder, setSelectedOrder] = useState(null)
   const [filters, setFilters] = useState({
     sort: "asc",
     orderType: "all",
     memberStatus: "all",
     orderStatus: "all",
-  });
+  })
+
+  // Filter sections expand/collapse state
+  const [expandedSections, setExpandedSections] = useState({
+    sorting: true,
+    orderType: true,
+    memberStatus: true,
+    orderStatus: true,
+  })
+
+  // Payment state
+  const [inputAmount, setInputAmount] = useState("110.00")
+  const [customerChanges, setCustomerChanges] = useState("0.00")
 
   const handleTabChange = (tab) => {
     setActiveTab(tab)
@@ -472,6 +588,25 @@ const TransactionDashboard = () => {
     setOpenTrackOrderModal(false)
   }
 
+  const handleOpenPayment = (order) => {
+    setSelectedOrder(order)
+    setOpenPaymentModal(true)
+    setOpenOrderDetailModal(false)
+  }
+
+  const handleClosePayment = () => {
+    setOpenPaymentModal(false)
+  }
+
+  const handlePayNow = () => {
+    setOpenPaymentModal(false)
+    setOpenPaymentSuccessModal(true)
+  }
+
+  const handleClosePaymentSuccess = () => {
+    setOpenPaymentSuccessModal(false)
+  }
+
   const handleFilterChange = (key, value) => {
     setFilters((prev) => ({
       ...prev,
@@ -492,6 +627,55 @@ const TransactionDashboard = () => {
     setOpenFilterModal(false)
     // Here you would typically apply the filters to your data
     console.log("Applied filters:", filters)
+  }
+
+  const toggleSection = (section) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [section]: !prev[section],
+    }))
+  }
+
+  const handleQuickAmountClick = (amount) => {
+    setInputAmount(amount)
+    // Calculate customer changes
+    const total = paymentOrderDetail.total
+    setCustomerChanges((amount - total).toFixed(2))
+  }
+
+  const handleNumberClick = (number) => {
+    let newAmount
+    if (inputAmount === "110.00") {
+      newAmount = number
+    } else {
+      newAmount = inputAmount + number
+    }
+    setInputAmount(newAmount)
+
+    // Calculate customer changes
+    const total = paymentOrderDetail.total
+    setCustomerChanges((Number.parseFloat(newAmount) - total).toFixed(2))
+  }
+
+  const handleDeleteClick = () => {
+    if (inputAmount.length > 1) {
+      const newAmount = inputAmount.slice(0, -1)
+      setInputAmount(newAmount)
+
+      // Calculate customer changes
+      const total = paymentOrderDetail.total
+      setCustomerChanges((Number.parseFloat(newAmount) - total).toFixed(2))
+    } else {
+      setInputAmount("0")
+      setCustomerChanges((0 - paymentOrderDetail.total).toFixed(2))
+    }
+  }
+
+  const handleDecimalClick = () => {
+    if (!inputAmount.includes(".")) {
+      const newAmount = inputAmount + "."
+      setInputAmount(newAmount)
+    }
   }
 
   const getStatusChipColor = (status) => {
@@ -600,10 +784,14 @@ const TransactionDashboard = () => {
             >
               {/* Header */}
               <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
-                <Typography variant="h4" fontWeight="bold" sx={{
-                  fontWeight: 500,
-                  fontSize: "36px",
-                }}>
+                <Typography
+                  variant="h4"
+                  fontWeight="bold"
+                  sx={{
+                    fontWeight: 500,
+                    fontSize: "36px",
+                  }}
+                >
                   240{" "}
                   <span style={{ fontSize: "16px", fontWeight: "400", color: "#7F7F7F" }}>Transactions in your Shift</span>
                 </Typography>
@@ -634,232 +822,8 @@ const TransactionDashboard = () => {
 
               {/* Main Content */}
               <Grid container spacing={2}>
-                {/* Left Column */}
-                <Grid item xs={12} md={6}>
-                  <Box>
-                    {/* Revenue Card */}
-                    <Typography
-                      variant="body2"
-                      color="rgba(255,255,255,0.7)"
-                      style={{
-                        background: "#446780",
-                        padding: "10px",
-                      }}
-                    >
-                      Ensure the total revenue from your shift's orders is accurate for reporting.
-                    </Typography>
-                    <Box style={{ ...styles.revenueCard, borderRadius: 0 }} mb={2}>
-                      <Typography
-                        variant="body2"
-                        color="#ffff"
-                        mb={1}
-                        sx={{
-                          fontWeight: 400,
-                          fontSize: "14px",
-                        }}>
-                        Today Revenue
-                      </Typography>
-                      <Typography variant="h4" fontWeight="bold" mb={2}
-                        sx={{
-                          fontWeight: 500,
-                          fontSize: "30px",
-                        }}>
-                        Rs 559,102.00
-                      </Typography>
-                      <Box display="flex" justifyContent="space-between">
-                        <Box>
-                          <Typography variant="h6" fontWeight="bold" sx={{
-                            fontWeight: 500,
-                            fontSize: "12px",
-                          }}>
-                            40%
-                          </Typography>
-                          <Typography variant="body2" color="#ffff"
-                            sx={{
-                              fontWeight: 400,
-                              fontSize: "12px",
-                            }}>
-                            Dine In
-                          </Typography>
-                        </Box>
-                        <Box>
-                          <Typography variant="h6" fontWeight="bold" sx={{
-                            fontWeight: 500,
-                            fontSize: "12px",
-                          }}>
-                            15%
-                          </Typography>
-                          <Typography variant="body2" color="#ffff" sx={{
-                            fontWeight: 400,
-                            fontSize: "12px",
-                          }}>
-                            Takeaway
-                          </Typography>
-                        </Box>
-                        <Box>
-                          <Typography variant="h6" fontWeight="bold" sx={{
-                            fontWeight: 500,
-                            fontSize: "12px",
-                          }}>
-                            35%
-                          </Typography>
-                          <Typography variant="body2" color="#ffff" sx={{
-                            fontWeight: 400,
-                            fontSize: "12px",
-                          }}>
-                            Delivery
-                          </Typography>
-                        </Box>
-                        <Box>
-                          <Typography variant="h6" fontWeight="bold" sx={{
-                            fontWeight: 500,
-                            fontSize: "12px",
-                          }}>
-                            10%
-                          </Typography>
-                          <Typography variant="body2" color="#ffff" sx={{
-                            fontWeight: 400,
-                            fontSize: "12px",
-                          }}>
-                            Pick Up
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </Box>
-                  </Box>
-                  {/* Transactions Card */}
-                  <Box style={{ ...styles.transactionCard, borderRadius: 0, backgroundColor: "#3f4e4f", }} mb={2}>
-                    <Box display="flex" alignItems="center" mb={2} borderBottom="1px solid #566364" py={1}>
-                      <Box
-                        display="flex"
-                        alignItems="center"
-                        justifyContent="center"
-                        borderRadius="50%"
-                        width={40}
-                        height={40}
-                        mr={2}
-
-                      >
-                        <ReceiptIcon />
-                      </Box>
-                      <Box>
-                        <Typography variant="body2" color="#C6C6C6" sx={{
-                          fontWeight: 400,
-                          fontSize: "14px",
-                        }}>
-                          Total Transactions
-                        </Typography>
-                        <Typography variant="h5" color="#ffff" fontWeight="bold" sx={{
-                          fontWeight: 500,
-                          fontSize: "20px",
-                        }}>
-                          320
-                        </Typography>
-                      </Box>
-                    </Box>
-                    <Box display="flex" gap="150px">
-                      <Box>
-                        <Typography variant="body2" color="#C6C6C6" sx={{
-                          fontWeight: 400,
-                          fontSize: "12px",
-                        }}>
-                          Self Order
-                        </Typography>
-                        <Typography variant="h6" color="#ffff" fontWeight="bold" sx={{
-                          fontWeight: 500,
-                          fontSize: "18px",
-                        }}>
-                          280
-                        </Typography>
-                      </Box>
-                      <Box>
-                        <Typography variant="body2" color="#C6C6C6" sx={{
-                          fontWeight: 400,
-                          fontSize: "12px",
-                        }}>
-                          Mobile App
-                        </Typography>
-                        <Typography variant="h6" fontWeight="bold" sx={{
-                          fontWeight: 500,
-                          fontSize: "18px",
-                        }}>
-                          40
-                        </Typography>
-                      </Box>
-                    </Box>
-                  </Box>
-
-                  {/* Product Sold and Total Order Cards */}
-                  <Grid container spacing={2}>
-                    <Grid item xs={6}>
-                      <Box style={{ ...styles.productSoldCard, borderRadius: 0, backgroundColor: "#3f4e4f", }}>
-                        <Box display="flex" alignItems="center" mb={2}>
-                          <Box
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center"
-                            bgcolor="rgba(255,255,255,0.1)"
-                            borderRadius="50%"
-                            width={40}
-                            height={40}
-                            mr={2}
-                          >
-                            <DiningIcon />
-                          </Box>
-                          <Box>
-                            <Typography variant="body2" color="#C6C6C6" sx={{
-                              fontWeight: 400,
-                              fontSize: "14px",
-                            }}>
-                              Product Sold
-                            </Typography>
-                            <Typography variant="h5" fontWeight="bold" sx={{
-                              fontWeight: 500,
-                              fontSize: "20px",
-                            }}>
-                              500 <span style={{ fontSize: "12px", fontWeight: "normal" }}>Items</span>
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </Box>
-                    </Grid>
-                    <Grid item xs={6}>
-                      <Box style={{ ...styles.totalOrderCard, borderRadius: 0, backgroundColor: "#3f4e4f", }}>
-                        <Box display="flex" alignItems="center" mb={2}>
-                          <Box
-                            display="flex"
-                            alignItems="center"
-                            justifyContent="center"
-                            bgcolor="rgba(255,255,255,0.1)"
-                            borderRadius="50%"
-                            width={40}
-                            height={40}
-                            mr={2}
-                          >
-                            <ReceiptIcon />
-                          </Box>
-                          <Box>
-                            <Typography variant="body2" color="#C6C6C6" sx={{
-                              fontWeight: 400,
-                              fontSize: "14px",
-                            }}>
-                              Total Order
-                            </Typography>
-                            <Typography variant="h5" fontWeight="bold" sx={{
-                              fontWeight: 500,
-                              fontSize: "20px",
-                            }}>
-                              380 <span style={{ fontSize: "12px", fontWeight: "normal" }}>Order</span>
-                            </Typography>
-                          </Box>
-                        </Box>
-                      </Box>
-                    </Grid>
-                  </Grid>
-                </Grid>
-
                 {/* Right Column - Orders List */}
-                <Grid item xs={12} md={6}>
+                <Grid item xs={12}>
                   {orders.map((order) => (
                     <Card
                       style={{
@@ -888,10 +852,13 @@ const TransactionDashboard = () => {
                           </Avatar>
                           <Box ml={2} flex={1}>
                             <Box display="flex" alignItems="center">
-                              <Typography variant="subtitle1" sx={{
-                                fontWeight: 500,
-                                fontSize: "18px",
-                              }}>
+                              <Typography
+                                variant="subtitle1"
+                                sx={{
+                                  fontWeight: 500,
+                                  fontSize: "18px",
+                                }}
+                              >
                                 {order.customer}
                               </Typography>
                               {order.isVIP && (
@@ -906,22 +873,38 @@ const TransactionDashboard = () => {
                                 />
                               )}
                             </Box>
-                            <Typography variant="body2" color="#7F7F7F" sx={{
-                              fontWeight: 400,
-                              fontSize: "14px",
-                            }}>
+                            <Typography
+                              variant="body2"
+                              color="#7F7F7F"
+                              sx={{
+                                fontWeight: 400,
+                                fontSize: "14px",
+                              }}
+                            >
                               {order.items} Items
                             </Typography>
                           </Box>
                           <Box textAlign="right">
-                            <Typography variant="subtitle1" fontWeight="bold" display="flex" gap="5px" alignItems="center" sx={{
-                              fontWeight: 500,
-                              fontSize: "20px",
-                            }}>
-                              <Typography color="#7F7F7F" sx={{
-                                fontWeight: 400,
-                                fontSize: "16px",
-                              }}>Rs </Typography>
+                            <Typography
+                              variant="subtitle1"
+                              fontWeight="bold"
+                              display="flex"
+                              gap="5px"
+                              alignItems="center"
+                              sx={{
+                                fontWeight: 500,
+                                fontSize: "20px",
+                              }}
+                            >
+                              <Typography
+                                color="#7F7F7F"
+                                sx={{
+                                  fontWeight: 400,
+                                  fontSize: "16px",
+                                }}
+                              >
+                                Rs{" "}
+                              </Typography>
                               {order.amount.toFixed(2)}
                             </Typography>
                           </Box>
@@ -940,6 +923,39 @@ const TransactionDashboard = () => {
                             }}
                           />
                         </Box>
+                        <Box display="flex" justifyContent="flex-end" mt={1} gap={1}>
+                          <Button
+                            size="small"
+                            startIcon={<PrintIcon />}
+                            variant="outlined"
+                            sx={{
+                              borderRadius: "4px",
+                              fontSize: "12px",
+                              textTransform: "none",
+                              border: "1px solid #0a3d62",
+                              color: "#0a3d62",
+                            }}
+                          >
+                            Print Receipt
+                          </Button>
+                          <Button
+                            size="small"
+                            variant="contained"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              handleOpenPayment(order)
+                            }}
+                            sx={{
+                              borderRadius: "4px",
+                              fontSize: "12px",
+                              textTransform: "none",
+                              backgroundColor: "#0a3d62",
+                              color: "white",
+                            }}
+                          >
+                            Payment Now
+                          </Button>
+                        </Box>
                       </CardContent>
                     </Card>
                   ))}
@@ -957,182 +973,334 @@ const TransactionDashboard = () => {
             PaperProps={{
               style: {
                 position: "fixed",
-                position: "fixed",
                 top: 0,
                 right: 0,
                 margin: 0,
-                height: "auto",
+                height: "100vh",
                 maxHeight: "100vh",
                 overflow: "auto",
+                borderRadius: 0,
               },
             }}
           >
-            <Box style={styles.modalTitle}>
-              <Typography variant="h6" fontWeight="bold">
-                Menu Filter
-              </Typography>
-              <IconButton onClick={handleCloseFilterModal} style={styles.closeButton}>
-                <CloseIcon />
-              </IconButton>
-            </Box>
-            <DialogContent>
-              {/* Sorting Section */}
-              <Box mb={2}>
-                <Typography variant="subtitle1" fontWeight="bold" mb={1}>
-                  Sorting
+            <Box sx={{ p: 3 }}>
+              <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+                <Typography variant="h6" fontWeight="bold">
+                  Menu Filter
                 </Typography>
-                <Box display="flex" alignItems="center" gap={1}>
-                  <Typography variant="body2">By Order Id</Typography>
-                  <Button
-                    variant={filters.sort === "asc" ? "contained" : "outlined"}
-                    onClick={() => handleFilterChange("sort", "asc")}
-                    style={filters.sort === "asc" ? styles.activeFilterChip : styles.filterChip}
-                  >
-                    Ascending
-                  </Button>
-                  <Button
-                    variant={filters.sort === "desc" ? "contained" : "outlined"}
-                    onClick={() => handleFilterChange("sort", "desc")}
-                    style={filters.sort === "desc" ? styles.activeFilterChip : styles.filterChip}
-                  >
-                    Descending
-                  </Button>
+                <IconButton onClick={handleCloseFilterModal} edge="end">
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+
+              {/* Sorting Section */}
+              <Box className={styles.filterSection}>
+                <Box className={styles.filterHeader} onClick={() => toggleSection("sorting")}>
+                  <Typography variant="subtitle1">Sorting</Typography>
+                  <KeyboardArrowDownIcon
+                    sx={{
+                      transform: expandedSections.sorting ? "rotate(180deg)" : "rotate(0deg)",
+                      transition: "transform 0.3s",
+                    }}
+                  />
                 </Box>
+                <Collapse in={expandedSections.sorting}>
+                  <Box className={styles.filterContent}>
+                    <Typography variant="body2" mb={1}>
+                      By Order Id
+                    </Typography>
+                    <Box display="flex" gap={1}>
+                      <Button
+                        variant="contained"
+                        onClick={() => handleFilterChange("sort", "asc")}
+                        sx={{
+                          backgroundColor: filters.sort === "asc" ? "#0a3d62" : "#e3f2fd",
+                          color: filters.sort === "asc" ? "white" : "#0a3d62",
+                          "&:hover": {
+                            backgroundColor: filters.sort === "asc" ? "#0a3d62" : "#d0e8fc",
+                          },
+                        }}
+                        startIcon={filters.sort === "asc" ? <CheckIcon fontSize="small" /> : null}
+                      >
+                        Ascending
+                      </Button>
+                      <Button
+                        variant="contained"
+                        onClick={() => handleFilterChange("sort", "desc")}
+                        sx={{
+                          backgroundColor: filters.sort === "desc" ? "#0a3d62" : "#e3f2fd",
+                          color: filters.sort === "desc" ? "white" : "#0a3d62",
+                          "&:hover": {
+                            backgroundColor: filters.sort === "desc" ? "#0a3d62" : "#d0e8fc",
+                          },
+                        }}
+                        startIcon={filters.sort === "desc" ? <CheckIcon fontSize="small" /> : null}
+                      >
+                        Descending
+                      </Button>
+                    </Box>
+                  </Box>
+                </Collapse>
               </Box>
 
               {/* Order Type Section */}
-              <Box mb={2}>
-                <Typography variant="subtitle1" fontWeight="bold" mb={1}>
-                  Order Type
-                </Typography>
-                <Box display="flex" flexWrap="wrap" gap={1}>
-                  <Chip
-                    label="ALL STATUS"
-                    onClick={() => handleFilterChange("orderType", "all")}
-                    style={filters.orderType === "all" ? styles.activeFilterChip : styles.filterChip}
-                  />
-                  <Chip
-                    label="Dine In"
-                    icon={<DiningIcon />}
-                    onClick={() => handleFilterChange("orderType", "dine-in")}
-                    style={filters.orderType === "dine-in" ? styles.activeFilterChip : styles.filterChip}
-                  />
-                  <Chip
-                    label="Pick Up"
-                    icon={<TakeoutIcon />}
-                    onClick={() => handleFilterChange("orderType", "pickup")}
-                    style={filters.orderType === "pickup" ? styles.activeFilterChip : styles.filterChip}
-                  />
-                  <Chip
-                    label="Delivery"
-                    icon={<DeliveryIcon />}
-                    onClick={() => handleFilterChange("orderType", "delivery")}
-                    style={filters.orderType === "delivery" ? styles.activeFilterChip : styles.filterChip}
-                  />
-                  <Chip
-                    label="Takeaway"
-                    icon={<TakeoutIcon />}
-                    onClick={() => handleFilterChange("orderType", "takeaway")}
-                    style={filters.orderType === "takeaway" ? styles.activeFilterChip : styles.filterChip}
-                  />
-                  <Chip
-                    label="Reservation"
-                    icon={<ReservationIcon />}
-                    onClick={() => handleFilterChange("orderType", "reservation")}
-                    style={filters.orderType === "reservation" ? styles.activeFilterChip : styles.filterChip}
+              <Box className={styles.filterSection} mt={2}>
+                <Box className={styles.filterHeader} onClick={() => toggleSection("orderType")}>
+                  <Typography variant="subtitle1">Order Type</Typography>
+                  <KeyboardArrowDownIcon
+                    sx={{
+                      transform: expandedSections.orderType ? "rotate(180deg)" : "rotate(0deg)",
+                      transition: "transform 0.3s",
+                    }}
                   />
                 </Box>
+                <Collapse in={expandedSections.orderType}>
+                  <Box className={styles.filterContent}>
+                    <Box display="flex" flexWrap="wrap" gap={1}>
+                      <Chip
+                        label="All Status"
+                        onClick={() => handleFilterChange("orderType", "all")}
+                        sx={{
+                          backgroundColor: filters.orderType === "all" ? "#0a3d62" : "#e3f2fd",
+                          color: filters.orderType === "all" ? "white" : "#0a3d62",
+                          fontWeight: 500,
+                        }}
+                        icon={filters.orderType === "all" ? <CheckIcon style={{ color: "white" }} /> : null}
+                      />
+                      <Chip
+                        label="Dine In"
+                        onClick={() => handleFilterChange("orderType", "dine-in")}
+                        sx={{
+                          backgroundColor: filters.orderType === "dine-in" ? "#0a3d62" : "#e3f2fd",
+                          color: filters.orderType === "dine-in" ? "white" : "#0a3d62",
+                          fontWeight: 500,
+                        }}
+                        icon={<DiningIcon style={{ color: filters.orderType === "dine-in" ? "white" : "#0a3d62" }} />}
+                      />
+                      <Chip
+                        label="Pick Up"
+                        onClick={() => handleFilterChange("orderType", "pickup")}
+                        sx={{
+                          backgroundColor: filters.orderType === "pickup" ? "#0a3d62" : "#e3f2fd",
+                          color: filters.orderType === "pickup" ? "white" : "#0a3d62",
+                          fontWeight: 500,
+                        }}
+                        icon={<TakeoutIcon style={{ color: filters.orderType === "pickup" ? "white" : "#0a3d62" }} />}
+                      />
+                      <Chip
+                        label="Delivery"
+                        onClick={() => handleFilterChange("orderType", "delivery")}
+                        sx={{
+                          backgroundColor: filters.orderType === "delivery" ? "#0a3d62" : "#e3f2fd",
+                          color: filters.orderType === "delivery" ? "white" : "#0a3d62",
+                          fontWeight: 500,
+                        }}
+                        icon={<DeliveryIcon style={{ color: filters.orderType === "delivery" ? "white" : "#0a3d62" }} />}
+                      />
+                      <Chip
+                        label="Takeaway"
+                        onClick={() => handleFilterChange("orderType", "takeaway")}
+                        sx={{
+                          backgroundColor: filters.orderType === "takeaway" ? "#0a3d62" : "#e3f2fd",
+                          color: filters.orderType === "takeaway" ? "white" : "#0a3d62",
+                          fontWeight: 500,
+                        }}
+                        icon={<TakeoutIcon style={{ color: filters.orderType === "takeaway" ? "white" : "#0a3d62" }} />}
+                      />
+                      <Chip
+                        label="Reservation"
+                        onClick={() => handleFilterChange("orderType", "reservation")}
+                        sx={{
+                          backgroundColor: filters.orderType === "reservation" ? "#0a3d62" : "#e3f2fd",
+                          color: filters.orderType === "reservation" ? "white" : "#0a3d62",
+                          fontWeight: 500,
+                        }}
+                        icon={
+                          <ReservationIcon style={{ color: filters.orderType === "reservation" ? "white" : "#0a3d62" }} />
+                        }
+                      />
+                    </Box>
+                  </Box>
+                </Collapse>
               </Box>
 
               {/* Member Status Section */}
-              <Box mb={2}>
-                <Typography variant="subtitle1" fontWeight="bold" mb={1}>
-                  Member Status
-                </Typography>
-                <Box display="flex" flexWrap="wrap" gap={1}>
-                  <Chip
-                    label="ALL STATUS"
-                    onClick={() => handleFilterChange("memberStatus", "all")}
-                    style={filters.memberStatus === "all" ? styles.activeFilterChip : styles.filterChip}
-                  />
-                  <Chip
-                    label="Guest"
-                    icon={<PersonIcon />}
-                    onClick={() => handleFilterChange("memberStatus", "guest")}
-                    style={filters.memberStatus === "guest" ? styles.activeFilterChip : styles.filterChip}
-                  />
-                  <Chip
-                    label="Star"
-                    icon={<StarIcon />}
-                    onClick={() => handleFilterChange("memberStatus", "star")}
-                    style={filters.memberStatus === "star" ? styles.activeFilterChip : styles.filterChip}
-                  />
-                  <Chip
-                    label="Diamond"
-                    icon={<DiamondIcon />}
-                    onClick={() => handleFilterChange("memberStatus", "diamond")}
-                    style={filters.memberStatus === "diamond" ? styles.activeFilterChip : styles.filterChip}
+              <Box className={styles.filterSection} mt={2}>
+                <Box className={styles.filterHeader} onClick={() => toggleSection("memberStatus")}>
+                  <Typography variant="subtitle1">Member Status</Typography>
+                  <KeyboardArrowDownIcon
+                    sx={{
+                      transform: expandedSections.memberStatus ? "rotate(180deg)" : "rotate(0deg)",
+                      transition: "transform 0.3s",
+                    }}
                   />
                 </Box>
+                <Collapse in={expandedSections.memberStatus}>
+                  <Box className={styles.filterContent}>
+                    <Box display="flex" flexWrap="wrap" gap={1}>
+                      <Chip
+                        label="All Status"
+                        onClick={() => handleFilterChange("memberStatus", "all")}
+                        sx={{
+                          backgroundColor: filters.memberStatus === "all" ? "#0a3d62" : "#e3f2fd",
+                          color: filters.memberStatus === "all" ? "white" : "#0a3d62",
+                          fontWeight: 500,
+                        }}
+                        icon={filters.memberStatus === "all" ? <CheckIcon style={{ color: "white" }} /> : null}
+                      />
+                      <Chip
+                        label="Guest"
+                        onClick={() => handleFilterChange("memberStatus", "guest")}
+                        sx={{
+                          backgroundColor: filters.memberStatus === "guest" ? "#0a3d62" : "#e3f2fd",
+                          color: filters.memberStatus === "guest" ? "white" : "#0a3d62",
+                          fontWeight: 500,
+                        }}
+                        icon={<PersonIcon style={{ color: filters.memberStatus === "guest" ? "white" : "#0a3d62" }} />}
+                      />
+                      <Chip
+                        label="Star"
+                        onClick={() => handleFilterChange("memberStatus", "star")}
+                        sx={{
+                          backgroundColor: filters.memberStatus === "star" ? "#0a3d62" : "#e3f2fd",
+                          color: filters.memberStatus === "star" ? "white" : "#0a3d62",
+                          fontWeight: 500,
+                        }}
+                        icon={<StarIcon style={{ color: filters.memberStatus === "star" ? "white" : "#0a3d62" }} />}
+                      />
+                      <Chip
+                        label="Diamond"
+                        onClick={() => handleFilterChange("memberStatus", "diamond")}
+                        sx={{
+                          backgroundColor: filters.memberStatus === "diamond" ? "#0a3d62" : "#e3f2fd",
+                          color: filters.memberStatus === "diamond" ? "white" : "#0a3d62",
+                          fontWeight: 500,
+                        }}
+                        icon={<DiamondIcon style={{ color: filters.memberStatus === "diamond" ? "white" : "#0a3d62" }} />}
+                      />
+                    </Box>
+                  </Box>
+                </Collapse>
               </Box>
 
               {/* Order Status Section */}
-              <Box mb={2}>
-                <Typography variant="subtitle1" fontWeight="bold" mb={1}>
-                  Order Status
-                </Typography>
-                <Box display="flex" flexWrap="wrap" gap={1}>
-                  <Chip
-                    label="ALL STATUS"
-                    onClick={() => handleFilterChange("orderStatus", "all")}
-                    style={filters.orderStatus === "all" ? styles.activeFilterChip : styles.filterChip}
-                  />
-                  <Chip
-                    label="Ready to serve"
-                    icon={<CheckCircleIcon />}
-                    onClick={() => handleFilterChange("orderStatus", "ready")}
-                    style={filters.orderStatus === "ready" ? styles.activeFilterChip : styles.filterChip}
-                  />
-                  <Chip
-                    label="Cooking Process"
-                    icon={<RestaurantIcon />}
-                    onClick={() => handleFilterChange("orderStatus", "cooking")}
-                    style={filters.orderStatus === "cooking" ? styles.activeFilterChip : styles.filterChip}
-                  />
-                  <Chip
-                    label="Waiting to payment"
-                    icon={<ReceiptIcon />}
-                    onClick={() => handleFilterChange("orderStatus", "waiting")}
-                    style={filters.orderStatus === "waiting" ? styles.activeFilterChip : styles.filterChip}
-                  />
-                  <Chip
-                    label="Order done"
-                    icon={<CheckCircleIcon />}
-                    onClick={() => handleFilterChange("orderStatus", "done")}
-                    style={filters.orderStatus === "done" ? styles.activeFilterChip : styles.filterChip}
-                  />
-                  <Chip
-                    label="Order Cancelled"
-                    icon={<CloseIcon />}
-                    onClick={() => handleFilterChange("orderStatus", "cancelled")}
-                    style={filters.orderStatus === "cancelled" ? styles.activeFilterChip : styles.filterChip}
+              <Box className={styles.filterSection} mt={2}>
+                <Box className={styles.filterHeader} onClick={() => toggleSection("orderStatus")}>
+                  <Typography variant="subtitle1">Order Status</Typography>
+                  <KeyboardArrowDownIcon
+                    sx={{
+                      transform: expandedSections.orderStatus ? "rotate(180deg)" : "rotate(0deg)",
+                      transition: "transform 0.3s",
+                    }}
                   />
                 </Box>
+                <Collapse in={expandedSections.orderStatus}>
+                  <Box className={styles.filterContent}>
+                    <Box display="flex" flexWrap="wrap" gap={1}>
+                      <Chip
+                        label="All Status"
+                        onClick={() => handleFilterChange("orderStatus", "all")}
+                        sx={{
+                          backgroundColor: filters.orderStatus === "all" ? "#0a3d62" : "#e3f2fd",
+                          color: filters.orderStatus === "all" ? "white" : "#0a3d62",
+                          fontWeight: 500,
+                        }}
+                        icon={filters.orderStatus === "all" ? <CheckIcon style={{ color: "white" }} /> : null}
+                      />
+                      <Chip
+                        label="Ready to serve"
+                        onClick={() => handleFilterChange("orderStatus", "ready")}
+                        sx={{
+                          backgroundColor: filters.orderStatus === "ready" ? "#0a3d62" : "#e3f2fd",
+                          color: filters.orderStatus === "ready" ? "white" : "#0a3d62",
+                          fontWeight: 500,
+                        }}
+                        icon={<CheckCircleIcon style={{ color: filters.orderStatus === "ready" ? "white" : "#0a3d62" }} />}
+                      />
+                      <Chip
+                        label="Cooking Process"
+                        onClick={() => handleFilterChange("orderStatus", "cooking")}
+                        sx={{
+                          backgroundColor: filters.orderStatus === "cooking" ? "#0a3d62" : "#e3f2fd",
+                          color: filters.orderStatus === "cooking" ? "white" : "#0a3d62",
+                          fontWeight: 500,
+                        }}
+                        icon={<RestaurantIcon style={{ color: filters.orderStatus === "cooking" ? "white" : "#0a3d62" }} />}
+                      />
+                      <Chip
+                        label="Waiting to payment"
+                        onClick={() => handleFilterChange("orderStatus", "waiting")}
+                        sx={{
+                          backgroundColor: filters.orderStatus === "waiting" ? "#0a3d62" : "#e3f2fd",
+                          color: filters.orderStatus === "waiting" ? "white" : "#0a3d62",
+                          fontWeight: 500,
+                        }}
+                        icon={<ReceiptIcon style={{ color: filters.orderStatus === "waiting" ? "white" : "#0a3d62" }} />}
+                      />
+                      <Chip
+                        label="Order done"
+                        onClick={() => handleFilterChange("orderStatus", "done")}
+                        sx={{
+                          backgroundColor: filters.orderStatus === "done" ? "#0a3d62" : "#e3f2fd",
+                          color: filters.orderStatus === "done" ? "white" : "#0a3d62",
+                          fontWeight: 500,
+                        }}
+                        icon={<CheckCircleIcon style={{ color: filters.orderStatus === "done" ? "white" : "#0a3d62" }} />}
+                      />
+                      <Chip
+                        label="Order Canceled"
+                        onClick={() => handleFilterChange("orderStatus", "cancelled")}
+                        sx={{
+                          backgroundColor: filters.orderStatus === "cancelled" ? "#0a3d62" : "#e3f2fd",
+                          color: filters.orderStatus === "cancelled" ? "white" : "#0a3d62",
+                          fontWeight: 500,
+                        }}
+                        icon={<CloseIcon style={{ color: filters.orderStatus === "cancelled" ? "white" : "#0a3d62" }} />}
+                      />
+                    </Box>
+                  </Box>
+                </Collapse>
               </Box>
-            </DialogContent>
-            <Box style={{
-              ...styles.modalFooter,
-              gap: "5px",
-            }}>
-              <Button variant="outlined" style={styles.cancelButton} onClick={handleCloseFilterModal}>
-                Cancel
-              </Button>
-              <Button variant="outlined" style={styles.resetButton} onClick={handleResetFilters}>
-                Reset Filter
-              </Button>
-              <Button variant="contained" style={styles.applyButton} onClick={handleApplyFilters}>
-                Apply Filters
-              </Button>
+
+              {/* Footer Buttons */}
+              <Box display="flex" justifyContent="flex-end" gap={1} mt={3}>
+                <Button
+                  variant="outlined"
+                  onClick={handleCloseFilterModal}
+                  sx={{
+                    color: "#333",
+                    borderColor: "#ddd",
+                    textTransform: "none",
+                  }}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={handleResetFilters}
+                  sx={{
+                    color: "#333",
+                    borderColor: "#ddd",
+                    textTransform: "none",
+                  }}
+                >
+                  Reset Filter
+                </Button>
+                <Button
+                  variant="contained"
+                  onClick={handleApplyFilters}
+                  sx={{
+                    backgroundColor: "#0a3d62",
+                    color: "white",
+                    textTransform: "none",
+                    "&:hover": {
+                      backgroundColor: "#083352",
+                    },
+                  }}
+                >
+                  Apply Filters
+                </Button>
+              </Box>
             </Box>
           </Dialog>
 
@@ -1145,48 +1313,53 @@ const TransactionDashboard = () => {
             PaperProps={{
               style: {
                 position: "fixed",
-                position: "fixed",
                 top: 0,
                 right: 0,
                 margin: 0,
-                height: "auto",
+                height: "100vh",
                 maxHeight: "100vh",
                 overflow: "auto",
+                borderRadius: 0,
               },
             }}
           >
-            <Box style={styles.modalTitle}>
-              <Typography variant="h6" fontWeight="bold">
-                Order Detail
-              </Typography>
-              <IconButton onClick={handleCloseOrderDetail} style={styles.closeButton}>
-                <CloseIcon />
-              </IconButton>
-            </Box>
-            <DialogContent>
-              <Box sx={{ border: "1px solid #e0e0e0", borderRadius: 2, p: 2, mb: 2 }}>
-                {/* Header */}
-                <Typography variant="caption" color="textSecondary">
+            <Box sx={{ p: 3 }}>
+              <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
+                <Typography variant="h6" fontWeight="bold">
+                  Order Detail
+                </Typography>
+                <IconButton onClick={handleCloseOrderDetail} edge="end">
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+
+              {/* Customer Info */}
+              <Box sx={{ mb: 3 }}>
+                <Typography variant="caption" color="text.secondary">
                   Customer Name
                 </Typography>
-                <Box display="flex" justifyContent="space-between" alignItems="center">
-                  {/* Customer Info */}
-                  <Box display="flex" alignItems="center" flex={1}>
-                    <Avatar src={orderDetail.customerAvatar} sx={{ width: 36, height: 36, mr: 1 }} />
-                    <Box>
-                      <Typography variant="subtitle1" fontWeight="bold" display="flex" alignItems="center">
-                        {orderDetail.customer}
-                      </Typography>
-                    </Box>
-                  </Box>
-
-                  {/* Table Number */}
-                  <Avatar sx={{ bgcolor: "#1565c0", color: "#fff", width: 36, height: 36 }}>
-                    {orderDetail.tableNumber}
+                <Box display="flex" alignItems="center" mt={1}>
+                  <Avatar sx={{ bgcolor: "#f5f5f5", color: "#333", width: 36, height: 36, mr: 1 }}>
+                    {orderDetail.customer.charAt(0)}
                   </Avatar>
-
-                  {/* Icons */}
-                  <Box ml={1} display="flex" gap={1}>
+                  <Typography variant="subtitle1" fontWeight="medium">
+                    {orderDetail.customer}
+                  </Typography>
+                  {orderDetail.isVIP && (
+                    <Box
+                      component="span"
+                      ml={1}
+                      display="inline-block"
+                      width={16}
+                      height={16}
+                      borderRadius="50%"
+                      bgcolor="#ffc107"
+                    />
+                  )}
+                  <Box ml="auto" display="flex" alignItems="center" gap={1}>
+                    <Avatar sx={{ bgcolor: "#0a3d62", color: "white", width: 36, height: 36 }}>
+                      {orderDetail.tableNumber}
+                    </Avatar>
                     <IconButton size="small" sx={{ border: "1px solid #e0e0e0" }}>
                       <HomeIcon />
                     </IconButton>
@@ -1195,146 +1368,957 @@ const TransactionDashboard = () => {
                     </IconButton>
                   </Box>
                 </Box>
+              </Box>
 
-                {/* Grid Info */}
-                <Grid container spacing={2} mt={2}>
-                  <Grid item xs={4} sx={{ borderRight: "1px solid #e0e0e0" }}>
-                    <Typography variant="body2" color="textSecondary">
-                      Order Date
-                    </Typography>
-                    <Typography variant="body1">{orderDetail.date}</Typography>
-                  </Grid>
-
-                  <Grid item xs={4} sx={{ borderRight: "1px solid #e0e0e0" }}>
-                    <Typography variant="body2" color="textSecondary">
-                      Cashier
-                    </Typography>
-                    <Box display="flex">
-                      <Avatar src={orderDetail.cashierAvatar} sx={{ width: 24, height: 24, mr: 1 }} />
-                      <Typography variant="body1">{orderDetail.cashier}</Typography>
-                    </Box>
-                  </Grid>
-
-                  <Grid item xs={4} sx={{}}>
-                    <Typography variant="body2" color="textSecondary">
-                      Working Time
-                    </Typography>
-                    <Typography variant="body1">{orderDetail.workingTime}</Typography>
-                  </Grid>
+              {/* Order Info Grid */}
+              <Grid container spacing={2} sx={{ mb: 2 }}>
+                <Grid item xs={4}>
+                  <Typography variant="caption" color="text.secondary">
+                    Order Date
+                  </Typography>
+                  <Typography variant="body2" mt={0.5}>
+                    {orderDetail.date}
+                  </Typography>
                 </Grid>
+                <Grid item xs={4}>
+                  <Typography variant="caption" color="text.secondary">
+                    Cashier
+                  </Typography>
+                  <Box display="flex" alignItems="center" mt={0.5}>
+                    <Avatar src={orderDetail.cashierAvatar} sx={{ width: 20, height: 20, mr: 1 }} />
+                    <Typography variant="body2">{orderDetail.cashier}</Typography>
+                  </Box>
+                </Grid>
+                <Grid item xs={4}>
+                  <Typography variant="caption" color="text.secondary">
+                    Working Time
+                  </Typography>
+                  <Typography variant="body2" mt={0.5}>
+                    {orderDetail.workingTime}
+                  </Typography>
+                </Grid>
+              </Grid>
 
-                {/* Order ID */}
-                <Box mt={2}>
-                  <Chip
-                    label={`Order Id : ${orderDetail.id}`}
-                    sx={{
-                      backgroundColor: "#f5f5f5",
-                      fontWeight: 500,
-                      fontSize: 14,
-                      color: "#333",
-                    }}
-                  />
-                </Box>
+              {/* Order ID */}
+              <Box sx={{ mb: 3 }}>
+                <Chip
+                  label={`Order Id : ${orderDetail.id}`}
+                  sx={{
+                    backgroundColor: "#f5f5f5",
+                    color: "#333",
+                    fontWeight: 500,
+                    borderRadius: "4px",
+                  }}
+                />
               </Box>
 
               {/* Order Items */}
-              {orderDetail.items.map((item, index) => (
-                <Box key={index} display="flex" mb={2}>
-                  <img src={item.image || "/placeholder.svg"} alt={item.name} style={styles.orderItemImage} />
-                  <Box ml={2} flex={1}>
-                    <Typography variant="subtitle1" fontWeight="bold">
-                      {item.name}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {item.category}
-                    </Typography>
-                    <Typography variant="body2" style={styles.orderItemVariant}>
-                      Variant : {item.variant}
-                    </Typography>
+              <Box sx={{ mb: 3 }}>
+                {orderDetail.items.map((item, index) => (
+                  <Box key={index} display="flex" alignItems="center" mb={2}>
+                    <img
+                      src={item.image || "/placeholder.svg"}
+                      alt={item.name}
+                      style={{ width: 50, height: 50, borderRadius: 8, objectFit: "cover" }}
+                    />
+                    <Box ml={2} flex={1}>
+                      <Typography variant="subtitle2" fontWeight="bold">
+                        {item.name}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary" display="block">
+                        {item.category}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        Variant: {item.variant}
+                      </Typography>
+                    </Box>
+                    <Box textAlign="right">
+                      <Typography variant="caption" color="text.secondary">
+                        Qty: {item.quantity} x Rs {item.price.toFixed(2)}
+                      </Typography>
+                      <Typography variant="subtitle2" fontWeight="bold" display="block">
+                        Rs {(item.quantity * item.price).toFixed(2)}
+                      </Typography>
+                    </Box>
                   </Box>
-                  <Box style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <Typography variant="body2" style={styles.orderItemQuantity}>
-                      Qty : {item.quantity} x Rs {item.price.toFixed(2)}
-                    </Typography>
-                    <Typography variant="subtitle1" style={styles.orderItemPrice}>
-                      Rs {(item.quantity * item.price).toFixed(2)}
-                    </Typography>
-                  </Box>
-                </Box>
-              ))}
+                ))}
+              </Box>
 
               {/* Order Summary */}
-              <Box mt={3}>
-                <Box style={styles.orderSummaryRow}>
-                  <Typography variant="body1">Subtotal</Typography>
-                  <Typography variant="body1">Rs {orderDetail.subtotal.toFixed(2)}</Typography>
+              <Box sx={{ mb: 3 }}>
+                <Box display="flex" justifyContent="space-between" mb={1}>
+                  <Typography variant="body2" color="text.secondary">
+                    Subtotal
+                  </Typography>
+                  <Typography variant="body2">Rs {orderDetail.subtotal.toFixed(2)}</Typography>
                 </Box>
-                <Box style={styles.orderSummaryRow}>
-                  <Typography variant="body1">Discount</Typography>
-                  <Typography variant="body1">Rs {orderDetail.discount}% (0)</Typography>
+                <Box display="flex" justifyContent="space-between" mb={1}>
+                  <Typography variant="body2" color="text.secondary">
+                    Discount
+                  </Typography>
+                  <Typography variant="body2" color="#4caf50">
+                    Rs 0% (0)
+                  </Typography>
                 </Box>
-                <Box style={styles.orderSummaryRow}>
-                  <Typography variant="body1">Tax 12%</Typography>
-                  <Typography variant="body1">Rs {orderDetail.tax.toFixed(2)}</Typography>
+                <Box display="flex" justifyContent="space-between" mb={1}>
+                  <Typography variant="body2" color="text.secondary">
+                    Tax 12%
+                  </Typography>
+                  <Typography variant="body2">Rs {orderDetail.tax.toFixed(2)}</Typography>
                 </Box>
-                <Box style={styles.orderSummaryRow}>
-                  <Typography variant="subtitle1" style={styles.orderTotal}>
+                <Box display="flex" justifyContent="space-between" mt={2}>
+                  <Typography variant="subtitle1" fontWeight="bold">
                     Total
                   </Typography>
-                  <Typography variant="subtitle1" style={styles.orderTotal}>
+                  <Typography variant="subtitle1" fontWeight="bold">
                     Rs {orderDetail.total.toFixed(2)}
                   </Typography>
                 </Box>
               </Box>
 
               {/* Payment Info */}
-              <Box style={styles.paymentInfo}>
-                <Box style={styles.paymentMethod}>
-                  <ReceiptIcon style={styles.paymentIcon} />
-                  <Box>
-                    <Typography variant="body2" color="text.secondary">
-                      Payment
-                    </Typography>
-                    <Typography variant="body1" fontWeight="bold">
+              <Box
+                sx={{ display: "flex", justifyContent: "space-between", p: 2, bgcolor: "#f9f9f9", borderRadius: 1, mb: 3 }}
+              >
+                <Box>
+                  <Typography variant="caption" color="text.secondary">
+                    Payment
+                  </Typography>
+                  <Box display="flex" alignItems="center" mt={0.5}>
+                    <ReceiptIcon fontSize="small" sx={{ mr: 1, color: "#0a3d62" }} />
+                    <Typography variant="body2" fontWeight="medium">
                       {orderDetail.payment.method}
                     </Typography>
                   </Box>
                 </Box>
                 <Box>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="caption" color="text.secondary">
                     Cash Total
                   </Typography>
-                  <Typography variant="body1" fontWeight="bold">
+                  <Typography variant="body2" fontWeight="medium" mt={0.5}>
                     Rs {orderDetail.payment.amount.toFixed(2)}
                   </Typography>
                 </Box>
                 <Box>
-                  <Typography variant="body2" color="text.secondary">
+                  <Typography variant="caption" color="text.secondary">
                     Customer Change
                   </Typography>
-                  <Typography variant="body1" fontWeight="bold">
+                  <Typography variant="body2" fontWeight="medium" mt={0.5}>
                     Rs {orderDetail.payment.change.toFixed(2)}
                   </Typography>
                 </Box>
               </Box>
 
-              <Button variant="contained" fullWidth style={styles.applyButton} onClick={handleOpenTrackOrder}>
-                Track Order
-              </Button>
-            </DialogContent>
-            <Box style={styles.modalFooter}>
-              <Button variant="contained" style={styles.cancelButton} onClick={handleCloseOrderDetail}>
-                Close
-              </Button>
-              <Box ml={1}>
-                <Button variant="contained" style={styles.shareReceiptButton} endIcon={<ArrowDropDownIcon />}>
-                  Share Receipt
+              {/* Action Buttons */}
+              <Box display="flex" justifyContent="space-between" mt={3}>
+                <Button
+                  variant="outlined"
+                  onClick={handleCloseOrderDetail}
+                  sx={{
+                    color: "#333",
+                    borderColor: "#ddd",
+                    textTransform: "none",
+                  }}
+                >
+                  Close
                 </Button>
+                <Box display="flex" gap={1}>
+                  <Button
+                    variant="outlined"
+                    endIcon={<ArrowDropDownIcon />}
+                    sx={{
+                      color: "#333",
+                      borderColor: "#ddd",
+                      textTransform: "none",
+                    }}
+                  >
+                    Share Receipt
+                  </Button>
+                  <Button
+                    variant="contained"
+                    startIcon={<PrintIcon />}
+                    onClick={() => handleOpenPayment(selectedOrder)}
+                    sx={{
+                      backgroundColor: "#0a3d62",
+                      color: "white",
+                      textTransform: "none",
+                      "&:hover": {
+                        backgroundColor: "#083352",
+                      },
+                    }}
+                  >
+                    Print Receipt
+                  </Button>
+                </Box>
               </Box>
-              <Box ml={1}>
-                <Button variant="contained" style={styles.printReceiptButton} startIcon={<PrintIcon />}>
-                  Print Receipt
-                </Button>
+            </Box>
+          </Dialog>
+
+          {/* Payment Modal */}
+          <Dialog
+            open={openPaymentModal}
+            onClose={handleClosePayment}
+            fullWidth
+            maxWidth="md"
+            PaperProps={{
+              style: {
+                margin: 0,
+                maxWidth: "100%",
+                borderRadius: 0,
+              },
+            }}
+          >
+            <Box sx={{ display: "flex", height: "100vh" }}>
+              {/* Left Side - Receipt */}
+              <Box sx={{ width: "40%", bgcolor: "#f5f5f5", p: 3, borderRight: "1px solid #ddd" }}>
+                <Typography variant="caption" color="text.secondary" display="block" textAlign="center" mb={1}>
+                  {paymentOrderDetail.date}
+                </Typography>
+
+                {/* Order ID */}
+                <Box sx={{ border: "1px dashed #ccc", p: 2, mb: 3, textAlign: "center" }}>
+                  <Typography variant="caption" color="text.secondary" display="block" mb={0.5}>
+                    Order Id
+                  </Typography>
+                  <Typography variant="body1" fontWeight="bold">
+                    {paymentOrderDetail.id}
+                  </Typography>
+                </Box>
+
+                {/* Order Info */}
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item xs={4}>
+                    <Typography variant="caption" color="text.secondary">
+                      Cashier
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8} textAlign="right">
+                    <Typography variant="caption">{paymentOrderDetail.cashier}</Typography>
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item xs={4}>
+                    <Typography variant="caption" color="text.secondary">
+                      Working Time
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8} textAlign="right">
+                    <Typography variant="caption">{paymentOrderDetail.workingTime}</Typography>
+                  </Grid>
+                </Grid>
+
+                <Divider sx={{ my: 2 }} />
+
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item xs={4}>
+                    <Typography variant="caption" color="text.secondary">
+                      Customer Name
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8} textAlign="right">
+                    <Typography variant="caption">{paymentOrderDetail.customer}</Typography>
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item xs={4}>
+                    <Typography variant="caption" color="text.secondary">
+                      Member Id Card
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8} textAlign="right">
+                    <Typography variant="caption">-</Typography>
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item xs={4}>
+                    <Typography variant="caption" color="text.secondary">
+                      Order Type
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8} textAlign="right">
+                    <Typography variant="caption">Dine In</Typography>
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item xs={4}>
+                    <Typography variant="caption" color="text.secondary">
+                      Table Number
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8} textAlign="right">
+                    <Typography variant="caption">{paymentOrderDetail.tableNumber}</Typography>
+                  </Grid>
+                </Grid>
+
+                <Divider sx={{ my: 2 }} />
+
+                {/* Order Items */}
+                {paymentOrderDetail.items.map((item, index) => (
+                  <Box key={index} mb={1.5}>
+                    <Typography variant="caption" fontWeight="medium">
+                      {item.name}
+                    </Typography>
+                    <Grid container spacing={1}>
+                      <Grid item xs={6}>
+                        <Typography variant="caption" color="text.secondary">
+                          {item.quantity} x Rs {item.price.toFixed(2)}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={6} textAlign="right">
+                        <Typography variant="caption">Rs {item.total.toFixed(2)}</Typography>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                ))}
+
+                <Divider sx={{ my: 2 }} />
+
+                {/* Order Summary */}
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item xs={6}>
+                    <Typography variant="caption" color="text.secondary">
+                      Subtotal
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} textAlign="right">
+                    <Typography variant="caption">Rs {paymentOrderDetail.subtotal.toFixed(2)}</Typography>
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item xs={6}>
+                    <Typography variant="caption" color="text.secondary">
+                      Discount
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} textAlign="right">
+                    <Typography variant="caption">Rs {paymentOrderDetail.discount}</Typography>
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item xs={6}>
+                    <Typography variant="caption" color="text.secondary">
+                      Tax (12%)
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} textAlign="right">
+                    <Typography variant="caption">Rs {paymentOrderDetail.tax.toFixed(2)}</Typography>
+                  </Grid>
+                </Grid>
+
+                <Divider sx={{ my: 2 }} />
+
+                <Grid container spacing={1} sx={{ mb: 2 }}>
+                  <Grid item xs={6}>
+                    <Typography variant="body2" fontWeight="bold" color="#0a3d62">
+                      Total Amount
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} textAlign="right">
+                    <Typography variant="body2" fontWeight="bold" color="#0a3d62">
+                      Rs {paymentOrderDetail.total.toFixed(2)}
+                    </Typography>
+                  </Grid>
+                </Grid>
+
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  display="block"
+                  textAlign="center"
+                  fontSize="0.65rem"
+                  mb={3}
+                >
+                  Thanks for having our passion. Drop by again. If your orders aren't still visible, you're always welcome
+                  here!
+                </Typography>
+
+                <Typography variant="h6" fontWeight="bold" color="#0a3d62" textAlign="center">
+                  IMAJI Coffee.
+                </Typography>
+              </Box>
+
+              {/* Right Side - Payment */}
+              <Box sx={{ flex: 1, p: 3 }}>
+                <Typography variant="h5" fontWeight="bold" mb={4}>
+                  Payment
+                </Typography>
+
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <Typography variant="subtitle1" mb={1}>
+                      Input Amount
+                    </Typography>
+                    <TextField
+                      fullWidth
+                      value={inputAmount}
+                      InputProps={{
+                        startAdornment: (
+                          <InputAdornment position="start">
+                            <Typography variant="body1">Rs</Typography>
+                          </InputAdornment>
+                        ),
+                        readOnly: true,
+                      }}
+                      sx={{ mb: 2 }}
+                    />
+
+                    <Typography variant="subtitle1" mb={1}>
+                      Customer Changes
+                    </Typography>
+                    <Box sx={{ mb: 3, display: "flex", alignItems: "center" }}>
+                      <Typography
+                        variant="h5"
+                        fontWeight="bold"
+                        color={Number.parseFloat(customerChanges) < 0 ? "#f44336" : "#333"}
+                      >
+                        Rs {customerChanges}
+                      </Typography>
+                    </Box>
+
+                    {/* Quick Amount Buttons */}
+                    <Box sx={{ display: "flex", gap: 1, mb: 3, flexWrap: "wrap" }}>
+                      <Button
+                        variant="outlined"
+                        onClick={() => handleQuickAmountClick("10.00")}
+                        sx={styles.quickAmountButton}
+                      >
+                        Exact money
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        onClick={() => handleQuickAmountClick("10.00")}
+                        sx={styles.quickAmountButton}
+                      >
+                        Rs 10.00
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        onClick={() => handleQuickAmountClick("20.00")}
+                        sx={styles.quickAmountButton}
+                      >
+                        Rs 20.00
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        onClick={() => handleQuickAmountClick("50.00")}
+                        sx={styles.quickAmountButton}
+                      >
+                        Rs 50.00
+                      </Button>
+                      <Button
+                        variant="outlined"
+                        onClick={() => handleQuickAmountClick("100.00")}
+                        sx={styles.quickAmountButton}
+                      >
+                        Rs 100.00
+                      </Button>
+                    </Box>
+
+                    {/* Numpad */}
+                    <Grid container spacing={1}>
+                      <Grid item xs={4}>
+                        <Button fullWidth sx={styles.numpadButton} onClick={() => handleNumberClick("1")}>
+                          1
+                        </Button>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Button fullWidth sx={styles.numpadButton} onClick={() => handleNumberClick("2")}>
+                          2
+                        </Button>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Button fullWidth sx={styles.numpadButton} onClick={() => handleNumberClick("3")}>
+                          3
+                        </Button>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Button fullWidth sx={styles.numpadButton} onClick={() => handleNumberClick("4")}>
+                          4
+                        </Button>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Button fullWidth sx={styles.numpadButton} onClick={() => handleNumberClick("5")}>
+                          5
+                        </Button>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Button fullWidth sx={styles.numpadButton} onClick={() => handleNumberClick("6")}>
+                          6
+                        </Button>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Button fullWidth sx={styles.numpadButton} onClick={() => handleNumberClick("7")}>
+                          7
+                        </Button>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Button fullWidth sx={styles.numpadButton} onClick={() => handleNumberClick("8")}>
+                          8
+                        </Button>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Button fullWidth sx={styles.numpadButton} onClick={() => handleNumberClick("9")}>
+                          9
+                        </Button>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Button fullWidth sx={styles.numpadButton} onClick={handleDecimalClick}>
+                          .
+                        </Button>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Button fullWidth sx={styles.numpadButton} onClick={() => handleNumberClick("0")}>
+                          0
+                        </Button>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Button
+                          fullWidth
+                          sx={{
+                            ...styles.numpadButton,
+                            backgroundColor: "#ffebee",
+                            color: "#f44336",
+                            "&:hover": {
+                              backgroundColor: "#ffcdd2",
+                            },
+                          }}
+                          onClick={handleDeleteClick}
+                        >
+                          <BackspaceIcon />
+                        </Button>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+
+                {/* Footer Buttons */}
+                <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
+                  <Button
+                    variant="outlined"
+                    onClick={handleClosePayment}
+                    sx={{
+                      color: "#333",
+                      borderColor: "#ddd",
+                      textTransform: "none",
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    variant="contained"
+                    endIcon={<ArrowForwardIcon />}
+                    onClick={handlePayNow}
+                    sx={styles.payNowButton}
+                  >
+                    Pay Now
+                  </Button>
+                </Box>
+              </Box>
+            </Box>
+          </Dialog>
+
+          {/* Payment Success Modal */}
+          <Dialog
+            open={openPaymentSuccessModal}
+            onClose={handleClosePaymentSuccess}
+            fullWidth
+            maxWidth="md"
+            PaperProps={{
+              style: {
+                margin: 0,
+                maxWidth: "100%",
+                borderRadius: 0,
+              },
+            }}
+          >
+            <Box sx={{ display: "flex", height: "100vh" }}>
+              {/* Left Side - Receipt */}
+              <Box sx={{ width: "40%", bgcolor: "#f5f5f5", p: 3, borderRight: "1px solid #ddd" }}>
+                <Typography variant="caption" color="text.secondary" display="block" textAlign="center" mb={1}>
+                  {paymentOrderDetail.date}
+                </Typography>
+
+                {/* Order ID */}
+                <Box sx={{ border: "1px dashed #ccc", p: 2, mb: 3, textAlign: "center" }}>
+                  <Typography variant="caption" color="text.secondary" display="block" mb={0.5}>
+                    Order Id
+                  </Typography>
+                  <Typography variant="body1" fontWeight="bold">
+                    {paymentOrderDetail.id}
+                  </Typography>
+                </Box>
+
+                {/* Order Info */}
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item xs={4}>
+                    <Typography variant="caption" color="text.secondary">
+                      Cashier
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8} textAlign="right">
+                    <Typography variant="caption">{paymentOrderDetail.cashier}</Typography>
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item xs={4}>
+                    <Typography variant="caption" color="text.secondary">
+                      Working Time
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8} textAlign="right">
+                    <Typography variant="caption">{paymentOrderDetail.workingTime}</Typography>
+                  </Grid>
+                </Grid>
+
+                <Divider sx={{ my: 2 }} />
+
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item xs={4}>
+                    <Typography variant="caption" color="text.secondary">
+                      Customer Name
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8} textAlign="right">
+                    <Typography variant="caption">{paymentOrderDetail.customer}</Typography>
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item xs={4}>
+                    <Typography variant="caption" color="text.secondary">
+                      Member Id Card
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8} textAlign="right">
+                    <Typography variant="caption">-</Typography>
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item xs={4}>
+                    <Typography variant="caption" color="text.secondary">
+                      Order Type
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8} textAlign="right">
+                    <Typography variant="caption">Dine In</Typography>
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item xs={4}>
+                    <Typography variant="caption" color="text.secondary">
+                      Table Number
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={8} textAlign="right">
+                    <Typography variant="caption">{paymentOrderDetail.tableNumber}</Typography>
+                  </Grid>
+                </Grid>
+
+                <Divider sx={{ my: 2 }} />
+
+                {/* Order Items */}
+                {paymentOrderDetail.items.map((item, index) => (
+                  <Box key={index} mb={1.5}>
+                    <Typography variant="caption" fontWeight="medium">
+                      {item.name}
+                    </Typography>
+                    <Grid container spacing={1}>
+                      <Grid item xs={6}>
+                        <Typography variant="caption" color="text.secondary">
+                          {item.quantity} x Rs {item.price.toFixed(2)}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={6} textAlign="right">
+                        <Typography variant="caption">Rs {item.total.toFixed(2)}</Typography>
+                      </Grid>
+                    </Grid>
+                  </Box>
+                ))}
+
+                <Divider sx={{ my: 2 }} />
+
+                {/* Order Summary */}
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item xs={6}>
+                    <Typography variant="caption" color="text.secondary">
+                      Subtotal
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} textAlign="right">
+                    <Typography variant="caption">Rs {paymentOrderDetail.subtotal.toFixed(2)}</Typography>
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item xs={6}>
+                    <Typography variant="caption" color="text.secondary">
+                      Discount
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} textAlign="right">
+                    <Typography variant="caption">Rs {paymentOrderDetail.discount}</Typography>
+                  </Grid>
+                </Grid>
+
+                <Grid container spacing={1} sx={{ mb: 1 }}>
+                  <Grid item xs={6}>
+                    <Typography variant="caption" color="text.secondary">
+                      Tax (12%)
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} textAlign="right">
+                    <Typography variant="caption">Rs {paymentOrderDetail.tax.toFixed(2)}</Typography>
+                  </Grid>
+                </Grid>
+
+                <Divider sx={{ my: 2 }} />
+
+                <Grid container spacing={1} sx={{ mb: 2 }}>
+                  <Grid item xs={6}>
+                    <Typography variant="body2" fontWeight="bold" color="#0a3d62">
+                      Total Amount
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={6} textAlign="right">
+                    <Typography variant="body2" fontWeight="bold" color="#0a3d62">
+                      Rs {paymentOrderDetail.total.toFixed(2)}
+                    </Typography>
+                  </Grid>
+                </Grid>
+
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  display="block"
+                  textAlign="center"
+                  fontSize="0.65rem"
+                  mb={3}
+                >
+                  Thanks for having our passion. Drop by again. If your orders aren't still visible, you're always welcome
+                  here!
+                </Typography>
+
+                <Typography variant="h6" fontWeight="bold" color="#0a3d62" textAlign="center">
+                  IMAJI Coffee.
+                </Typography>
+
+                {/* Footer Buttons */}
+                <Box sx={{ display: "flex", justifyContent: "space-between", mt: 3 }}>
+                  <Button
+                    variant="outlined"
+                    onClick={handleClosePaymentSuccess}
+                    sx={{
+                      color: "#333",
+                      borderColor: "#ddd",
+                      textTransform: "none",
+                    }}
+                  >
+                    Close
+                  </Button>
+                  <Button variant="contained" startIcon={<PrintIcon />} sx={styles.printReceiptButton}>
+                    Print Receipt
+                  </Button>
+                </Box>
+              </Box>
+
+              {/* Right Side - Success Message */}
+              <Box
+                sx={{
+                  flex: 1,
+                  p: 5,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {/* Confetti Animation */}
+                <Box sx={{ position: "absolute", top: 0, left: 0, right: 0, height: "100px", overflow: "hidden" }}>
+                  {/* Confetti elements would be here in a real implementation */}
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: 20,
+                      left: "10%",
+                      width: 10,
+                      height: 10,
+                      bgcolor: "#4caf50",
+                      transform: "rotate(15deg)",
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: 40,
+                      left: "20%",
+                      width: 8,
+                      height: 8,
+                      bgcolor: "#2196f3",
+                      transform: "rotate(45deg)",
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: 30,
+                      left: "30%",
+                      width: 12,
+                      height: 12,
+                      bgcolor: "#ff9800",
+                      borderRadius: "50%",
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: 50,
+                      left: "40%",
+                      width: 15,
+                      height: 15,
+                      bgcolor: "#e91e63",
+                      transform: "rotate(30deg)",
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: 20,
+                      left: "50%",
+                      width: 10,
+                      height: 10,
+                      bgcolor: "#9c27b0",
+                      transform: "rotate(60deg)",
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: 60,
+                      left: "60%",
+                      width: 8,
+                      height: 8,
+                      bgcolor: "#f44336",
+                      borderRadius: "50%",
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: 40,
+                      left: "70%",
+                      width: 12,
+                      height: 12,
+                      bgcolor: "#ffeb3b",
+                      transform: "rotate(15deg)",
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: 30,
+                      left: "80%",
+                      width: 10,
+                      height: 10,
+                      bgcolor: "#4caf50",
+                      transform: "rotate(45deg)",
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      position: "absolute",
+                      top: 50,
+                      left: "90%",
+                      width: 15,
+                      height: 15,
+                      bgcolor: "#2196f3",
+                      borderRadius: "50%",
+                    }}
+                  />
+                </Box>
+
+                <Box sx={styles.successIcon}>
+                  <CheckIcon sx={{ fontSize: 40 }} />
+                </Box>
+
+                <Typography variant="h4" fontWeight="bold" mb={2}>
+                  Payment Success!
+                </Typography>
+
+                <Typography variant="body1" color="text.secondary" mb={4} textAlign="center">
+                  You've successfully pay your bill. Well done!
+                </Typography>
+
+                <Box sx={{ width: "100%", maxWidth: 400 }}>
+                  <Box sx={{ mb: 3 }}>
+                    <Typography variant="subtitle2" color="text.secondary" mb={1}>
+                      Total Amount
+                    </Typography>
+                    <Typography variant="h4" fontWeight="bold" color="#0a3d62" textAlign="center">
+                      Rs {paymentOrderDetail.total.toFixed(2)}
+                    </Typography>
+                  </Box>
+
+                  <Grid container spacing={3} mb={4}>
+                    <Grid item xs={6}>
+                      <Typography variant="subtitle2" color="text.secondary" mb={1}>
+                        Payment Method
+                      </Typography>
+                      <Typography variant="body1">Cash</Typography>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Typography variant="subtitle2" color="text.secondary" mb={1}>
+                        Cash
+                      </Typography>
+                      <Typography variant="body1">Rs {paymentOrderDetail.payment.amount.toFixed(2)}</Typography>
+                    </Grid>
+                  </Grid>
+
+                  <Box sx={{ mb: 3 }}>
+                    <Typography variant="subtitle2" color="text.secondary" mb={1}>
+                      Customer Changes
+                    </Typography>
+                    <Typography variant="body1" fontWeight="medium">
+                      Rs {paymentOrderDetail.payment.change.toFixed(2)}
+                    </Typography>
+                  </Box>
+
+                  <Box sx={{ display: "flex", justifyContent: "space-between", mt: 4 }}>
+                    <Button
+                      variant="outlined"
+                      onClick={handleClosePaymentSuccess}
+                      sx={{
+                        color: "#333",
+                        borderColor: "#ddd",
+                        textTransform: "none",
+                      }}
+                    >
+                      Close
+                    </Button>
+                    <Button
+                      variant="outlined"
+                      endIcon={<ArrowDropDownIcon />}
+                      sx={{
+                        color: "#333",
+                        borderColor: "#ddd",
+                        textTransform: "none",
+                      }}
+                    >
+                      Share Receipt
+                    </Button>
+                    <Button variant="contained" startIcon={<PrintIcon />} sx={styles.printReceiptButton}>
+                      Print Receipt
+                    </Button>
+                  </Box>
+                </Box>
               </Box>
             </Box>
           </Dialog>
@@ -1348,13 +2332,13 @@ const TransactionDashboard = () => {
             PaperProps={{
               style: {
                 position: "fixed",
-                position: "fixed",
                 top: 0,
                 right: 0,
                 margin: 0,
-                height: "auto",
+                height: "100vh",
                 maxHeight: "100vh",
                 overflow: "auto",
+                borderRadius: 0,
               },
             }}
           >

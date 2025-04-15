@@ -279,11 +279,11 @@ export default function SideNav({ open, setOpen }) {
                             justifyContent: "center",
                             transition: "all 0.3s ease-in-out",
                         }}
-                        onClick={() => setShowOrder(true)}
+                        onClick={() => navigate('/new/order')}
                     >
                         {open ? "+ New Order" : "+ New Order"} {/* Show full text only when open */}
                     </Button>
-                    <Modal
+                    {/* <Modal
                         open={showOrder}
                         onClose={() => setShowOrder(false)}
                         aria-labelledby="new-order-modal"
@@ -307,7 +307,7 @@ export default function SideNav({ open, setOpen }) {
                         >
                             <NewOrderDialog onClose={() => setShowOrder(false)} />
                         </Box>
-                    </Modal>
+                    </Modal> */}
                 </Box>
 
                 <List>

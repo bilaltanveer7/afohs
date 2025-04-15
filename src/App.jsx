@@ -13,6 +13,7 @@ import CoffeeShop from './inventory/dashboard';
 import TransactionDashboard from './transaction/dashboard'; 
 import SettingDashboard from './settings/dashboard';
 import TableManagement from './table/dashboard';
+import NewOrderDialog from './sidebar/order';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
         <Route path="/transaction" element={<TransactionDashboard/>} />
         <Route path="/settings" element={<SettingDashboard/>} />
         <Route path="/table/management" element={<TableManagement/>} />
+        <Route path="/new/order" element={<NewOrderDialog/>} />
       </Routes>
     </>
   );
